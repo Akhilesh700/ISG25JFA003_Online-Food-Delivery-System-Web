@@ -2,7 +2,7 @@
     <div class="w-11/12 mx-auto flex justify-between items-center">
         <button class="cursor-pointer">
 
-            <i class="pi pi-bars rounded-full hover:bg-primary/60 p-3 duration-300 cursor-pointer" style="color: var(--primary-color)"></i>
+            <i class="pi pi-bars rounded-full hover:bg-primary/60 p-3 duration-300 cursor-pointer" style="color: var(--primary-color)" (click)="openOptionsSheet()"></i>
         </button>
         <h3 class="text-lg">Dine <span class="font-semibold">Cognizant</span> </h3>
         <div class="flex items-center gap-1">
@@ -18,7 +18,7 @@
         </div>
         <div class="flex items-center">
             <button class=" cursor-pointer">
-                <i class="pi pi-shopping-cart rounded-full hover:bg-primary/60 p-3 duration-300" style="color: var(--primary-color)" (click)="openSheet()" ></i>
+                <i class="pi pi-shopping-cart rounded-full hover:bg-primary/60 p-3 duration-300" style="color: var(--primary-color)" (click)="openCartSheet()" ></i>
             </button>
             <z-switch [(ngModel)]="isDarkMode" (onChange)="toggleTheme()" class="ml-4"></z-switch>
 

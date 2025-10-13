@@ -4,6 +4,7 @@ import { DarkModeService } from '@shared/services/darkmode.service';
 import { FormsModule } from '@angular/forms';
 import { ZardSheetService } from '../sheet/sheet.service';
 import { CartSheet } from './cart-sheet/cart-sheet';
+import { UserOptionsSheet } from './user-options-sheet/user-options-sheet';
 
 const getCurrentUser = () => {
   return {
@@ -38,12 +39,21 @@ export class Navbar {
 
   isCartEmpty = true;
 
-  openSheet() {
+  openCartSheet() {
     this.sheetService.create({
       zTitle: 'Cart',
       zContent: CartSheet,
       zOkText: this.isCartEmpty ? 'Checkout' : null,
       zSize: 'lg'
+    });
+  }
+
+  openOptionsSheet() {
+    this.sheetService.create({
+      zContent: UserOptionsSheet,
+      zSize: 'sm',
+      zSide: 'left',
+      zOkText: null,
     });
   }
 
