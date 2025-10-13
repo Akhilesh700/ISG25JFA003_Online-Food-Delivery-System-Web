@@ -3,7 +3,7 @@
   "packageManager": "npm",
   "tailwind": {
     "css": "src/styles.css",
-    "baseColor": "stone",
+    "baseColor": "neutral",
     "cssVariables": true
   },
   "aliases": {

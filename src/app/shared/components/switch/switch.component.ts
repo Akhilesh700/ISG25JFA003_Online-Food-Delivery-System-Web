@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, forwardRef, input, output, signal, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, forwardRef, inject, input, output, signal, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 
 import { switchVariants, ZardSwitchVariants } from './switch.variants';
 import { mergeClasses, generateId } from '@shared/utils/merge-classes';
+import { DarkModeService } from '@shared/services/darkmode.service';
 
 type OnTouchedType = () => any;
 type OnChangeType = (value: any) => void;
@@ -40,6 +41,7 @@ type OnChangeType = (value: any) => void;
 export class ZardSwitchComponent implements ControlValueAccessor {
   readonly checkChange = output<boolean>();
   readonly class = input<ClassValue>('');
+  protected readonly darkmodeService = inject(DarkModeService);
 
   readonly zType = input<ZardSwitchVariants['zType']>('default');
   readonly zSize = input<ZardSwitchVariants['zSize']>('default');
@@ -69,6 +71,10 @@ export class ZardSwitchComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
 
+  toggleTheme(): void {
+    this.darkmodeService.toggleTheme();
+  }
+
   onSwitchChange(): void {
     if (this.disabled()) return;
 
@@ -76,6 +82,7 @@ export class ZardSwitchComponent implements ControlValueAccessor {
     this.onTouched();
     this.onChange(this.checked());
     this.checkChange.emit(this.checked());
+    this.toggleTheme();
   }
 
   setDisabledState(isDisabled: boolean): void {
