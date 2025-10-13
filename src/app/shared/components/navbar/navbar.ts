@@ -1,7 +1,9 @@
 import { Component, inject, NgModule } from '@angular/core';
 import { ZardSwitchComponent } from "../switch/switch.component";
 import { DarkModeService } from '@shared/services/darkmode.service';
-import { FormsModule, NgModel } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+import { ZardSheetService } from '../sheet/sheet.service';
+import { CartSheet } from './cart-sheet/cart-sheet';
 
 const getCurrentUser = () => {
   return {
@@ -21,6 +23,7 @@ const getCurrentUser = () => {
 export class Navbar {
 
   protected readonly darkmodeService = inject(DarkModeService);
+  protected readonly sheetService = inject(ZardSheetService)
 
   isDarkMode: boolean = this.darkmodeService.getCurrentTheme() === 'dark';
 
@@ -31,6 +34,17 @@ export class Navbar {
     this.darkmodeService.toggleTheme();
 
     this.isDarkMode = this.darkmodeService.getCurrentTheme() === 'dark';
+  }
+
+  isCartEmpty = true;
+
+  openSheet() {
+    this.sheetService.create({
+      zTitle: 'Cart',
+      zContent: CartSheet,
+      zOkText: this.isCartEmpty ? 'Checkout' : null,
+      zSize: 'lg'
+    });
   }
 
 
