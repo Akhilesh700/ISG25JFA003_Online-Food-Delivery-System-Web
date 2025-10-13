@@ -174,15 +174,15 @@ export class ZardSheetComponent<T, U> extends BasePortalOutlet {
     this.cancelTriggered.emit();
   }
 
-  overlayClickOutside() {
-    return fromEvent<MouseEvent>(document, 'click').pipe(
-      filter(event => {
-        const clickTarget = event.target as HTMLElement;
-        const hasNotOrigin = clickTarget !== this.host.nativeElement;
-        const hasNotOverlay = !!this.overlayRef && this.overlayRef.overlayElement.contains(clickTarget) === false;
-        return hasNotOrigin && hasNotOverlay;
-      }),
-      takeUntil(this.overlayRef.detachments()),
-    );
-  }
+  // overlayClickOutside() {
+  //   return fromEvent<MouseEvent>(document, 'click').pipe(
+  //     filter(event => {
+  //       const clickTarget = event.target as HTMLElement;
+  //       const hasNotOrigin = clickTarget !== this.host.nativeElement;
+  //       const hasNotOverlay = !!this.overlayRef && this.overlayRef.overlayElement.contains(clickTarget) === false;
+  //       return hasNotOrigin && hasNotOverlay;
+  //     }),
+  //     takeUntil(this.overlayRef.detachments()),
+  //   );
+  // }
 }

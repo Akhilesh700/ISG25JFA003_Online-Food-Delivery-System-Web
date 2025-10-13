@@ -1,4 +1,7 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { ZardDialogService } from '@shared/components/dialog/dialog.service';
+import { NoteModal } from './note-modal/note-modal';
+import { ZardBreadcrumbModule } from "@shared/components/sheet/sheet.module";
 
 interface cartItem {
   id: string;
@@ -14,7 +17,7 @@ interface cartItem {
 
 @Component({
   selector: 'app-cart-sheet',
-  imports: [],
+  imports: [ZardBreadcrumbModule],
   templateUrl: './cart-sheet.html',
   styleUrl: './cart-sheet.css'
 })
@@ -23,6 +26,13 @@ export class CartSheet {
 
   @Output() 
   readonly checkout = new EventEmitter<cartItem[]>();
+
+
+  protected readonly dialogService = inject(ZardDialogService); 
+
+
+
+
 
   sampleCartItems: cartItem[] = [
   {
@@ -100,6 +110,19 @@ export class CartSheet {
       return item;
     }).filter(item => item.quantity > 0) // Remove items with quantity 0
   }
+
+
+
+
+  openDialog() {
+    this.dialogService.create({
+      zTitle: 'Add a Note',
+      zContent: NoteModal,
+      zOkText: 'Save',
+      zWidth: '425px',
+    });
+  }
+
 
 
 

@@ -11,6 +11,12 @@ export const routes: Routes = [
     // You'd typically use a guard here to ensure the user is logged in
     // canActivate: [AuthGuard] 
   },
+
+  {
+    path: 'resturant/:id',
+    // Route for /customer/resturant
+    loadComponent: () => import('./pages/resturant/resturant').then(m => m.Resturant)
+  },
   // Optional: A wild card route for handling unknown paths within the customer module
   {
     path: '**', 

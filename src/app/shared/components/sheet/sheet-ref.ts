@@ -24,18 +24,18 @@ export class ZardSheetRef<T = any, R = any, U = any> {
     this.containerInstance.cancelTriggered.subscribe(() => this.trigger(eTriggerAction.CANCEL));
     this.containerInstance.okTriggered.subscribe(() => this.trigger(eTriggerAction.OK));
 
-    if ((this.config.zMaskClosable || this.config.zMaskClosable === undefined) && isPlatformBrowser(this.platformId)) {
-      this.containerInstance.getNativeElement().addEventListener(
-        'animationend',
-        () => {
-          this.containerInstance
-            .overlayClickOutside()
-            .pipe(takeUntil(this.destroy$))
-            .subscribe(() => this.close());
-        },
-        { once: true },
-      );
-    }
+    // if ((this.config.zMaskClosable || this.config.zMaskClosable === undefined) && isPlatformBrowser(this.platformId)) {
+    //   this.containerInstance.getNativeElement().addEventListener(
+    //     'animationend',
+    //     () => {
+    //       this.containerInstance
+    //         .overlayClickOutside()
+    //         .pipe(takeUntil(this.destroy$))
+    //         .subscribe(() => this.close());
+    //     },
+    //     { once: true },
+    //   );
+    // }
 
     if (isPlatformBrowser(this.platformId)) {
       fromEvent<KeyboardEvent>(document, 'keydown')

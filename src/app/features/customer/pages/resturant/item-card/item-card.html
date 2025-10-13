@@ -1,0 +1,18 @@
+<div class="border flex gap-5 border-black/10 dark:border-white/10 max-h-50 min-h-50 rounded-2xl overflow-clip relative ">
+    <img src={{dish.imageUrl}} alt={{dish.name}} class="h-56 max-w-4/12 min-w-4/12 object-cover  ">
+    <div class="w-8/12 mt-4 pr-4">
+        <h4 class="text-md font-semibold mb-2">{{dish.name}}</h4>
+        <p class="text-sm mb-1">Rs. {{dish.price}} • <i class="pi pi-thumbs-up"></i> {{dish.rating}} (234) </p>
+        <p class="text-black/80 dark:text-white/80 text-sm font-light line-clamp-2 ">{{dish.description}}</p>
+
+    </div>
+
+    <div class="overflow-hidden select-none py-1 text-white  bg-black  dark:bg-primary absolute rounded-full  bottom-3 right-3  drop-shadow-sm ">
+        <button class="px-4 py-1  duration-300 cursor-pointer">-</button>
+        <span class="px-2">0</span>
+        <button class="px-4 py-1  duration-300 cursor-pointer"  >+</button>
+    </div>
+    <z-badge zType="outline" class="absolute top-2 right-2 text-white  "  >{{dish.isVegetarian ? 'Veg' : 'Non-Veg'}}</z-badge>
+</div>
+
+ 

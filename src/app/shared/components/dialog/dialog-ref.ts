@@ -21,8 +21,8 @@ export class ZardDialogRef<T = any, R = any, U = any> {
     private containerInstance: ZardDialogComponent<T, U>,
     @Inject(PLATFORM_ID) private platformId: object,
   ) {
-    this.containerInstance.cancelTriggered.subscribe(() => this.trigger(eTriggerAction.CANCEL));
-    this.containerInstance.okTriggered.subscribe(() => this.trigger(eTriggerAction.OK));
+    this.containerInstance.cancelTriggeredDialog.subscribe(() => this.trigger(eTriggerAction.CANCEL));
+    this.containerInstance.okTriggeredDialog.subscribe(() => this.trigger(eTriggerAction.OK));
 
     if ((this.config.zMaskClosable || this.config.zMaskClosable === undefined) && isPlatformBrowser(this.platformId)) {
       this.containerInstance.getNativeElement().addEventListener(
