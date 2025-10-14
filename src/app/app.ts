@@ -23,6 +23,9 @@ export class App implements OnInit {
   onAuthPage() : boolean {
     return window.location.href.includes('auth');
   }
+  onLandingPage() : boolean {
+    return window.location.href.includes('/');
+  }
 
 
 
