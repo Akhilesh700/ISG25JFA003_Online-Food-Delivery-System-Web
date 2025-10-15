@@ -6,6 +6,9 @@ import { IDish } from 'src/app/models/resturantInterface';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/state/app.state';
 import { selectCartItems } from 'src/app/state/cart/cart.selector';
+import { Router, RouterLink } from '@angular/router';
+import { ZardButtonComponent } from '@shared/components/button/button.component';
+
 
 interface cartItem {
   id: string;
@@ -21,7 +24,7 @@ interface cartItem {
 
 @Component({
   selector: 'app-cart-sheet',
-  imports: [ZardBreadcrumbModule],
+  imports: [ZardBreadcrumbModule, ZardButtonComponent],
   templateUrl: './cart-sheet.html',
   styleUrl: './cart-sheet.css'
 })
@@ -35,7 +38,7 @@ export class CartSheet {
   
   protected readonly storeSerice = inject<Store<AppState>>(Store);
   protected readonly dialogService = inject(ZardDialogService); 
-  
+  private readonly router = inject(Router);
   
   cartItems$ = this.storeSerice.select(selectCartItems);
 
@@ -93,8 +96,7 @@ export class CartSheet {
 
  
   public triggerCheckout():void {
-    console.log('CartSheet: Emitting checkout event with cart items.');
-    this.checkout.emit(this.sampleCartItems);
+    this.router.navigate(['/checkout'])
   }
 
 

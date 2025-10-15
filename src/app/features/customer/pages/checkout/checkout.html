@@ -1,0 +1,39 @@
+<!-- 
+  1. Resolve the observable and create a local variable 'cartItems'.
+  2. The @if block will only render if cartItems is not null.
+  3. We add a second check for cartItems.length > 0.
+-->
+@if (cartItem$ | async; as cartItems) {
+    @if(cartItems.length > 0) {
+        <main class="w-10/12 mx-auto mt-22 flex justify-between gap-2 mb-10">
+            <div class="flex-2">
+                <app-delivery-details></app-delivery-details>
+                <button z-button class="w-full mt-5">Proceed To Pay</button>
+            </div>
+            <div class="flex flex-col">
+                @if (restaurant$ | async; as restaurant) {
+                    <app-restaurant-checkout-cart [restaurant]="restaurant"></app-restaurant-checkout-cart>
+                }
+                <!-- Now you can safely pass cartItems to the child component -->
+                <app-cart-summary [cartItems]="cartItems" ></app-cart-summary>
+                @if(summary$ | async; as summary){
+                    <app-order-summary [summary]="summary" ></app-order-summary>
+                }
+            </div>
+        </main>
+    } @else {
+        <!-- This block now correctly handles an empty cart -->
+        <div class="h-[100vh] flex items-center justify-center">
+            <div class="text-center">
+                <p class="text-2xl text-gray-500 mb-4">Your cart is empty.</p>
+                <button z-button>Home Page</button>
+            </div>
+        </div>
+    }
+} @else {
+    <!-- Optional: This block handles the case where the observable is still loading (i.e., is null) -->
+    <div class="h-[100vh] flex items-center justify-center">
+        <!-- You could put a spinner or loading indicator here -->
+        <p class="text-2xl text-gray-500">Loading Cart...</p>
+    </div>
+}

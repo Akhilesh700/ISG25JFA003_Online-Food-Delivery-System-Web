@@ -1,5 +1,5 @@
 <div class="border flex gap-5 border-black/10 dark:border-white/10 max-h-50 min-h-50 rounded-2xl overflow-clip relative ">
-    <img src={{dish.imageUrl}} alt={{dish.name}} class="h-56 max-w-4/12 min-w-4/12 object-cover  ">
+    <img src={{dish.imageUrl}} alt={{dish.name}} class="h-56 max-w-4/12 min-w-4/12 object-cover  " (click)="openDialog()">
     <div class="w-8/12 mt-4 pr-4">
         <h4 class="text-md font-semibold mb-2">{{dish.name}}</h4>
         <p class="text-sm mb-1">Rs. {{dish.price}} • <i class="pi pi-thumbs-up"></i> {{dish.rating}} (234) </p>

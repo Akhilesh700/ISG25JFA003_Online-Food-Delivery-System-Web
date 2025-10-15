@@ -1,6 +1,6 @@
 
 @if((cartItems$ | async)?.length) {
-    <div class="w-11/12 mx-auto ">
+    <div class="w-11/12 mx-auto relative ">
 
         <div class="flex  items-center justify-between mb-8 cursor-pointer ">
             <img src={{restaurant.banner}} alt={{restaurant.name}} class="w-20 h-20 rounded-full object-cover" />
@@ -37,9 +37,13 @@
             <h4 class="font-semibold">Total</h4>
             <h4 class="font-semibold">Rs.  5,432</h4>
         </div>
+<!-- 
+        <a routerLink="checkout">
+
+            <button z-button class="w-full absolute bottom-2 "> Checkout </button>
+        </a> -->
     </div>
 }@else {
-    
     <p class="flex items-center justify-center h-[80vh]" >Cart is Empty</p>
 }
     

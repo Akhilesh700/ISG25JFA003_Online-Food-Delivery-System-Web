@@ -10,6 +10,7 @@ import { Store } from '@ngrx/store';
 import { selectCartItems, selectCartState } from 'src/app/state/cart/cart.selector';
 import { AsyncPipe } from '@angular/common';
 import { IDish } from 'src/app/models/resturantInterface';
+import { Router } from '@angular/router';
 
 const getCurrentUser = () => {
   return {
@@ -31,6 +32,9 @@ export class Navbar implements OnInit {
   protected readonly darkmodeService = inject(DarkModeService);
   protected readonly sheetService = inject(ZardSheetService)
   protected readonly storeSerice = inject<Store<AppState>>(Store);
+  protected readonly router = inject(Router);
+
+
 
   isDarkMode: boolean = this.darkmodeService.getCurrentTheme() === 'dark';
   currentUser = getCurrentUser();
@@ -52,7 +56,10 @@ export class Navbar implements OnInit {
       zTitle: 'Cart',
       zContent: CartSheet,
       zOkText: !this.isCartEmpty ? 'Checkout' : null,
-      zSize: 'lg'
+      zSize: 'lg',
+      zOnOk: () => {
+          this.router.navigate(['checkout'])
+      }
     });
   }
 

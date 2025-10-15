@@ -1,16 +1,32 @@
 import { createReducer, on } from "@ngrx/store";
-import { IDish } from "src/app/models/resturantInterface";
+import { IDish, IResturant } from "src/app/models/resturantInterface";
 import { addToCard, decrement, increment, removeFromCart } from "./cart.action";
+import { inject } from "@angular/core";
+import { ResturantService } from "src/app/core/services/customer/resturants/RestaurantService";
 
 
 export interface CartState{
     dishes: IDish[],
-    totalPrice?: number
+    totalPrice: number,
+    restaurant?: IResturant
 }
 
 export const initialCartState: CartState = {
     dishes: [],
+    totalPrice: 0,
 }
+
+
+//Find Resturant by ResturantId
+const findResturantById = (resturantId: number): IResturant => {
+    const resturantService = new ResturantService();
+    return resturantService.getResturantById(resturantId)
+}
+
+// Helper function to calculate the total price
+const calculateTotalPrice = (dishes: IDish[]): number => {
+    return dishes.reduce((total, dish) => total + (dish.price * dish.quantity), 0);
+};
 
 export const cartReducer = createReducer(
     initialCartState,
@@ -19,7 +35,9 @@ export const cartReducer = createReducer(
         
         return {
             ...state,
-            dishes: updatedDishes
+            dishes: updatedDishes,
+            totalPrice: calculateTotalPrice(updatedDishes),
+            restaurant: findResturantById(1)
         }
     }),
 
@@ -32,7 +50,8 @@ export const cartReducer = createReducer(
         )
         return {
             ...state,
-            dishes: updatedDishes
+            dishes: updatedDishes,
+            totalPrice: calculateTotalPrice(updatedDishes)
         }
     }),
 
@@ -45,7 +64,8 @@ export const cartReducer = createReducer(
         )
         return {
             ...state,
-            dishes: updatedDishes
+            dishes: updatedDishes,
+            totalPrice: calculateTotalPrice(updatedDishes)
         }
     }),
 
@@ -53,7 +73,8 @@ export const cartReducer = createReducer(
         const updatedDishes = state.dishes.filter(d => d.id !== dishId)
         return {
             ...state,
-            dishes: updatedDishes
+            dishes: updatedDishes,
+            totalPrice: calculateTotalPrice(updatedDishes)
         }
     })
 

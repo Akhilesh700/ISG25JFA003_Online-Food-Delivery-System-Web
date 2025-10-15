@@ -4,6 +4,8 @@ import { ZardBadgeComponent } from "@shared/components/badge/badge.component";
 import { selectCartItems } from 'src/app/state/cart/cart.selector';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/state/app.state';
+import { ZardDialogService } from '@shared/components/dialog/dialog.service';
+import { CardModal } from '../components/card-modal/card-modal';
 
 @Component({
   selector: 'app-item-card',
@@ -13,6 +15,7 @@ import { AppState } from 'src/app/state/app.state';
 })
 export class ItemCard implements OnInit {
   protected readonly storeSerice = inject<Store<AppState>>(Store);
+  private dialogService = inject(ZardDialogService);
 
   @Input()
   dish : IDish = null as unknown as IDish;
@@ -53,6 +56,23 @@ export class ItemCard implements OnInit {
   removeFromCart(dishId: number) {
     this.handleRemove.emit(dishId)
   }
+
+
+  openDialog() {
+    this.dialogService.create({
+      zTitle: this.dish.name,
+      zDescription: `${this.dish.description}`,
+      zContent: CardModal,
+      zData: {
+        menuItem : this.dish
+      },
+      zOkText: null,
+      zWidth: '',
+      zCancelText: null
+    });
+  }
+
+
 
 
 }

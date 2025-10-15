@@ -20,7 +20,8 @@ import { AsyncPipe } from '@angular/common';
 export class Resturant implements OnInit {
   
   private readonly resturantService = inject(ResturantService)
-    protected readonly store = inject<Store<AppState>>(Store);
+  protected readonly store = inject<Store<AppState>>(Store);
+  
   param:number = window.location.pathname.split('/').pop() as unknown as number;
   isLoading: boolean = false;
   
