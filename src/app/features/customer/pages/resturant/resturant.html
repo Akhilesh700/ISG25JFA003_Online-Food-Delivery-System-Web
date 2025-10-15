@@ -41,8 +41,16 @@
         <section class="mt-10">
             @if( resturant.dishes.length > 0 ) {
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    @for( dish of resturant.dishes; track dish.id) {
-                        <app-item-card [dish]="dish" class="mb-4"></app-item-card>
+                    @for( dish of (mergeDishes$ | async); track dish.id) {
+                        <app-item-card 
+                            [dish]="dish" 
+                            class="mb-4 " 
+                            (handleAdd)="addItemToCart($event)" 
+                            (handleIncrement)="increaseCartItem($event)"
+                            (handleDecrement)="decreseCartItem($event)"
+                            (handleRemove)="removeItemFromCart($event)"
+                            
+                            ></app-item-card>
                     }
                 </div>
             }

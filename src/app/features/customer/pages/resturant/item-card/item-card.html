@@ -7,10 +7,19 @@
 
     </div>
 
+    <!-- TODO: Make this as a component -->
     <div class="overflow-hidden select-none py-1 text-white  bg-black  dark:bg-primary absolute rounded-full  bottom-3 right-3  drop-shadow-sm ">
-        <button class="px-4 py-1  duration-300 cursor-pointer">-</button>
-        <span class="px-2">0</span>
-        <button class="px-4 py-1  duration-300 cursor-pointer"  >+</button>
+        @if(dish.quantity === 0 ){
+            <button class=" h-10 w-12 duration-300 cursor-pointer" (click)="addToCart(dish)" >+</button>
+        }@else {
+            @if(dish.quantity === 1 ) {
+                <button class="px-4 py-1 duration-300 cursor-pointer " (click)="removeFromCart(dish.id)" ><i class="pi pi-trash"></i></button>
+            }@else {
+                <button class="px-4 py-1  duration-300 cursor-pointer" (click)="decrementCartItem(dish.id)" >-</button>
+            }
+            <span class="px-2">{{dish.quantity}}</span>
+            <button class="px-4 py-1  duration-300 cursor-pointer" (click)="incrementCartItem(dish.id)" >+</button>
+        }
     </div>
     <z-badge zType="outline" class="absolute top-2 right-2 text-white  "  >{{dish.isVegetarian ? 'Veg' : 'Non-Veg'}}</z-badge>
 </div>

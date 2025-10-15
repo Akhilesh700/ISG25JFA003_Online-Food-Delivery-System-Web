@@ -1,7 +1,11 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { ZardDialogService } from '@shared/components/dialog/dialog.service';
 import { NoteModal } from './note-modal/note-modal';
 import { ZardBreadcrumbModule } from "@shared/components/sheet/sheet.module";
+import { IDish } from 'src/app/models/resturantInterface';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/state/app.state';
+import { selectCartItems } from 'src/app/state/cart/cart.selector';
 
 interface cartItem {
   id: string;
@@ -24,14 +28,16 @@ interface cartItem {
 export class CartSheet {
 
 
+  
   @Output() 
   readonly checkout = new EventEmitter<cartItem[]>();
-
-
+  
+  
+  protected readonly storeSerice = inject<Store<AppState>>(Store);
   protected readonly dialogService = inject(ZardDialogService); 
-
-
-
+  
+  
+  cartItems$ = this.storeSerice.select(selectCartItems);
 
 
   sampleCartItems: cartItem[] = [
@@ -72,6 +78,7 @@ export class CartSheet {
     rating: 4.3,
   }]
 
+
   // sampleCartItems: cartItem[] = [];
 
   restaurant = {
@@ -83,6 +90,8 @@ export class CartSheet {
     description: 'Experience culinary excellence with our farm-to-table dishes, crafted from the freshest local ingredients. Join us for a memorable dining experience that delights the senses.'
   }
 
+
+ 
   public triggerCheckout():void {
     console.log('CartSheet: Emitting checkout event with cart items.');
     this.checkout.emit(this.sampleCartItems);

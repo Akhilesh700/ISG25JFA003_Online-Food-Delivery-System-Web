@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { map, Observable, of, Subscriber } from "rxjs";
 import { IResturant } from "src/app/models/resturantInterface";
 
 
@@ -26,7 +27,8 @@ export class ResturantService {
             "isAvailable": true,
             "category": "Main Course",
             "isVegetarian": false,
-            "rating": 4.8
+            "rating": 4.8,
+            quantity: 0
             },
             {
             "id": 102,
@@ -37,7 +39,8 @@ export class ResturantService {
             "isAvailable": true,
             "category": "Main Course",
             "isVegetarian": true,
-            "rating": 4.6
+            "rating": 4.6,
+            quantity: 0
             },
             {
             "id": 103,
@@ -48,7 +51,8 @@ export class ResturantService {
             "isAvailable": true,
             "category": "Appetizer",
             "isVegetarian": true,
-            "rating": 4.5
+            "rating": 4.5,
+            quantity: 0
             },
             {
             "id": 104,
@@ -59,7 +63,8 @@ export class ResturantService {
             "isAvailable": true,
             "category": "Appetizer",
             "isVegetarian": false,
-            "rating": 4.9
+            "rating": 4.9,
+            quantity: 0
             },
             {
             "id": 105,
@@ -70,7 +75,8 @@ export class ResturantService {
             "isAvailable": true,
             "category": "Main Course",
             "isVegetarian": false,
-            "rating": 4.9
+            "rating": 4.9,
+            quantity: 0
             },
             {
             "id": 106,
@@ -81,7 +87,8 @@ export class ResturantService {
             "isAvailable": true,
             "category": "Breads",
             "isVegetarian": true,
-            "rating": 4.7
+            "rating": 4.7,
+            quantity: 0
             },
             {
             "id": 107,
@@ -92,13 +99,33 @@ export class ResturantService {
             "isAvailable": false,
             "category": "Desserts",
             "isVegetarian": true,
-            "rating": 4.8
+            "rating": 4.8,
+            quantity: 0
             }
         ]
     }
 
+
+
     getResturantById(resturantId: number): IResturant {
-        return this.resturant;
+        
+        //  return of(this.resturant)
+        //     .pipe(
+        //         map(restaurant => {
+        //             // Create a new array of dishes, each with the quantity property
+        //             const dishesWithQuantity = restaurant.dishes.map(dish => {
+        //                 return { ...dish, quantity: 0 };
+        //             });
+                    
+        //             // Return a *new restaurant object* with the modified dishes array
+        //             return {
+        //                 ...restaurant, // Copy all original restaurant properties
+        //                 dishes: dishesWithQuantity // Overwrite the dishes property with the new array
+        //             };
+        //         })
+        //     );
+        return this.resturant
+
     }
 
 }

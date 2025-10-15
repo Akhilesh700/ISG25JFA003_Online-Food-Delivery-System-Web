@@ -1,4 +1,4 @@
-export interface IDishes {
+export interface IDish {
     id: number;
     name: string;
     description: string;
@@ -8,6 +8,7 @@ export interface IDishes {
     category: string;
     isVegetarian: boolean;
     rating: number;
+    quantity: number;
 }
 
 export interface IResturant {
@@ -20,5 +21,5 @@ export interface IResturant {
     ETA: string;
     isOpen: boolean;
     deliveryFee: number;
-    dishes: IDishes[];
+    dishes: IDish[];
 }

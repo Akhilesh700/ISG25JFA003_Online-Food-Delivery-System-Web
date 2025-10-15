@@ -1,6 +1,9 @@
-import { Component, Input, input } from '@angular/core';
-import { IDishes } from 'src/app/models/resturantInterface';
+import { Component, EventEmitter, inject, Input, input, OnInit, Output } from '@angular/core';
+import { IDish } from 'src/app/models/resturantInterface';
 import { ZardBadgeComponent } from "@shared/components/badge/badge.component";
+import { selectCartItems } from 'src/app/state/cart/cart.selector';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/state/app.state';
 
 @Component({
   selector: 'app-item-card',
@@ -8,18 +11,48 @@ import { ZardBadgeComponent } from "@shared/components/badge/badge.component";
   templateUrl: './item-card.html',
   styleUrl: './item-card.css'
 })
-export class ItemCard {
+export class ItemCard implements OnInit {
+  protected readonly storeSerice = inject<Store<AppState>>(Store);
 
   @Input()
-  dish : IDishes = null as unknown as IDishes
+  dish : IDish = null as unknown as IDish;
+
+  @Output()
+  handleAdd = new EventEmitter();
+
+  @Output()
+  handleIncrement = new EventEmitter();
+
+  @Output()
+  handleDecrement = new EventEmitter();
+
+  @Output()
+  handleRemove = new EventEmitter();
+
+  ngOnInit(): void {
+      
+  }
+
+  
 
 
+  addToCart(dish: IDish) {
+    this.handleAdd.emit(dish);
+  }
 
 
+  incrementCartItem(dishId: number) {
+    this.handleIncrement.emit(dishId);
+  }
 
 
+  decrementCartItem(dishId: number) {
+    this.handleDecrement.emit(dishId);
+  }
 
-
+  removeFromCart(dishId: number) {
+    this.handleRemove.emit(dishId)
+  }
 
 
 }

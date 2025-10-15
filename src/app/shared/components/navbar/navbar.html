@@ -17,8 +17,11 @@
             <input type="text" placeholder="Search for restaurant, cuisine or a dish" class=" text-sm font-mono  bg-transparent outline-none text-primary-foreground placeholder:text-primary-foreground/20 flex-1 " />
         </div>
         <div class="flex items-center">
-            <button class=" cursor-pointer">
-                <i class="pi pi-shopping-cart rounded-full hover:bg-primary/60 p-3 duration-300" style="color: var(--primary-color)" (click)="openCartSheet()" ></i>
+            <button class=" cursor-pointer relative " (click)="openCartSheet()">
+                <i class="pi pi-shopping-cart rounded-full hover:bg-primary/60 p-3 duration-300" style="color: var(--primary-color)"  ></i>
+                @if((cartItems$ | async)?.length){
+                    <span class="absolute top-0.5  right-0 w-[17px] h-[17px] rounded-full bg-primary text-xs flex items-center justify-center ">{{(cartItems$ | async)?.length}}</span>
+                }
             </button>
             <z-switch [(ngModel)]="isDarkMode" (onChange)="toggleTheme()" class="ml-4"></z-switch>
 
