@@ -1,0 +1,22 @@
+<section class="py-24 bg-gray-900/50">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-3xl font-bold text-white">How It Works</h2>
+    <p class="mt-2 text-gray-400">Get your food delivered in 4 easy steps</p>
+
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-4 relative">
+      <div class="hidden md:block absolute top-1/2 left-0 w-full h-px -translate-y-16">
+          <div class="w-5/6 h-full border-b-2 border-dashed border-gray-600 mx-auto"></div>
+      </div>
+
+      @for (step of steps; track step.number) {
+        <div class="relative flex flex-col items-center">
+          <div class="w-20 h-20 rounded-full bg-orange-500 flex items-center justify-center text-white text-2xl font-bold ring-8 ring-gray-800">
+            {{ step.number }}
+          </div>
+          <h3 class="mt-6 text-xl font-semibold text-white">{{ step.title }}</h3>
+          <p class="mt-2 text-gray-400 text-sm">{{ step.description }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>

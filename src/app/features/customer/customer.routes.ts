@@ -1,15 +1,14 @@
 import { Routes } from '@angular/router';
-import { Home } from './pages/home/home';
 
 export const routes: Routes = [
   {
-    path: '', 
-    component: Home, 
+    path: 'home', 
+    loadComponent : () => import('./home/home-page/home-page.component').then(m => m.HomePageComponent), 
   },
   // Optional: A wild card route for handling unknown paths within the customer module
   {
     path: '**', 
-    redirectTo: '',
+    redirectTo: 'home',
     pathMatch: 'full'
   }
 ];
