@@ -1,0 +1,18 @@
+<div class="max-w-sm mx-auto bg-black rounded-t-2xl dark:bg-secondary-foreground mb-1 shadow-lg p-6 text-white">
+    <div class="flex  items-center justify-between mb-8 cursor-pointer ">
+            <img [src]="restaurant.bannerUrl" [alt]="restaurant.name" class="w-20 h-20 rounded-full object-cover" />
+            <div class="w-8/12">
+                <h3 class="text-lg ">{{restaurant.name}}</h3>
+                <p class="text-sm line-clamp-1 ">{{restaurant.address}}</p>
+            </div>
+            <button class="cursor-pointer" > 
+                <i class="pi pi-angle-right rounded-full  hover:bg-primary/60 p-3 duration-300" style="color: var(--primary-color)"></i>
+            </button>
+    </div>
+    <div class="py-2 px-4 bg-primary/30 text-white rounded-2xl relative overflow-hidden">
+        <h4 class="text-sm font-medium w-8/12 ">4 days left of your Dine one benefits</h4>
+        <em class="text-sm italic">Join free for 1 month <i class="pi pi-arrow-right ml-5"></i></em>
+        <img src="https://www.simplotfoods.com/_next/image?url=https%3A%2F%2Fimages.ctfassets.net%2F0dkgxhks0leg%2F30QsCbbMsiCoVN2RXvWExm%2F86b4c3fe242cb0d6283a27070556fd90%2Fburgers_20with_20avocado_171_20copy.jpg%3Ffm%3Dwebp&w=3840&q=75" alt="Burger" class="rounded-full absolute left-53 -bottom-23 opacity-80 border-white">
+    </div>
+    <button class="w-full mt-3" z-button >pay</button>
+</div>

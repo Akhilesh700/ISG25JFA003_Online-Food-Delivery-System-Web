@@ -1,0 +1,83 @@
+<div class="mx-auto bg-black/95 dark:bg-secondary-foreground text-white rounded-xl shadow-md p-6 font-sans">
+
+  <div class="mb-6">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-semibold tracking-wide ">Delivery details</h2>
+    </div>
+
+    <div class="flex justify-between items-center py-3">
+      <div class="flex items-center">
+        <i class="pi pi-home mr-4 " style="font-size: 1.4rem;"></i>
+        <div>
+          <p class="font-semibold ">New York</p>
+          <p class="text-sm ">NY</p>
+        </div>
+      </div>
+      <button z-button zType="outline" (click)="onEdit('location')" class=" text-black dark:text-white text-sm px-4 py-1.5 rounded-full ">Edit <i class="pi pi-pencil ml-1"></i></button>
+    </div>
+
+    <div class="flex justify-between items-center py-3">
+      <div class="flex items-center">
+        <i class="pi pi-user mr-4 " style="font-size: 1.4rem;"></i>
+        <div>
+          <p class="">Meet at my door</p>
+          <a href="#" class="text-xs text-primary font-semibold hover:text-primary/80">Add delivery instructions</a>
+        </div>
+      </div>
+      <button z-button  zType="outline" (click)="onEdit('instructions')" disabled class="  text-black dark:text-white text-sm px-4 py-1.5 rounded-full ">Edit <i class="pi pi-pencil ml-1"></i> </button>    </div>
+  </div>
+
+
+  <div>
+    <h2 class="text-lg font-semibold tracking-wide   mb-4">Delivery options</h2>
+    <div class="space-y-3">
+
+      <div
+        (click)="selectDeliveryOption('Priority')"
+        class="rounded-lg p-4 flex items-center cursor-pointer transition-all duration-200"
+        [ngClass]="{
+          'outline outline-secondary/10 ': selectedDeliveryOption !== 'Priority',
+          'outline-2 outline-primary': selectedDeliveryOption === 'Priority'
+        }">
+        <i class="pi pi-bolt mr-4 " style="font-size: 1.4rem;"></i>
+
+        <div class="flex-grow">
+          <p class="font-medium tracking-wide">Priority</p>
+          <p class="text-xs ">20-30 min • Direct to you. Top-rated couriers</p>
+        </div>
+      </div>
+
+      <div
+        (click)="selectDeliveryOption('Standard')"
+        class=" rounded-lg p-4 flex items-center cursor-pointer transition-all duration-200"
+        [ngClass]="{
+          'outline outline-secondary/10': selectedDeliveryOption !== 'Standard',
+          'outline-2 outline-primary': selectedDeliveryOption === 'Standard'
+        }">
+        <i class="pi pi-truck mr-4 " style="font-size: 1.4rem;"></i>
+        <div class="flex-grow">
+          <p class="font-medium ">Standard</p>
+          <p class="text-xs ">30-50 min</p>
+        </div>
+      </div>
+
+      <div
+        (click)="selectDeliveryOption('Eco-Saver')"
+        class=" rounded-lg p-4 flex justify-between items-center cursor-pointer transition-all duration-200"
+        [ngClass]="{
+          'outline outline-secondary/10': selectedDeliveryOption !== 'Eco-Saver',
+          'outline-2 outline-primary': selectedDeliveryOption === 'Eco-Saver'
+        }">
+        <div class="flex items-center">
+            <i class="pi pi-clock mr-4 " style="font-size: 1.4rem;"></i>
+            <div class="flex-grow" >
+              <p class="font-medium ">Eco-Saver</p>
+              <p class="text-xs ">40 - 60 min</p>
+            </div>
+        </div>
+        <z-badge zType="outline">Free Delivery</z-badge>
+      </div>
+
+    </div>
+  </div>
+</div>

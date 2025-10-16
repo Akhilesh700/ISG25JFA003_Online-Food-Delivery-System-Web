@@ -1,0 +1,49 @@
+
+@if((cartItems$ | async)?.length) {
+    <div class="w-11/12 mx-auto relative ">
+
+        <div class="flex  items-center justify-between mb-8 cursor-pointer ">
+            <img src={{restaurant.banner}} alt={{restaurant.name}} class="w-20 h-20 rounded-full object-cover" />
+            <div class="w-8/12">
+                <h3 class="text-lg ">{{restaurant.name}}</h3>
+                <p class="text-sm line-clamp-1 ">{{restaurant.description}}</p>
+            </div>
+            <button class="cursor-pointer" > 
+                <i class="pi pi-angle-right rounded-full  hover:bg-primary/60 p-3 duration-300" style="color: var(--primary-color)"></i>
+            </button>
+        </div>
+    
+        <div class="overflow-y-scroll max-h-[45vh] no-scrollbar">
+    
+            @for(item of (cartItems$ | async); track item.id) {
+                <div class="py-2 flex flex-col sm:flex-row justify-between items-center border-b border-white/20">
+                    <img src={{item.imageUrl}} alt={{item.name}} class="w-24 h-24 rounded-md object-cover" />
+                    <div class="ml-4 w-1/2 flex flex-col justify-center items-start gap-2">
+                        <h4 class="font-semibold">{{item.name}}</h4>
+                        <p class="text-sm text-secondary/60">{{(item.quantity * item.price).toFixed(2)}} Rs.</p>
+                    </div>
+                <div>
+                    <button class="bg-primary/20 text-primary px-3 py-1.5 rounded-full text-sm font-medium cursor-pointer hover:bg-primary/40  " (click)="decreaseItemQuantity((item.id).toString())" >-</button>
+                    <span class="mx-2">{{item.quantity}}</span>
+                    <button class="bg-primary/20 text-primary px-3 py-1.5 rounded-full text-sm font-medium cursor-pointer hover:bg-primary/40 "  (click)="increaseItemQuantity((item.id).toString())" >+</button>
+                </div>
+            </div>
+        }
+        </div>
+        
+        <div class="h-1 bg-white/20 mt-6"></div>
+        <button z-button zType="outline" (click)="openDialog()">Edit profile</button>
+        <div class="flex justify-between items-center mt-5">
+            <h4 class="font-semibold">Total</h4>
+            <h4 class="font-semibold">Rs.  5,432</h4>
+        </div>
+<!-- 
+        <a routerLink="checkout">
+
+            <button z-button class="w-full absolute bottom-2 "> Checkout </button>
+        </a> -->
+    </div>
+}@else {
+    <p class="flex items-center justify-center h-[80vh]" >Cart is Empty</p>
+}
+    

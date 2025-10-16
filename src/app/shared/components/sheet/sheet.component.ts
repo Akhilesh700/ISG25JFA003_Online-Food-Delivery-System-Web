@@ -100,13 +100,7 @@ export class ZardSheetOptions<T, U> {
         }
 
         @if (config.zCancelText !== null) {
-          <button data-testid="z-cancel-button" class="cursor-pointer" z-button zType="outline" (click)="onCloseClick()">
-            @if (config.zCancelIcon) {
-              <i class="icon-{{ config.zCancelIcon }}"></i>
-            }
-
-            {{ config.zCancelText || 'Cancel' }}
-          </button>
+          
         }
       </footer>
     }
@@ -169,6 +163,9 @@ export class ZardSheetComponent<T, U> extends BasePortalOutlet {
     return this.portalOutlet()?.attachTemplatePortal(portal);
   }
 
+  
+
+
   onOkClick() {
     this.okTriggered.emit();
   }
@@ -177,15 +174,15 @@ export class ZardSheetComponent<T, U> extends BasePortalOutlet {
     this.cancelTriggered.emit();
   }
 
-  overlayClickOutside() {
-    return fromEvent<MouseEvent>(document, 'click').pipe(
-      filter(event => {
-        const clickTarget = event.target as HTMLElement;
-        const hasNotOrigin = clickTarget !== this.host.nativeElement;
-        const hasNotOverlay = !!this.overlayRef && this.overlayRef.overlayElement.contains(clickTarget) === false;
-        return hasNotOrigin && hasNotOverlay;
-      }),
-      takeUntil(this.overlayRef.detachments()),
-    );
-  }
+  // overlayClickOutside() {
+  //   return fromEvent<MouseEvent>(document, 'click').pipe(
+  //     filter(event => {
+  //       const clickTarget = event.target as HTMLElement;
+  //       const hasNotOrigin = clickTarget !== this.host.nativeElement;
+  //       const hasNotOverlay = !!this.overlayRef && this.overlayRef.overlayElement.contains(clickTarget) === false;
+  //       return hasNotOrigin && hasNotOverlay;
+  //     }),
+  //     takeUntil(this.overlayRef.detachments()),
+  //   );
+  // }
 }

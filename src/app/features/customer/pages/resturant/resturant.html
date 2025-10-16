@@ -1,0 +1,60 @@
+
+@if(isLoading) {
+
+    <main class="w-11/12 mx-auto mt-22">
+        <header>
+            <z-skeleton class="w-full h-64 rounded-2xl object-cover object-center shadow-2xl"></z-skeleton>
+        </header>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-20">
+
+            @for(dish of resturant.dishes; track dish.id){
+                <z-skeleton class="h-50 "></z-skeleton>
+            }
+        </div>
+    </main>
+
+
+
+}@else{
+    <main class="w-11/12 mx-auto mt-22">
+        <header>
+            <img src={{resturant.bannerUrl}} alt={{resturant.name}} class="w-full h-64 rounded-2xl object-cover object-center shadow-2xl "/>
+            <h1 class="font-semibold text-4xl mt-2">{{resturant.name}}</h1>
+            <div class="mt-6 flex justify-between " >
+                <div>
+                    <p class="text-sm "> <span class="font-medium"> {{resturant.rating}} {{' '}} </span>   <i class="pi pi-star-fill text-black dark:text-white text-xs "></i> (123)</p>
+                    <p class="text-sm ">{{resturant.address}}</p>
+                </div>
+                <div class="border border-white/10 py-2 px-4 rounded-lg flex justify-end ">
+    
+                    <div class="flex flex-col items-center px-5 border-r border-white/10 ">
+                        <p class="text-xs font-medium">Rs.{{resturant.deliveryFee}} Delivery Fee</p>
+                        <p class="text-xs">Other fees <i class="pi pi-info-circle"></i></p>
+                    </div>
+                    <div class="flex flex-col items-center px-5">
+                        <p class="text-xs font-medium">{{resturant.ETA}} </p>
+                        <p class="text-xs">Earliest arrival <i class="pi pi-info-circle"></i></p>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <section class="mt-10">
+            @if( resturant.dishes.length > 0 ) {
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    @for( dish of (mergeDishes$ | async); track dish.id) {
+                        <app-item-card 
+                            [dish]="dish" 
+                            class="mb-4 " 
+                            (handleAdd)="addItemToCart($event)" 
+                            (handleIncrement)="increaseCartItem($event)"
+                            (handleDecrement)="decreseCartItem($event)"
+                            (handleRemove)="removeItemFromCart($event)"
+                            
+                            ></app-item-card>
+                    }
+                </div>
+            }
+        </section>
+    
+    </main>
+}
