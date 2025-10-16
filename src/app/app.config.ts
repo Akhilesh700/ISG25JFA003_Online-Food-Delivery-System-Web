@@ -19,8 +19,7 @@ export const appConfig: ApplicationConfig = {
     ),
     provideStore({
       cart: cartReducer
-    })
-    provideRouter(routes),
+    }),
     provideHttpClient(withInterceptors([addTokenInterceptor]))
   ]
 };
