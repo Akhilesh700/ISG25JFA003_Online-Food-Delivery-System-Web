@@ -1,5 +1,5 @@
 @if (summary) {
-<div class="max-w-sm mx-auto  bg-black dark:bg-secondary-foreground rounded-b-xl shadow-lg p-6 text-white">
+<div class="max-w-sm mx-auto  border border-secondary-foreground/20 dark:bg-secondary-foreground rounded-b-xl shadow-lg p-6 ">
 
   <!-- Header -->
   <h2 class="text-xl font-semibold mb-4 tracking-wide">Order total</h2>
@@ -37,7 +37,7 @@
     @if (summary.deliveryDiscount) {
     <div class="flex justify-between items-center">
       <p class="">Delivery Discount</p>
-      <p class="font-semibold text-green-300">{{ summary.deliveryDiscount | number:'1.2-2' }}</p>
+      <p class="font-semibold text-green-500   dark:text-green-300">{{ summary.deliveryDiscount | number:'1.2-2' }}</p>
     </div>
     }
     

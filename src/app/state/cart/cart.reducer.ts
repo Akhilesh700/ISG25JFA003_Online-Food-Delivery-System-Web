@@ -1,8 +1,7 @@
 import { createReducer, on } from "@ngrx/store";
 import { IDish, IResturant } from "src/app/models/resturantInterface";
-import { addToCard, decrement, increment, removeFromCart } from "./cart.action";
-import { inject } from "@angular/core";
-import { ResturantService } from "src/app/core/services/customer/resturants/RestaurantService";
+import { addToCard, decrement, emptyCart, increment, removeFromCart } from "./cart.action";
+
 
 
 export interface CartState{
@@ -14,13 +13,7 @@ export interface CartState{
 export const initialCartState: CartState = {
     dishes: [],
     totalPrice: 0,
-}
-
-
-//Find Resturant by ResturantId
-const findResturantById = (resturantId: number): IResturant => {
-    const resturantService = new ResturantService();
-    return resturantService.getResturantById(resturantId)
+    restaurant: undefined
 }
 
 // Helper function to calculate the total price
@@ -30,19 +23,25 @@ const calculateTotalPrice = (dishes: IDish[]): number => {
 
 export const cartReducer = createReducer(
     initialCartState,
-    on(addToCard, (state, {dish}) => {
+    on(addToCard, (state, {dish, restaurant}) => {
+        if (state.restaurant && state.restaurant.id !== restaurant.id) {
+            // Todo: Make it sooner
+            alert("You can only order from one restaurant at a time. Please clear your cart first.");
+            return state; // Return the state unchanged
+        }
         const updatedDishes = [...state.dishes, {...dish, quantity: dish.quantity + 1} ]
         
         return {
             ...state,
             dishes: updatedDishes,
             totalPrice: calculateTotalPrice(updatedDishes),
-            restaurant: findResturantById(1)
+            // if its first time add rest for all cart
+            restaurant: state.restaurant || restaurant
         }
     }),
 
     on(increment, (state, {dishId}) => {
-        const updatedDishes = state.dishes.map(d => d.id === dishId ? {
+        const updatedDishes = state.dishes.map(d => d.itemId === dishId ? {
             ...d,
             quantity: d.quantity + 1}
             :
@@ -56,7 +55,7 @@ export const cartReducer = createReducer(
     }),
 
     on(decrement, (state, {dishId}) => {
-        const updatedDishes = state.dishes.map(d => d.id === dishId ? {
+        const updatedDishes = state.dishes.map(d => d.itemId === dishId ? {
             ...d,
             quantity: d.quantity - 1}
             :
@@ -70,12 +69,16 @@ export const cartReducer = createReducer(
     }),
 
     on(removeFromCart, (state, {dishId}) => {
-        const updatedDishes = state.dishes.filter(d => d.id !== dishId)
+        const updatedDishes = state.dishes.filter(d => d.itemId !== dishId)
         return {
             ...state,
             dishes: updatedDishes,
             totalPrice: calculateTotalPrice(updatedDishes)
         }
+    }),
+
+    on(emptyCart, () => {
+        return initialCartState
     })
 
 

@@ -1,15 +1,17 @@
 export interface IDish {
-    id: number;
+    itemId: number;
     name: string;
+    imgUrl: string;
+    cuisineType?: string;
+    isAvailable: boolean;
+    isVegetarian: boolean;
     description: string;
     price: number;
-    imageUrl: string;
-    isAvailable: boolean;
-    category: string;
-    isVegetarian: boolean;
     rating: number;
     quantity: number;
+    category: string;
 }
+
 
 export interface IResturant {
     id: number;
