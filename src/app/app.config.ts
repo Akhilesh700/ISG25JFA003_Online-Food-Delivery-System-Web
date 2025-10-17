@@ -2,10 +2,11 @@ import { ApplicationConfig, importProvidersFrom, provideBrowserGlobalErrorListen
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 
 import { routes } from './app.routes';
-import { provideStore } from '@ngrx/store';
+import { provideState, provideStore } from '@ngrx/store';
 import { cartReducer } from './state/cart/cart.reducer';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { addTokenInterceptor } from './core/interceptors/add-token-interceptor';
+import { localStorageSync } from './state/metaReducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,7 +20,12 @@ export const appConfig: ApplicationConfig = {
     ),
     provideStore({
       cart: cartReducer
-    }),
+    },
+    {
+      metaReducers: [localStorageSync]
+    }
+  ),
+    provideState({name: 'cart', reducer: cartReducer}),
     provideHttpClient(withInterceptors([addTokenInterceptor]))
   ]
 };

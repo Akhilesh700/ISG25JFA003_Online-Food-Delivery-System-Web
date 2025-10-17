@@ -58,7 +58,7 @@ export class Navbar implements OnInit {
       zOkText: !this.isCartEmpty ? 'Checkout' : null,
       zSize: 'lg',
       zOnOk: () => {
-          this.router.navigate(['checkout'])
+          this.router.navigate(['user/checkout'])
       }
     });
   }

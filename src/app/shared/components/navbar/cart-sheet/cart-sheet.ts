@@ -96,7 +96,7 @@ export class CartSheet {
 
  
   public triggerCheckout():void {
-    this.router.navigate(['/checkout'])
+    this.router.createUrlTree(['checkout'])
   }
 
 

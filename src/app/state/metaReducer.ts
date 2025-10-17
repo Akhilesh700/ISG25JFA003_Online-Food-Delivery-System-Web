@@ -1,5 +1,6 @@
 import { ActionReducer, Action } from "@ngrx/store";
 import { CartState } from "./cart/cart.reducer";
+import { emptyCart } from "./cart/cart.action";
 
 const CART_STORAGE_KEY = 'myAppCartState';
 
@@ -8,7 +9,9 @@ export const localStorageSync = (reducer: ActionReducer<any>) : ActionReducer<an
 
         const nextState = reducer(state, action);
 
-        if (nextState && nextState.cart) {
+        if (action.type === emptyCart.type) {
+            localStorage.removeItem(CART_STORAGE_KEY);
+        } else if (nextState && nextState.cart) {
             localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(nextState.cart));
         }
 
