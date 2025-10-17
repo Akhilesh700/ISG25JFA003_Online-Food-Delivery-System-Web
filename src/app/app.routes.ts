@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { LandingPageComponent } from './features/customer/landing/landing-page/landing-page';
-import { LoginComponent } from './features/auth/login/ui/login-page/login.component';
 import { roleGuard } from './core/guards/role-guard';
 import { authRedirectGuard } from './core/guards/auth-redirect-guard';
 

@@ -18,7 +18,7 @@ export function getPathForRole(role: Role): string {
             return '/delivery/dashboard';
         default:
             // Fallback to the login page if the role is unknown or null.
-            return '/login';
+            return '/auth/login';
     }
 }
 

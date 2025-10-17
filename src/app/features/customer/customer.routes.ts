@@ -8,7 +8,7 @@ export const routes: Routes = [
 
   {
     path: 'resturant/:id',
-    // Route for /customer/resturant
+    // Route for /user/resturant
     loadComponent: () => import('./pages/resturant/resturant').then(m => m.Resturant)
   },
 
