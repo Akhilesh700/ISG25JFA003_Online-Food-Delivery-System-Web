@@ -1,5 +1,5 @@
-@if(!onAuthPage() && !onLandingPage) {
-    <app-navbar/>
+@if(showNavBar()) {
+    <app-navbar></app-navbar>
 }
 <router-outlet/>
 <app-global-loader/>

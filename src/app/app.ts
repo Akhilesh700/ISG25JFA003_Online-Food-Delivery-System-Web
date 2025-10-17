@@ -15,8 +15,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class App implements OnInit {
   private readonly darkmodeService = inject(DarkModeService);
 
-private readonly router = inject(Router);
   private readonly loadingService = inject(LoadingService);
+  private readonly router = inject(Router);
 
   constructor() {
     // Start listening to router events as soon as the component is created.
@@ -28,13 +28,9 @@ private readonly router = inject(Router);
   }
 
 
-  onAuthPage() : boolean {
-    return window.location.href.includes('auth');
+  showNavBar() : boolean {
+    return this.router.url.includes('user');
   }
-  onLandingPage() : boolean {
-    return window.location.href.includes('/');
-  }
-
 
   private listenToRouterEvents(): void {
     this.router.events.pipe(
