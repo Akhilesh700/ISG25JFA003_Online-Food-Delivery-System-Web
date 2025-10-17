@@ -79,15 +79,10 @@ export class Checkout implements OnInit {
     effect(() => {
       if(this.isPaymentSuccess().status === 'SUCCESS') {
         setTimeout(() => {
-          // this.router.navigate(['/payment-confirmed'], {
-          //   queryParams: {
-          //     paymentId : this.isPaymentSuccess().paymentId 
-          //   }
-          // })
-          this.router.navigate([''])
+          
+          this.router.navigate(['user/home'])
           this.openSucessDialog();
-          this.store.dispatch(emptyCart());
-        },1000)
+        },300)
       }
       if(this.isPaymentSuccess().status === 'FAILED') {
         setTimeout(() => {
@@ -106,7 +101,7 @@ export class Checkout implements OnInit {
   ngOnInit(): void {
          this.restaurant$.pipe(
       map(e => {
-        this.currentRestaurant = { ...e };
+        this.currentRestaurant = {...e};
         console.log(this.currentRestaurant)
         return null
       })
@@ -149,6 +144,7 @@ export class Checkout implements OnInit {
               date: new Date().toLocaleString()
             })
           });
+          self.store.dispatch(emptyCart());
         },
         prefill: {
           name: this.currentUser.name,
