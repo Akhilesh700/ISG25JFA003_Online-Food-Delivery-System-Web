@@ -1,7 +1,7 @@
 import { createReducer, on } from "@ngrx/store";
 import { IDish, IResturant } from "src/app/models/resturantInterface";
 import { addToCard, decrement, emptyCart, increment, removeFromCart } from "./cart.action";
-
+import { getInitialCartState } from "../metaReducer";
 
 
 export interface CartState{
@@ -10,11 +10,7 @@ export interface CartState{
     restaurant?: IResturant
 }
 
-export const initialCartState: CartState = {
-    dishes: [],
-    totalPrice: 0,
-    restaurant: undefined
-}
+export const initialCartState: CartState = getInitialCartState();
 
 // Helper function to calculate the total price
 const calculateTotalPrice = (dishes: IDish[]): number => {
