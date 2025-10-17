@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { Navbar } from '@shared/components/navbar/navbar';
 import { DarkModeService } from '@shared/services/darkmode.service';
 
@@ -12,7 +12,7 @@ import { DarkModeService } from '@shared/services/darkmode.service';
 })
 export class App implements OnInit {
   private readonly darkmodeService = inject(DarkModeService);
-
+  private readonly router = inject(Router);
 
 
   ngOnInit(): void {
@@ -20,13 +20,9 @@ export class App implements OnInit {
   }
 
 
-  onAuthPage() : boolean {
-    return window.location.href.includes('auth');
+  showNavBar() : boolean {
+    return this.router.url.includes('user');
   }
-  onLandingPage() : boolean {
-    return window.location.href.includes('/');
-  }
-
 
 
 
