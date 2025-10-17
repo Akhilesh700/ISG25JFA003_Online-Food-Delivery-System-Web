@@ -10,7 +10,8 @@ export const routes: Routes = [
     {
         path: '',
         component: LandingPageComponent,
-        title: 'DineCognizant - Welcome'
+        title: 'DineCognizant - Welcome',
+        canActivate: [authRedirectGuard]
     },
     {
         path: 'auth',
