@@ -2,10 +2,10 @@ import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/core/services/auth.service';
-import { LoginCredentials, Role } from 'src/app/core/services/auth.models';
+import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { take } from 'rxjs';
 import { navigateToDashboard } from '@shared/utils/navigations.utils';
+import { LoginCredentials } from 'src/app/core/services/auth/auth.models';
 
 @Component({
   selector: 'app-login-form',
@@ -45,7 +45,7 @@ export class LoginFormComponent implements OnInit {
   onSubmit(): void {
     this.submitted = true;
     if (this.loginForm.invalid) return;
-    
+
     this.isLoading = true;
     this.loginError = null;
 
@@ -55,13 +55,12 @@ export class LoginFormComponent implements OnInit {
       rememberMe: this.loginForm.value.rememberMe
     };
 
+    // The login method now returns an Observable that completes with the user's role.
     this.authService.login(credentials).subscribe({
-      next: () => {
-        // After login, get the role and use the utility function for navigation.
-        this.authService.userRole$.pipe(take(1)).subscribe(role => {
-          navigateToDashboard(role, this.router); 
-          this.isLoading = false;
-        });
+      next: (role) => {
+        // By the time 'next' is called, the role is guaranteed to be fetched and the state is resolved.
+        this.isLoading = false;
+        navigateToDashboard(role, this.router);
       },
       error: (error) => {
         this.loginError = 'Login failed. Please check your credentials.';

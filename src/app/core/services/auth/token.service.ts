@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
 import { jwtDecode } from "jwt-decode";
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'

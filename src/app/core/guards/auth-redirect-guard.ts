@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, take, filter } from 'rxjs/operators';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../services/auth/auth.service';
 import { getPathForRole } from '@shared/utils/navigations.utils';
 
 export const authRedirectGuard: CanActivateFn = (): Observable<boolean | UrlTree> => {
@@ -11,7 +11,7 @@ export const authRedirectGuard: CanActivateFn = (): Observable<boolean | UrlTree
 
   return authService.isAuthStateResolved$.pipe(
     // 1. Wait until the auth state is resolved.
-    filter(isResolved => isResolved),
+    filter(isResolved => isResolved === true),
     take(1),
     // 2. Once resolved, get the current role and make the decision.
     map(() => {

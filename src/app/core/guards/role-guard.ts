@@ -2,8 +2,8 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router, UrlTree } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { map, take, filter } from 'rxjs/operators';
-import { AuthService } from '../services/auth.service';
-import { Role } from '../services/auth.models';
+import { AuthService } from '../services/auth/auth.service';
+import { Role } from '../services/auth/auth.models';
 
 export const roleGuard: CanActivateFn = (route): Observable<boolean | UrlTree> => {
   const authService = inject(AuthService);
@@ -13,7 +13,7 @@ export const roleGuard: CanActivateFn = (route): Observable<boolean | UrlTree> =
 
   return authService.isAuthStateResolved$.pipe(
     // 1. Wait until the auth state is resolved.
-    filter(isResolved => isResolved),
+    filter(isResolved => isResolved === true),
     take(1),
     // 2. Once resolved, get the current role and make the decision.
     map(() => {

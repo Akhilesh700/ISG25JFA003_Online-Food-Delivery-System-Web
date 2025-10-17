@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { tap, catchError, take, map, switchMap } from 'rxjs/operators';
 import { jwtDecode } from 'jwt-decode';
 
-import { TokenService } from './token.service';
+import { TokenService } from '../auth/token.service';
 import { AuthApiService } from './auth-api.service';
 import { AuthResponse, JwtPayload, LoginCredentials, Role } from './auth.models';
 
@@ -32,18 +32,45 @@ export class AuthService {
         this.loadInitialRole();
     }
 
-    login(credentials: LoginCredentials): Observable<AuthResponse> {
-        // We set resolved state to false during login to ensure guards wait
-        this.isAuthStateResolved.set(false); 
+    /**
+     * Orchestrates the entire login flow as a single atomic operation.
+     * 1. Calls the login API.
+     * 2. Saves the token.
+     * 3. Fetches the user's role.
+     * 4. Updates the internal state signals.
+     * @returns An Observable that emits the user's final Role upon successful completion.
+     */
+    login(credentials: LoginCredentials): Observable<Role | null> {
+        // Reset the resolved state at the start of a login attempt.
+        this.isAuthStateResolved.set(false);
+
         return this.authApiService.login(credentials).pipe(
-            tap(response => {
+            // Use switchMap to chain the login API call with the role fetching call.
+            switchMap(response => {
                 this.tokenService.saveToken(response.jwt);
-                this.loadInitialRole();
+                
+                const userId = this.getUserIdFromToken();
+                if (!userId) {
+                    // If the token is invalid right after login, something is wrong.
+                    this.logout(); // Ensure a clean state
+                    return of(null);
+                }
+                
+                // Return the inner observable for fetching the role.
+                return this.authApiService.fetchUserRole(userId).pipe(
+                    map(roleResponse => roleResponse.role)
+                );
+            }),
+            // `tap` the final result (the role) to update the state signals.
+            tap(role => {
+                this.userRole.set(role);
+                // IMPORTANT: Signal that the entire auth process is now resolved.
+                this.isAuthStateResolved.set(true); 
             }),
             catchError(error => {
-                console.error('Login failed:', error.message);
+                console.error('Login or role fetch failed:', error.message);
                 this.logout();
-                throw error;
+                throw error; // Propagate error to the component
             })
         );
     }
@@ -52,7 +79,7 @@ export class AuthService {
         this.tokenService.removeToken();
         this.userRole.set(null);
         this.isAuthStateResolved.set(true); // After logout, the state is resolved (as "logged out").
-        this.router.navigate(['/authlogin']);
+        this.router.navigate(['auth/login']);
     }
 
     public get isLoggedIn(): boolean {

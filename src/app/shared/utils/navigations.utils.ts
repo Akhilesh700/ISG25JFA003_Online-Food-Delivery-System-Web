@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Role } from 'src/app/core/services/auth.models';
+import { Role } from 'src/app/core/services/auth/auth.models';
 
 /**
  * Determines the appropriate application path for a given user role.
