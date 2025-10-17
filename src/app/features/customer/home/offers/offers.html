@@ -1,0 +1,18 @@
+<section class="py-16">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl font-bold text-white">Exclusive Offers</h2>
+    <p class="mt-2 text-gray-400">Save more with our special deals</p>
+
+    <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      @for (offer of offers; track offer.code) {
+        <div class="p-6 rounded-2xl bg-gradient-to-br text-white relative overflow-hidden transition-transform duration-300 hover:-translate-y-2" [ngClass]="offer.bgColor">
+          <h3 class="text-2xl font-bold">{{ offer.title }}</h3>
+          <p class="text-sm opacity-90">{{ offer.subtitle }}</p>
+          <div class="mt-6">
+            <span class="bg-white/20 text-white text-xs font-semibold px-3 py-1 rounded-full">{{ offer.code }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>

@@ -4,7 +4,8 @@ import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { routes } from './app.routes';
 import { provideStore } from '@ngrx/store';
 import { cartReducer } from './state/cart/cart.reducer';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { addTokenInterceptor } from './core/interceptors/add-token-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,6 +20,6 @@ export const appConfig: ApplicationConfig = {
     provideStore({
       cart: cartReducer
     }),
-    provideHttpClient()
+    provideHttpClient(withInterceptors([addTokenInterceptor]))
   ]
 };

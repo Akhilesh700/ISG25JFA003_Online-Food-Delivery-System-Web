@@ -1,0 +1,72 @@
+<div class="container">
+  <div class="flex items-center justify-center min-h-screen px-4">
+    <div class="relative w-full max-w-md pt-24">
+
+      <div class="absolute top-5 -left-5 w-3/6 z-10">
+        <img src="img/login/spilling_burger_2.png" alt="Spilling Burger">
+      </div>
+
+      <div class="card w-full bg-white mt-17">
+        <div class="flex flex-col items-center">
+          <h1 class="text-3xl text-orange-700 font-bold">Agent Register</h1>
+          <p class="text-gray-500 mt-1">Join Our Delivery Fleet</p>
+        </div>
+
+        <form [formGroup]="deliveryAgentForm" (ngSubmit)="onSubmit()" class="grid gap-2 mt-6 text-black">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="form-field">
+              <label for="name" class="form-label required">Full Name</label>
+              <input id="name" class="form-input" type="text" placeholder="Your full name" formControlName="name"
+                [class.is-invalid]="f['name'].invalid && f['name'].touched" />
+            </div>
+
+            <div class="form-field">
+              <label for="phone" class="form-label required">Phone</label>
+              <input id="phone" class="form-input" type="text" placeholder="10-digit mobile" formControlName="phone"
+                [class.is-invalid]="f['phone'].invalid && f['phone'].touched" />
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="email" class="form-label required">Email Address</label>
+            <input id="email" class="form-input" type="email" placeholder="you@example.com" formControlName="email"
+              [class.is-invalid]="f['email'].invalid && f['email'].touched" />
+          </div>
+
+          <div class="form-field">
+            <label for="password" class="form-label required">Password</label>
+            <input id="password" class="form-input" type="password" placeholder="Min. 8 characters"
+              formControlName="password" [class.is-invalid]="f['password'].invalid && f['password'].touched" />
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="form-field">
+              <label for="identityProofType" class="form-label required">Proof Type</label>
+              <select id="identityProofType" class="form-input" formControlName="identityProofType"
+                [class.is-invalid]="f['identityProofType'].invalid && f['identityProofType'].touched">
+                <option value="" disabled>Select Type</option>
+                @for (type of identityProofTypes; track type) {
+                  <option [value]="type">{{ type }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="identityProofNo" class="form-label required">Proof Number</label>
+              <input id="identityProofNo" class="form-input" type="text" placeholder="ID Number"
+                formControlName="identityProofNo"
+                [class.is-invalid]="f['identityProofNo'].invalid && f['identityProofNo'].touched" />
+            </div>
+          </div>
+
+          @if (deliveryAgentForm.invalid && (deliveryAgentForm.touched || deliveryAgentForm.dirty)) {
+            <div class="text-xs text-center text-red-500 mt-1">Please fill out all required fields correctly.</div>
+          }
+
+          <button type="submit" class="submit-btn p-2.5 mt-2 bg-orange-600">Create Account</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>

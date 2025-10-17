@@ -173,3 +173,18 @@
   --shadow-2xl: var(--shadow-2xl);
 }
 
+/* Custom scrollbar for a more integrated look */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #2d2d2d;
+}
+::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #777;
+}

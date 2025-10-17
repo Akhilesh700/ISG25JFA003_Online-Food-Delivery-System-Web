@@ -1,0 +1,21 @@
+<form class=" grid gap-4 mt-6 text-black">
+  <z-form-field>
+    <z-form-label zRequired="true">Email</z-form-label>
+    <z-form-control>
+      <input z-input type="email" placeholder="Enter you email" />
+    </z-form-control>
+  </z-form-field>
+
+  <z-form-field>
+    <z-form-label zRequired="true">Password</z-form-label>
+    <z-form-control>
+      <input z-input type="password" placeholder="Enter you password" />
+    </z-form-control>
+  </z-form-field>
+  <div class="flex w-100 justify-between align-center">
+    <z-checkbox>Remember me</z-checkbox>
+    <p class="text-orange-600 hover:cursor-pointer">Forgot Password</p>
+  </div>
+
+  <z-button zFull="true" class="mt-4 bg-orange-700">Login</z-button>
+</form>

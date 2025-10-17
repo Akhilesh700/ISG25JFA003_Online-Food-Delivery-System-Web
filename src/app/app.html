@@ -1,8 +1,4 @@
-@if(!onAuthPage()) {
+@if(showNavBar()) {
     <app-navbar></app-navbar>
 }
 <router-outlet></router-outlet>
-
-@if(!onAuthPage()) {
-    <app-footer></app-footer>
-}

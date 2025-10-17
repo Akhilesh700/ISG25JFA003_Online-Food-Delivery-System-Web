@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { forkJoin, map, Observable, of, Subscriber } from "rxjs";
 import { IDish, IResturant } from "src/app/models/resturantInterface";
+import { environment } from "src/environments/environment";
 
 
 // @Injectable({
@@ -175,20 +176,15 @@ import { IDish, IResturant } from "src/app/models/resturantInterface";
     providedIn:'root'
 })
 export class RestaurantService {
-    private token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJlcmVuMUBlcmVuLmNvbSIsInVzZXJJZCI6IjgiLCJpYXQiOjE3NjA1OTg2NjYsImV4cCI6OTk5OTk5OTk5OX0.Ad11a_kML_xAxvuKTbusgE-fpCn2aVPDoCcMG19e53ekyyWHw7UvpisHj_clTq8zeN5yd6HH00O9nzaS_Xaoww";
     protected readonly http = inject(HttpClient);
 
     getResturantById(resturantId: number): Observable<IResturant> {
 
         // 1. Define the observable for fetching the restaurant details
-        const restaurantDetails$ = this.http.get<IResturant>(`http://localhost:8081/api/v1/menu/restaurant/${resturantId}`, {
-            headers: { 'Authorization': `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJlcmVuMUBlcmVuLmNvbSIsInVzZXJJZCI6IjgiLCJpYXQiOjE3NjA1OTg2NjYsImV4cCI6OTk5OTk5OTk5OX0.Ad11a_kML_xAxvuKTbusgE-fpCn2aVPDoCcMG19e53ekyyWHw7UvpisHj_clTq8zeN5yd6HH00O9nzaS_Xaoww`} // ⚠️ Note: Hardcoding tokens is not secure
-        });
+        const restaurantDetails$ = this.http.get<IResturant>(`${environment.apiUrl}api/${environment.version}/menu/restaurant/${resturantId}`);
 
          // 2. Define the observable for fetching and mapping the dishes
-        const dishes$ = this.http.get<IDish[]>(`http://localhost:8081/api/v1/menu/${resturantId}`, {
-            headers: { 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJlcmVuMUBlcmVuLmNvbSIsInVzZXJJZCI6IjgiLCJpYXQiOjE3NjA1OTg2NjYsImV4cCI6OTk5OTk5OTk5OX0.Ad11a_kML_xAxvuKTbusgE-fpCn2aVPDoCcMG19e53ekyyWHw7UvpisHj_clTq8zeN5yd6HH00O9nzaS_Xaoww' }
-        }).pipe(
+        const dishes$ = this.http.get<IDish[]>(`${environment.apiUrl}api/${environment.version}/menu/${resturantId}`).pipe(
             
             map(backendDishes  => backendDishes.map(dish =>{
                 return {
