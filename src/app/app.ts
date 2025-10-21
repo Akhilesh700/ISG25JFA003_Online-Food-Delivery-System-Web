@@ -3,7 +3,7 @@ import { Navbar } from '@shared/components/navbar/navbar';
 import { DarkModeService } from '@shared/services/darkmode.service';
 import { GlobalLoaderComponent } from "@shared/components/global-loader/global-loader.component";
 import { Router, RouterOutlet, NavigationStart, NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
-import { LoadingService } from './core/services/loading.service';
+import { LoadingService } from './core/services/loading/loading.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ZardToastComponent } from "@shared/components/toast/toast.component";
 

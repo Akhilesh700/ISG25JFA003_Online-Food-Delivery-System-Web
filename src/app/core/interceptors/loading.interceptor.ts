@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
-import { LoadingService } from '../services/loading.service';
+import { LoadingService } from '../services/loading/loading.service';
 
 /**
  * Intercepts all outgoing HTTP requests to manage the global loading state.

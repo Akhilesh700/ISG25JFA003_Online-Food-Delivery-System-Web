@@ -1,10 +1,12 @@
 <nav class="bg-black text-white dark:bg-secondary-foreground/70 border-b border-white/30 backdrop-blur-md fixed top-0 left-0 w-full z-50 py-4 ">
     <div class="w-11/12 mx-auto flex justify-between items-center">
         <button class="cursor-pointer">
-
             <i class="pi pi-bars rounded-full hover:bg-primary/60 p-3 duration-300 cursor-pointer" style="color: var(--primary-color)" (click)="openOptionsSheet()"></i>
         </button>
-        <h3 class="text-lg">Dine <span class="font-semibold">Cognizant</span> </h3>
+        
+        <a routerLink="/" class="cursor-pointer">
+            <img src="img/DINE.png" alt="Dine Cognizant Logo" class="h-8 w-auto">
+        </a>
         <div class="flex items-center gap-1">
             <i class="pi pi-map-marker " style="color: var(--primary-color)"></i>
             <p class="font-light cursor-not-allowed ">{{currentUser.location}}</p>
@@ -18,15 +20,12 @@
         </div>
         <div class="flex items-center">
             <button class=" cursor-pointer relative " (click)="openCartSheet()">
-                <i class="pi pi-shopping-cart rounded-full hover:bg-primary/60 p-3 duration-300" style="color: var(--primary-color)"  ></i>
+                <i class="pi pi-shopping-cart rounded-full hover:bg-primary/60 p-3 duration-300" style="color: var(--primary-color)"   ></i>
                 @if((cartItems$ | async)?.length){
                     <span class="absolute top-0.5  right-0 w-[17px] h-[17px] rounded-full bg-primary text-xs flex items-center justify-center ">{{(cartItems$ | async)?.length}}</span>
                 }
             </button>
             <z-switch [(ngModel)]="isDarkMode" (onChange)="toggleTheme()" class="ml-4"></z-switch>
-
         </div>
-
-
     </div>
 </nav>

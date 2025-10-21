@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { RestaurantService } from '../../../../core/services/customer/resturants/RestaurantService'
+import { RestaurantService } from '../../../../core/services/customer/restaurants/RestaurantService'
 import { IDish, IResturant } from 'src/app/models/resturantInterface';
 import { ItemCard } from "./item-card/item-card";
 import { ZardSkeletonComponent } from "@shared/components/skeleton/skeleton.component";

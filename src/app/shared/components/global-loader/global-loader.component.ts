@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LoadingService } from 'src/app/core/services/loading.service';
+import { LoadingService } from 'src/app/core/services/loading/loading.service';
 // 1. Import the Lottie component and its configuration type.
 import { LottieComponent, AnimationOptions } from 'ngx-lottie';
 

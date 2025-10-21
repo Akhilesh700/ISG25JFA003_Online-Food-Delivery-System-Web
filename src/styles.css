@@ -188,3 +188,15 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #777;
 }
+
+/* Hide spinner arrows on number inputs for WebKit browsers (Chrome, Safari, Edge) */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Hide spinner arrows on number inputs for Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
