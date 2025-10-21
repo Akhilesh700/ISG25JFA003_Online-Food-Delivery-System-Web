@@ -23,6 +23,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/checkout/checkout').then(m=> m.Checkout)
 
   },
+  {
+
+    path: 'track-order',
+    loadComponent: () => import('./pages/track-order/track-order').then(m=> m.TrackOrder)
+  },
 
 
   // Optional: A wild card route for handling unknown paths within the customer module

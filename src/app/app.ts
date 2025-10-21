@@ -5,10 +5,11 @@ import { GlobalLoaderComponent } from "@shared/components/global-loader/global-l
 import { Router, RouterOutlet, NavigationStart, NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
 import { LoadingService } from './core/services/loading.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ZardToastComponent } from "@shared/components/toast/toast.component";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Navbar, GlobalLoaderComponent],
+  imports: [RouterOutlet, Navbar, GlobalLoaderComponent, ZardToastComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

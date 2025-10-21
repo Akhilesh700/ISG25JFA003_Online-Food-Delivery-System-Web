@@ -33,7 +33,7 @@ export class ItemCard implements OnInit {
   handleRemove = new EventEmitter();
 
   ngOnInit(): void {
-      console.log(this.dish)
+      // console.log(this.dish)
   }
 
   

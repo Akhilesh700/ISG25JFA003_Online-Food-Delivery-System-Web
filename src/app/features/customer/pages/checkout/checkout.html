@@ -3,7 +3,7 @@
   2. The @if block will only render if cartItems is not null.
   3. We add a second check for cartItems.length > 0.
 -->
-@if (cartItem$ | async; as cartItems) {
+@if (cartItems$ | async; as cartItems) {
     @if(cartItems.length > 0) {
         <main class="w-10/12 mx-auto mt-22 flex justify-between gap-2 mb-10">
             <div class="flex-2">
