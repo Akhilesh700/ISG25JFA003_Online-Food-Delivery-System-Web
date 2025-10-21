@@ -21,7 +21,7 @@
             class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
             [ngClass]="{
               'bg-[#e87f6f] text-white': step.completed,
-              'bg-gray-700 text-gray-400': !step.completed,
+              ' text-gray-400': !step.completed,
               'ring-4 ring-[#e87f6f]/30': i === currentStatus
             }">
             
@@ -42,5 +42,5 @@
           
         </div>
       } </div>
-      <button z-button zType='outline' (click)="showToast()" >Toast Me</button>
+      
 </div>

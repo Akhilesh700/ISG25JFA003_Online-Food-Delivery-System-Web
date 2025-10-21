@@ -19,14 +19,17 @@ interface orderDetails {
   templateUrl: './payment-sucess-dialog.html',
   styleUrl: './payment-sucess-dialog.css'
 })
-export class PaymentSucessDialog {
+export class PaymentSucessDialog  {
 
   protected readonly router = inject(Router); 
   protected orderDetails: orderDetails = inject(Z_MODAL_DATA);
 
-  
+  constructor() {
+    console.log(this.orderDetails.resturant)
+  }
+
   trackOrder() {
-    this.router.navigate([`track-order`], {
+    this.router.navigate([`user/track-order`], {
       queryParams: {orderId : this.orderDetails.orderId}
     })
   }
