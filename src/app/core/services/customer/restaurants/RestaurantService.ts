@@ -1,8 +1,10 @@
 import { HttpClient } from "@angular/common/http";
-import { inject, Injectable } from "@angular/core";
-import { forkJoin, map, Observable, of, Subscriber } from "rxjs";
-import { IDish, IResturant } from "src/app/models/resturantInterface";
+import { inject, Injectable, signal } from "@angular/core";
+import { forkJoin, map, Observable, of, Subscriber, tap } from "rxjs";
+import { IDish, IResturant, Restaurant } from "src/app/models/resturantInterface";
 import { environment } from "src/environments/environment";
+import { RestaurantApiService } from "./restaurant-api.service";
+import { toObservable } from "@angular/core/rxjs-interop";
 
 
 // @Injectable({
@@ -145,8 +147,8 @@ import { environment } from "src/environments/environment";
 //         console.log(dishes$)
 //         console.log(restaurant$)
 
-        
-        
+
+
 //         //  return of(this.resturant)
 //         //     .pipe(
 //         //         map(restaurant => {
@@ -154,7 +156,7 @@ import { environment } from "src/environments/environment";
 //         //             const dishesWithQuantity = restaurant.dishes.map(dish => {
 //         //                 return { ...dish, quantity: 0 };
 //         //             });
-                    
+
 //         //             // Return a *new restaurant object* with the modified dishes array
 //         //             return {
 //         //                 ...restaurant, // Copy all original restaurant properties
@@ -173,29 +175,49 @@ import { environment } from "src/environments/environment";
 
 
 @Injectable({
-    providedIn:'root'
+    providedIn: 'root'
 })
 export class RestaurantService {
     protected readonly http = inject(HttpClient);
+    private restaurantApiService = inject(RestaurantApiService);
+
+    // --- STATE MANAGEMENT WITH SIGNALS ---
+    private topRestaurants = signal<Restaurant[]>([]);
+    public readonly topRestaurantsSignal = this.topRestaurants.asReadonly();
+    public topRestaurants$ = toObservable(this.topRestaurants);
+
+    /**
+     * Fetches the list of top restaurants and updates the state.
+     * This method is idempotent and can be called to refresh the data.
+     * @returns An Observable that completes when the data is fetched and the state is updated.
+     */
+    fetchRestaurants(): Observable<Restaurant[]> {
+        return this.restaurantApiService.getRestaurants().pipe(
+            tap(restaurants => {
+                // Update the signal with the new data from the API.
+                this.topRestaurants.set(restaurants);
+            })
+        );
+    }
 
     getResturantById(resturantId: number): Observable<IResturant> {
 
         // 1. Define the observable for fetching the restaurant details
         const restaurantDetails$ = this.http.get<IResturant>(`${environment.apiUrl}api/${environment.version}/menu/restaurant/${resturantId}`);
 
-         // 2. Define the observable for fetching and mapping the dishes
+        // 2. Define the observable for fetching and mapping the dishes
         const dishes$ = this.http.get<IDish[]>(`${environment.apiUrl}api/${environment.version}/menu/${resturantId}`).pipe(
-            
-            map(backendDishes  => backendDishes.map(dish =>{
+
+            map(backendDishes => backendDishes.map(dish => {
                 return {
-                ...dish,
-                rating: parseFloat((Math.max(3.5, (dish.itemId * 9763974263) % 5)).toFixed(1)),
-                quantity: 0,
-                category: dish.cuisineType || 'Main Menu'
+                    ...dish,
+                    rating: parseFloat((Math.max(3.5, (dish.itemId * 9763974263) % 5)).toFixed(1)),
+                    quantity: 0,
+                    category: dish.cuisineType || 'Main Menu'
                 }
-            } 
-                
-        ))
+            }
+
+            ))
         );
 
         return forkJoin({
@@ -205,7 +227,7 @@ export class RestaurantService {
             // 4. Once both are complete, use 'map' to combine their results into a single object
             map(response => {
                 const { restaurant, dishes } = response;
-                
+
                 // Return a new restaurant object with the fetched dishes array merged into it
                 return {
                     ...restaurant,

@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 interface Testimonial {
   quote: string;
   author: string;
+  title: string,
   avatarUrl: string;
   rating: number;
 }
@@ -22,20 +23,23 @@ export class TestimonialsComponent {
   testimonials: Testimonial[] = [
     {
       quote: "Amazing service! Food arrived hot and fresh. The delivery was faster than expected.",
-      author: 'Sarah Johnson',
-      avatarUrl: '/assets/images/avatar1.png',
+      author: 'Sankalp Salve',
+      avatarUrl: 'img/avatar/avatar1.png',
+      title: 'Amazing Service',
       rating: 5
     },
     {
       quote: "Best food delivery app! Great variety of restaurants and excellent customer support.",
-      author: 'Michael Chen',
-      avatarUrl: '/assets/images/avatar2.png',
+      author: 'Jyoti Anand',
+      title: 'Best food delivery app',
+      avatarUrl: 'img/avatar/avatar2.png',
       rating: 5
     },
     {
       quote: "Love the app interface and the deals. Makes ordering food so convenient!",
-      author: 'Priya Sharma',
-      avatarUrl: '/assets/images/avatar3.png',
+      author: 'Sarthak Yadav',
+      title: 'Best User Interface',
+      avatarUrl: 'img/avatar/avatar3.png',
       rating: 5
     }
   ];

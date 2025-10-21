@@ -7,6 +7,7 @@ import { HowItWorksComponent } from '../how-it-works/how-it-works';
 import { TestimonialsComponent } from '../testimonials/testimonials';
 import { AppPromoComponent } from '../app-promo/app-promo';
 import { Hero } from '../hero/hero';
+import { Footer } from '../../landing/footer/footer/footer';
 
 
 @Component({
@@ -20,8 +21,9 @@ import { Hero } from '../hero/hero';
     TopRestaurantsComponent,
     HowItWorksComponent,
     TestimonialsComponent,
-    AppPromoComponent
-  ],
+    AppPromoComponent,
+    Footer
+],
   templateUrl: './home-page.component.html',
 })
 export class HomePageComponent {

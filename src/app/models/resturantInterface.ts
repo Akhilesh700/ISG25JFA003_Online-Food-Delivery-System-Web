@@ -25,3 +25,14 @@ export interface IResturant {
     deliveryFee: number;
     dishes: IDish[];
 }
+
+export interface Restaurant {
+  restId: number;     
+  name: string;
+  imgUrl: string;
+  address: string;
+  phone: string;
+  rating: number;      
+  openTime: string;  
+  closeTime: string; 
+}
