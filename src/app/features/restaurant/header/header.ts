@@ -1,11 +1,12 @@
-import { Component, Output, EventEmitter, ElementRef, HostListener, Input } from '@angular/core';
+import { Component, Output, EventEmitter, ElementRef, HostListener, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router'; // <-- Import RouterModule
+import { RouterModule } from '@angular/router';
+import { AuthService } from '../../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule], // <-- Add RouterModule here
+  imports: [CommonModule, RouterModule],
   templateUrl: './header.html',
   styles: []
 })
@@ -15,6 +16,8 @@ export class HeaderComponent {
   @Output() toggleThemeEvent = new EventEmitter<void>();
   
   isProfileDropdownOpen: boolean = false;
+  
+  private authService = inject(AuthService);
 
   constructor(private elementRef: ElementRef) {}
   
@@ -36,5 +39,10 @@ export class HeaderComponent {
   toggleProfileDropdown(event: MouseEvent): void {
     event.stopPropagation();
     this.isProfileDropdownOpen = !this.isProfileDropdownOpen;
+  }
+  
+  onLogout(): void {
+    this.isProfileDropdownOpen = false;
+    this.authService.logout();
   }
 }
