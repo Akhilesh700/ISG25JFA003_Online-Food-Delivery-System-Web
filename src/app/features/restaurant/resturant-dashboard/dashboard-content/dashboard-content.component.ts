@@ -1,7 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RestaurantService } from '../../services/restaurant.service';
+import { 
+  RestaurantOrderHistoryResponse, 
+  RestaurantDashboardStats, 
+  MonthlyEarnings 
+} from '../../models/restaurant.models';
+import { Subject, takeUntil, interval } from 'rxjs';
 
-interface Order { id: string; customerName: string; date: string; price: string; status: 'Completed' | 'Pending' | 'Rejected'; }
+interface Order { 
+  id: number; 
+  customerName: string; 
+  date: string; 
+  price: number; 
+  status: string; 
+  customerPhone: string;
+  specialReq: string;
+}
 interface MonthData { month: string; value: number; }
 
 @Component({
@@ -11,40 +26,116 @@ interface MonthData { month: string; value: number; }
   templateUrl: './dashboard-content.html',
   styleUrls: ['./dashboard-content.css']
 })
-export class DashboardContentComponent implements OnInit {
+export class DashboardContentComponent implements OnInit, OnDestroy {
   pendingOrders: Order[] = [];
   monthlyData: MonthData[] = [];
   isDarkMode: boolean = false;
+  
+  // Dashboard stats
+  dashboardStats: RestaurantDashboardStats = {
+    todayOrders: 0,
+    todayEarnings: 0,
+    totalOrders: 0,
+    totalEarnings: 0,
+    pendingOrders: 0,
+    completedOrders: 0,
+    rejectedOrders: 0
+  };
 
-  private orders: Order[] = [
-    { id: '#ORD-001', customerName: 'Jackson Williams', date: '2025-10-15', price: '$45.50', status: 'Completed' },
-    { id: '#ORD-002', customerName: 'Sarah Mitchell', date: '2025-10-15', price: '$32.80', status: 'Pending' },
-    { id: '#ORD-003', customerName: 'Adam Mccall', date: '2025-10-15', price: '$67.20', status: 'Completed' },
-    { id: '#ORD-004', customerName: 'Emma Thompson', date: '2025-10-14', price: '$28.90', status: 'Rejected' },
-    { id: '#ORD-005', customerName: 'Michael Chen', date: '2025-10-14', price: '$54.30', status: 'Completed' },
-    { id: '#ORD-006', customerName: 'Sophie Anderson', date: '2025-10-14', price: '$41.75', status: 'Pending' },
-  ];
+  private destroy$ = new Subject<void>();
+  private orders: Order[] = [];
+
+  constructor(private restaurantService: RestaurantService) {}
 
   ngOnInit(): void {
-    this.filterPendingOrders();
-    this.monthlyData = [
-      { month: 'Jan', value: 120 },
-      { month: 'Feb', value: 110 },
-      { month: 'Mar', value: 130 },
-      { month: 'Apr', value: 115 },
-      { month: 'May', value: 125 }
-    ];
+    this.loadDashboardData();
+    
+    // Auto-refresh every 30 seconds
+    interval(30000)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.loadDashboardData();
+      });
   }
 
-  onUpdateStatus(order: Order, status: 'Completed' | 'Rejected'): void {
-    const orderInList = this.orders.find(o => o.id === order.id);
-    if (orderInList) {
-      orderInList.status = status;
-      this.filterPendingOrders();
-    }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  loadDashboardData(): void {
+    // Load dashboard stats
+    this.restaurantService.getDashboardStats()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (stats) => {
+          this.dashboardStats = stats;
+        },
+        error: (error) => {
+          console.error('Error loading dashboard stats:', error);
+        }
+      });
+
+    // Load monthly earnings
+    this.restaurantService.getMonthlyEarnings()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (earnings) => {
+          this.monthlyData = earnings.map(e => ({
+            month: e.month,
+            value: Number(e.earnings)
+          }));
+        },
+        error: (error) => {
+          console.error('Error loading monthly earnings:', error);
+        }
+      });
+
+    // Load order history
+    this.restaurantService.getOrderHistory()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (orderHistory) => {
+          this.orders = orderHistory.map(o => ({
+            id: o.orderId,
+            customerName: o.customerName,
+            date: new Date(o.orderTime).toLocaleDateString(),
+            price: o.totalAmount,
+            status: o.status,
+            customerPhone: o.customerPhone,
+            specialReq: o.specialReq
+          }));
+          this.filterPendingOrders();
+        },
+        error: (error) => {
+          console.error('Error loading order history:', error);
+        }
+      });
+  }
+
+  onUpdateStatus(order: Order, action: 'accept' | 'reject'): void {
+    this.restaurantService.updateOrderStatus(order.id, action)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          console.log('Order status updated:', response);
+          // Reload dashboard data to reflect changes
+          this.loadDashboardData();
+        },
+        error: (error) => {
+          console.error('Error updating order status:', error);
+        }
+      });
   }
 
   private filterPendingOrders(): void {
-    this.pendingOrders = this.orders.filter(order => order.status === 'Pending');
+    this.pendingOrders = this.orders.filter(
+      order => order.status === 'PLACED' || order.status === 'PREPARING' || order.status === 'PENDING'
+    );
+  }
+
+  getMaxEarnings(): number {
+    if (this.monthlyData.length === 0) return 1;
+    return Math.max(...this.monthlyData.map(d => d.value), 1);
   }
 }

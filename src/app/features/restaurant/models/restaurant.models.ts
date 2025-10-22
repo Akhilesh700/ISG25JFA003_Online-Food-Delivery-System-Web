@@ -38,7 +38,23 @@ export interface RestaurantOrderHistoryResponse {
 }
 
 export interface AcceptRejectOrderResponse {
-    orderId: number;
-    status: string;
+    statusType?: string;
+    status?: string;
     message: string;
+}
+
+export interface RestaurantDashboardStats {
+    todayOrders: number;
+    todayEarnings: number;
+    totalOrders: number;
+    totalEarnings: number;
+    pendingOrders: number;
+    completedOrders: number;
+    rejectedOrders: number;
+}
+
+export interface MonthlyEarnings {
+    month: string;
+    earnings: number;
+    orderCount: number;
 }

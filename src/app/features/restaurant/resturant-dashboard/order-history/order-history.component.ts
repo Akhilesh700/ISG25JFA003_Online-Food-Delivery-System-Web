@@ -1,7 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RestaurantService } from '../../services/restaurant.service';
+import { RestaurantOrderHistoryResponse } from '../../models/restaurant.models';
+import { Subject, takeUntil, interval } from 'rxjs';
 
-interface Order { id: string; customerName: string; date: string; price: string; status: 'Completed' | 'Pending' | 'Rejected'; }
+interface Order { 
+  id: number; 
+  customerName: string; 
+  date: string; 
+  price: number; 
+  status: string;
+  customerPhone: string;
+  specialReq: string;
+}
 
 @Component({
   selector: 'app-order-history',
@@ -10,23 +21,51 @@ interface Order { id: string; customerName: string; date: string; price: string;
   templateUrl: './order-history.html',
   styleUrls: ['./order-history.css']
 })
-export class OrderHistoryComponent implements OnInit {
-  orders: Order[] = [
-    { id: '#ORD-001', customerName: 'Jackson Williams', date: '2025-10-15', price: '$45.50', status: 'Completed' },
-    { id: '#ORD-002', customerName: 'Sarah Mitchell', date: '2025-10-15', price: '$32.80', status: 'Pending' },
-    { id: '#ORD-003', customerName: 'Adam Mccall', date: '2025-10-15', price: '$67.20', status: 'Completed' },
-    { id: '#ORD-004', customerName: 'Emma Thompson', date: '2025-10-14', price: '$28.90', status: 'Rejected' },
-    { id: '#ORD-005', customerName: 'Michael Chen', date: '2025-10-14', price: '$54.30', status: 'Completed' },
-    { id: '#ORD-006', customerName: 'Sophie Anderson', date: '2025-10-14', price: '$41.75', status: 'Pending' },
-    { id: '#ORD-007', customerName: 'David Brown', date: '2025-10-13', price: '$58.90', status: 'Completed' },
-    { id: '#ORD-008', customerName: 'Lisa Davis', date: '2025-10-13', price: '$39.50', status: 'Completed' },
-  ];
-  
+export class OrderHistoryComponent implements OnInit, OnDestroy {
+  orders: Order[] = [];
   filteredOrders: Order[] = [];
   selectedStatus: string = 'All Status';
+  
+  private destroy$ = new Subject<void>();
+
+  constructor(private restaurantService: RestaurantService) {}
 
   ngOnInit(): void {
-    this.applyFilter();
+    this.loadOrderHistory();
+    
+    // Auto-refresh every 30 seconds
+    interval(30000)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.loadOrderHistory();
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  loadOrderHistory(): void {
+    this.restaurantService.getOrderHistory()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (orderHistory) => {
+          this.orders = orderHistory.map(o => ({
+            id: o.orderId,
+            customerName: o.customerName,
+            date: new Date(o.orderTime).toLocaleDateString(),
+            price: o.totalAmount,
+            status: o.status,
+            customerPhone: o.customerPhone,
+            specialReq: o.specialReq
+          }));
+          this.applyFilter();
+        },
+        error: (error) => {
+          console.error('Error loading order history:', error);
+        }
+      });
   }
 
   onFilterChange(event: Event): void {
@@ -40,6 +79,36 @@ export class OrderHistoryComponent implements OnInit {
       this.filteredOrders = this.orders;
     } else {
       this.filteredOrders = this.orders.filter(order => order.status === this.selectedStatus);
+    }
+  }
+
+  getStatusClass(status: string): string {
+    switch(status) {
+      case 'DELIVERED':
+        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
+      case 'PLACED':
+      case 'PREPARING':
+      case 'PENDING':
+      case 'OUT_FOR_DELIVERY':
+        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
+      case 'NOT_ACCEPTED':
+      case 'FAILED':
+        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
+      default:
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200';
+    }
+  }
+
+  getStatusLabel(status: string): string {
+    switch(status) {
+      case 'PLACED': return 'Placed';
+      case 'PREPARING': return 'Preparing';
+      case 'PENDING': return 'Pending';
+      case 'OUT_FOR_DELIVERY': return 'Out for Delivery';
+      case 'DELIVERED': return 'Delivered';
+      case 'NOT_ACCEPTED': return 'Rejected';
+      case 'FAILED': return 'Failed';
+      default: return status;
     }
   }
 }
