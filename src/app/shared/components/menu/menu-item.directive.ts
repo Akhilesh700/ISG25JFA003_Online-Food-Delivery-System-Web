@@ -4,7 +4,7 @@ import { BooleanInput } from '@angular/cdk/coercion';
 import { CdkMenuItem } from '@angular/cdk/menu';
 import { booleanAttribute, computed, Directive, effect, inject, input, signal, untracked } from '@angular/core';
 
-import { mergeClasses } from '@shared/utils/merge-classes';
+import { mergeClasses } from '../../../shared/utils/merge-classes';
 import { menuItemVariants, ZardMenuItemVariants } from './menu.variants';
 
 @Directive({

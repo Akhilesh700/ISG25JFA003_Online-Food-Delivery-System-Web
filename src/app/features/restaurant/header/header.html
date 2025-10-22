@@ -1,0 +1,37 @@
+<header class="h-16 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 flex items-center justify-between flex-shrink-0">
+  <div class="flex items-center gap-4">
+    <button (click)="onToggleSidebar()" class="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+    </button>
+  </div>
+  
+  <div class="flex items-center gap-4">
+    <button (click)="onToggleTheme()" class="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+    </button>
+    
+    <div class="relative">
+      <div (click)="toggleProfileDropdown($event)" class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg p-2 transition-colors">
+        <div class="w-9 h-9 bg-orange-500 rounded-full flex items-center justify-center text-white font-semibold">AJ</div>
+        <div>
+          <div class="text-sm font-semibold text-gray-800 dark:text-gray-200">Albert Juan</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400">Manager</div>
+        </div>
+        <svg class="w-4 h-4 text-gray-600 dark:text-gray-300 transition-transform" [class.rotate-180]="isProfileDropdownOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </div>
+
+      <div *ngIf="isProfileDropdownOpen" class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg py-1 border border-gray-200 dark:border-gray-600 z-50">
+        <a [routerLink]="['/restaurant/update-profile']" (click)="isProfileDropdownOpen = false" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+          <span>✏️</span>
+          <span>Update Profile</span>
+        </a>
+        <a href="#" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+          <span>🚪</span>
+          <span>Sign-out</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>

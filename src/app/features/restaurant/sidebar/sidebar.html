@@ -1,0 +1,24 @@
+<aside [ngClass]="isOpen ? 'w-64' : 'w-0'" class="h-full bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out overflow-hidden flex-shrink-0 flex flex-col">
+  <div class="h-16 px-4 border-b border-gray-200 dark:border-gray-700 flex items-center gap-2 flex-shrink-0">
+    <span class="text-2xl">🍽️</span>
+    <span class="font-bold text-lg text-gray-800 dark:text-gray-200">DineCognizant</span>
+  </div>
+  
+  <nav class="p-4 flex-1 overflow-y-auto">
+    <a *ngFor="let item of menuItems"
+        [routerLink]="item.route"
+        routerLinkActive="!bg-orange-500 !text-white"
+        [routerLinkActiveOptions]="{exact: true}"
+        class="flex items-center justify-between px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-200 ease-in-out mb-1 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+        
+        <div class="flex items-center gap-3">
+            <span class="text-lg">{{ item.icon }}</span>
+            <span class="text-sm font-medium">{{ item.name }}</span>
+        </div>
+        
+        <span *ngIf="item.badge" class="bg-orange-600 text-white text-xs px-2 py-0.5 rounded-full">
+            {{ item.badge }}
+        </span>
+    </a>
+  </nav>
+</aside>

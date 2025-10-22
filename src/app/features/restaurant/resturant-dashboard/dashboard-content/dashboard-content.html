@@ -1,0 +1,104 @@
+<h2 id="dashboard-section" class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-6">Dashboard</h2>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+  <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 flex justify-between items-center">
+      <div>
+          <h3 class="text-gray-600 dark:text-gray-400 text-sm">Today's Orders</h3>
+          <div class="text-3xl font-bold text-gray-800 dark:text-gray-200 mt-1">1,250</div>
+      </div>
+      <div class="bg-green-100 dark:bg-green-900/50 p-3 rounded-full">
+          <svg class="w-6 h-6 text-green-500 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+      </div>
+  </div>
+
+  <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 flex justify-between items-center">
+      <div>
+          <h3 class="text-gray-600 dark:text-gray-400 text-sm">Today's Earnings</h3>
+          <div class="text-3xl font-bold text-gray-800 dark:text-gray-200 mt-1">$3,450</div>
+      </div>
+      <div class="bg-yellow-100 dark:bg-yellow-900/50 p-3 rounded-full">
+          <svg class="w-6 h-6 text-yellow-500 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      </div>
+  </div>
+  
+  <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 flex justify-between items-center">
+      <div>
+          <h3 class="text-gray-600 dark:text-gray-400 text-sm">Total Orders</h3>
+          <div class="text-3xl font-bold text-gray-800 dark:text-gray-200 mt-1">46,827</div>
+      </div>
+      <div class="bg-purple-100 dark:bg-purple-900/50 p-3 rounded-full">
+          <svg class="w-6 h-6 text-purple-500 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+      </div>
+  </div>
+
+  <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 flex justify-between items-center">
+      <div>
+          <h3 class="text-gray-600 dark:text-gray-400 text-sm">Total Earnings</h3>
+          <div class="text-3xl font-bold text-gray-800 dark:text-gray-200 mt-1">$89,935</div>
+      </div>
+      <div class="bg-blue-100 dark:bg-blue-900/50 p-3 rounded-full">
+          <svg class="w-6 h-6 text-blue-500 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+      </div>
+  </div>
+</div>
+
+<div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 mb-8">
+  <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">Incoming Orders</h2>
+  <div class="overflow-x-auto">
+    <table *ngIf="pendingOrders.length > 0" class="w-full text-left text-sm">
+      <thead class="text-gray-500 dark:text-gray-400">
+        <tr class="border-b border-gray-200 dark:border-gray-700">
+          <th class="py-3 px-4 font-medium">Order #</th>
+          <th class="py-3 px-4 font-medium">Customer Name</th>
+          <th class="py-3 px-4 font-medium">Price</th>
+          <th class="py-3 px-4 font-medium text-center">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of pendingOrders" class="border-b border-gray-200 dark:border-gray-700 last:border-b-0">
+          <td class="py-3 px-4 text-gray-700 dark:text-gray-300 font-medium">{{ order.id }}</td>
+          <td class="py-3 px-4 text-gray-600 dark:text-gray-400">{{ order.customerName }}</td>
+          <td class="py-3 px-4 text-gray-600 dark:text-gray-400">{{ order.price }}</td>
+          <td class="py-3 px-4 text-center">
+            <div class="flex items-center justify-center gap-2">
+              <button (click)="onUpdateStatus(order, 'Completed')" class="px-3 py-1 text-xs font-semibold text-white bg-green-500 rounded-md hover:bg-green-600 transition-colors">Accept</button>
+              <button (click)="onUpdateStatus(order, 'Rejected')" class="px-3 py-1 text-xs font-semibold text-white bg-red-500 rounded-md hover:bg-red-600 transition-colors">Reject</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="pendingOrders.length === 0" class="text-center py-8 text-gray-500 dark:text-gray-400">
+      No new orders to manage.
+    </div>
+  </div>
+</div>
+
+<div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 mb-8">
+    <h2 class="text-lg font-bold text-gray-800 dark:text-gray-200 mb-4">Monthly Revenue</h2>
+    <div class="flex flex-col md:flex-row items-start gap-8">
+      <div class="flex-shrink-0">
+          <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">Average Monthly Income</div>
+          <div class="text-3xl font-bold text-gray-800 dark:text-gray-200">$134,789</div>
+          <div class="flex items-center text-sm text-green-600 mt-1">
+            <span class="font-semibold">▲ 34.67</span>
+            <span class="text-gray-500 dark:text-gray-400 ml-2">vs previous month</span>
+          </div>
+      </div>
+      <div class="flex-grow w-full relative h-48">
+        <svg class="w-full h-full" viewBox="0 0 600 160">
+          <defs>
+            <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#fdba74" stop-opacity="0.5" />
+              <stop offset="100%" [attr.stop-color]="isDarkMode ? '#1f2937' : '#fff'" stop-opacity="0" />
+            </linearGradient>
+          </defs>
+          <path d="M 0,80 L 75,90 L 150,70 L 225,85 L 300,75 L 375,60 L 450,50 L 525,55 L 600,70 L 600,160 L 0,160 Z" fill="url(#areaGradient)"/>
+          <path d="M 0,80 L 75,90 L 150,70 L 225,85 L 300,75 L 375,60 L 450,50 L 525,55 L 600,70" fill="none" stroke="#f97316" stroke-width="2.5" stroke-linecap="round" />
+        </svg>
+        <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-2 absolute bottom-0 w-full px-2">
+          <span *ngFor="let d of monthlyData">{{ d.month }}</span>
+        </div>
+      </div>
+    </div>
+</div>

@@ -1,14 +1,15 @@
 import { Routes } from '@angular/router';
 
-type Role = 'Admin' | 'Customer' | 'Restaurant' | 'Delivery';
-
-const role: Role = (localStorage.getItem('role') as Role) || 'Customer';
-
 export const routes: Routes = [
     {
-        path: '', 
-        loadChildren : 
-            () => import('./features/customer/customer.routes').then(m => m.routes)
-             
+        // When a URL starts with 'restaurant', load the restaurant feature routes
+        path: 'restaurant',
+        loadChildren: () => import('./features/restaurant/restaurant.routes').then(m => m.RESTAURANT_ROUTES)
+    },
+    // Redirect the user to the restaurant section by default
+    {
+        path: '',
+        redirectTo: '/restaurant',
+        pathMatch: 'full'
     }
 ];

@@ -1,30 +1,21 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { Navbar } from '@shared/components/navbar/navbar';
-import { DarkModeService } from '@shared/services/darkmode.service';
 
+export interface MenuItem {
+  name: string;
+  icon: string;
+  route: string;
+  fragment?: string; // This tells the router which element ID to scroll to
+  badge?: number;
+}
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Navbar],
+  standalone: true,
+  imports: [CommonModule, RouterOutlet],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css']
 })
-export class App implements OnInit {
-  private readonly darkmodeService = inject(DarkModeService);
-
-
-
-  ngOnInit(): void {
-    this.darkmodeService.initTheme();
-  }
-
-
-  onAuthPage() : boolean {
-    return window.location.href.includes('auth');
-  }
-
-
-
-
+export class AppComponent {
 }
