@@ -1,0 +1,71 @@
+/* Card Base Style */
+.card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.order-history h3 {
+  margin-top: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-family: 'Inter', sans-serif;
+}
+
+th, td {
+  padding: 1rem 0.75rem;
+  border-bottom: 1px solid #e9ecef;
+  vertical-align: middle;
+}
+
+thead th {
+  color: #6c757d;
+  font-weight: 500;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6c757d;
+}
+
+/* Status Badges */
+.status-badge {
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.status-delivered {
+  background-color: #e6f7ec;
+  color: #28a745;
+}
+
+.status-in-transit {
+  background-color: #fff0e0;
+  color: #fd7e14;
+}
+
+.status-processing {
+  background-color: #e0f2ff;
+  color: #007bff;
+}
