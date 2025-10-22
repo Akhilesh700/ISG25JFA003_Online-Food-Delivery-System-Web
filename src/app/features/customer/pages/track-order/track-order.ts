@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { OrderTimeline } from "./order-timeline/order-timeline";
 import { ActivatedRoute, Router } from '@angular/router';
-import { DeliveryStatus } from 'src/app/core/services/customer/track-order/delivery-status.service';
+import { DeliveryStatus, IOrderInfoResponse } from 'src/app/core/services/customer/track-order/delivery-status.service';
 
 const orderStatusSet = {
   'PLACED': 1,
@@ -33,9 +33,9 @@ export class TrackOrder implements OnInit {
       this.route.queryParams.subscribe(params => {
         this.orderId = params['orderId']
 
-        this.deliveryStatus.getDeliveryStatus(this.orderId).subscribe(status => {
-          this.orderStatus = status;
-          console.log(this.orderStatus);
+        this.deliveryStatus.getDeliveryStatus(this.orderId).subscribe((orderInfo: IOrderInfoResponse) => {
+          this.orderStatus = orderInfo.status;
+          console.log(orderInfo);
           this.currentStep= orderStatusSet[this.orderStatus as keyof typeof orderStatusSet]
           console.log(this.currentStep);
         })

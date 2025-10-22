@@ -287,6 +287,7 @@ import { PaymentSucessDialog } from './components/payment-sucess-dialog/payment-
 
 import { ZardBreadcrumbModule } from "@shared/components/sheet/sheet.module";
 import { ZardDialogService } from '@shared/components/dialog/dialog.service';
+import { toast } from 'ngx-sonner';
 
 @Component({
   selector: 'app-checkout',
@@ -409,6 +410,8 @@ export class Checkout implements OnInit {
         ondismiss: () => {
           this.zone.run(() => {
             // 5b. On payment dismissal/failure, update status
+            toast.error("Payment Failed.")
+            this.store.dispatch(emptyCart());
             this.orderApiService.updatePaymentStatus(orderId, "TXN_FAILED_ajhf63refYAG", 'Failed', amount).subscribe(() => {
               console.log('Payment failed or was cancelled by the user.');
               this.isLoading.set(false);
