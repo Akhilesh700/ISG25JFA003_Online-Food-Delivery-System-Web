@@ -6,6 +6,7 @@ import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { take } from 'rxjs';
 import { navigateToDashboard } from '@shared/utils/navigations.utils';
 import { LoginCredentials } from 'src/app/core/services/auth/auth.models';
+import { toast } from 'ngx-sonner';
 
 @Component({
   selector: 'app-login-form',
@@ -55,16 +56,15 @@ export class LoginFormComponent implements OnInit {
       rememberMe: this.loginForm.value.rememberMe
     };
 
-    // The login method now returns an Observable that completes with the user's role.
     this.authService.login(credentials).subscribe({
       next: (role) => {
-        // By the time 'next' is called, the role is guaranteed to be fetched and the state is resolved.
         this.isLoading = false;
         navigateToDashboard(role, this.router);
       },
       error: (error) => {
-        this.loginError = 'Login failed. Please check your credentials.';
-        console.error('Login error:', error);
+        toast.error(error.error.message);
+        this.loginForm.reset();
+        this.submitted = false;
         this.isLoading = false;
       }
     });

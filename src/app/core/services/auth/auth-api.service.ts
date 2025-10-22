@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AuthResponse, LoginCredentials, Role } from './auth.models';
+import { AgentSignupResponse, AuthResponse, CustomerSignupResponse, LoginCredentials, RestaurantSignupResponse, Role } from './auth.models';
 import { environment } from 'src/environments/environment';
 
 /**
@@ -22,6 +22,21 @@ export class AuthApiService {
    */
   login(credentials: LoginCredentials): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, credentials);
+  }
+
+  /**
+   * Sends signup credentials to the signup authentication endpoint.
+   * @param credentials Credentials for registering based on role
+   * @returns An Observable of the SignupResponse.
+   */
+  customerSignup(credentials: iCustomerSignup): Observable<CustomerSignupResponse> {
+    return this.http.post<CustomerSignupResponse>(`${this.apiUrl}/auth/customer/sign-up`, credentials)
+  }
+  agentSignup(credentials: iAgentSignup): Observable<AgentSignupResponse> {
+    return this.http.post<AgentSignupResponse>(`${this.apiUrl}/auth/delivery-agent/sign-up`, credentials)
+  }
+  restaurantSignup(credentials: iRestaurantSignup): Observable<RestaurantSignupResponse> {
+    return this.http.post<RestaurantSignupResponse>(`${this.apiUrl}/auth/restaurant/sign-up`, credentials)
   }
 
   /**

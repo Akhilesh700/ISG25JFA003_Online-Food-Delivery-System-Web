@@ -10,9 +10,25 @@ export type Role = 'ROLE_ADMIN' | 'ROLE_CUSTOMER' | 'ROLE_RESTAURANT' | 'ROLE_DE
 
 export interface AuthResponse {
     jwt: string;
-    user: number; // Represents the userId
+    user: number; 
 }
 
+export interface RestaurantSignupResponse{
+    email: string;
+    role: string;
+    userId: number;
+    restId: number;
+}
+export interface AgentSignupResponse{
+    agentId: number;
+    status: string;
+}
+export interface CustomerSignupResponse{
+    email: string;
+    role: string;
+    userId: number;
+    createdCartId: number;
+}
 /**
  * Defines the structure of the JWT payload for strong typing and predictable access to claims.
  */

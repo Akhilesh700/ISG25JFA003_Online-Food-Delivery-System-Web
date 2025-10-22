@@ -25,7 +25,7 @@ input::placeholder, textarea::placeholder{
 }
 
 input:focus{
-    background-color: white;
+    background-color: white!important;
 }
 
 /* Styling for form labels */
