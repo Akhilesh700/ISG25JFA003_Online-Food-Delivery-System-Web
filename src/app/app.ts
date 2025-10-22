@@ -1,21 +1,56 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
-
-export interface MenuItem {
-  name: string;
-  icon: string;
-  route: string;
-  fragment?: string; // This tells the router which element ID to scroll to
-  badge?: number;
-}
+import { Component, inject, OnInit } from '@angular/core';
+import { Navbar } from './shared/components/navbar/navbar';
+import { DarkModeService } from './shared/services/darkmode.service';
+import { GlobalLoaderComponent } from "./shared/components/global-loader/global-loader.component";
+import { Router, RouterOutlet, NavigationStart, NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
+import { LoadingService } from './core/services/loading/loading.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ZardToastComponent } from "./shared/components/toast/toast.component";
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [CommonModule, RouterOutlet],
+  imports: [RouterOutlet, Navbar, GlobalLoaderComponent, ZardToastComponent],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })
-export class AppComponent {
+export class App implements OnInit {
+  private readonly darkmodeService = inject(DarkModeService);
+
+  private readonly loadingService = inject(LoadingService);
+  private readonly router = inject(Router);
+
+  constructor() {
+    // Start listening to router events as soon as the component is created.
+    this.listenToRouterEvents();
+  }
+
+  ngOnInit(): void {
+    this.darkmodeService.initTheme();
+  }
+
+
+  showNavBar() : boolean {
+    return this.router.url.includes('user');
+  }
+
+  private listenToRouterEvents(): void {
+    this.router.events.pipe(
+      // Use takeUntilDestroyed() for automatic subscription cleanup. This is a modern best practice.
+      takeUntilDestroyed()
+    ).subscribe(event => {
+      // When a navigation starts (e.g., clicking a link for a lazy-loaded component), show the loader.
+      if (event instanceof NavigationStart) {
+        this.loadingService.show();
+      } 
+      // When the navigation is complete, has been canceled, or has failed, hide the loader.
+      else if (
+        event instanceof NavigationEnd ||
+        event instanceof NavigationCancel ||
+        event instanceof NavigationError
+      ) {
+        this.loadingService.hide();
+      }
+    });
+  }
+
 }

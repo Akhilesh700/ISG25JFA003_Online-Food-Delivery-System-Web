@@ -122,8 +122,8 @@ export class ZardDialogComponent<T, U> extends BasePortalOutlet {
 
   readonly portalOutlet = viewChild.required(CdkPortalOutlet);
 
-  okTriggered = output<void>();
-  cancelTriggered = output<void>();
+  okTriggeredDialog = output<void>();
+  cancelTriggeredDialog = output<void>();
   state = signal<'close' | 'open'>('close');
 
   constructor() {
@@ -150,11 +150,11 @@ export class ZardDialogComponent<T, U> extends BasePortalOutlet {
   }
 
   onOkClick() {
-    this.okTriggered.emit();
+    this.okTriggeredDialog.emit();
   }
 
   onCloseClick() {
-    this.cancelTriggered.emit();
+    this.cancelTriggeredDialog.emit();
   }
 
   overlayClickOutside() {

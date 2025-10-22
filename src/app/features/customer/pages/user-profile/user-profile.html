@@ -1,0 +1,67 @@
+<div class="profile-container">
+  <div class="main-content-grid">
+    <div class="profile-column">
+      @if (!isEditing) {
+        <div class="card profile-header">
+          <img [src]="user.imageUrl" alt="Profile Picture" class="profile-avatar">
+          <div class="profile-details">
+            <h2>{{ user.name }}</h2>
+            <p>{{ user.email }}</p>
+            <p>{{ user.phone }}</p>
+            <p>{{ user.address }}</p>
+          </div>
+          <button class="btn btn-outline edit-btn" (click)="toggleEdit()">Edit Profile</button>
+        </div>
+      } @else {
+        <div class="card">
+          <form [formGroup]="profileForm" (ngSubmit)="onSave()">
+             <h3>Edit Profile</h3>
+             <div class="form-avatar-edit">
+                <img [src]="previewImageUrl" alt="Profile Picture Preview" class="profile-avatar">
+                <label for="file-upload" class="btn btn-outline">Change Picture</label>
+                <input id="file-upload" type="file" (change)="onFileChange($event)" accept="image/*">
+             </div>
+             <div class="form-fields">
+                <div class="form-group"><label for="name">Full Name</label><input id="name" type="text" formControlName="name"></div>
+                <div class="form-group"><label for="email">Email Address</label><input id="email" type="email" formControlName="email"></div>
+                <div class="form-group"><label for="phone">Phone Number</label><input id="phone" type="text" formControlName="phone"></div>
+                <div class="form-group"><label for="address">Address</label><input id="address" type="text" formControlName="address"></div>
+             </div>
+             <div class="form-actions">
+                <button type="button" class="btn btn-outline" (click)="toggleEdit()">Cancel</button>
+                <button type="submit" class="btn btn-primary" [disabled]="profileForm.invalid">Save Changes</button>
+             </div>
+          </form>
+        </div>
+      }
+    </div>
+
+    <div class="right-column">
+      <div class="stats-grid">
+        <div class="card stat-card"><div class="stat-header"><h3>Total Orders</h3></div><p class="stat-number">{{ stats.totalOrders }}</p><p class="stat-subtitle">All time orders</p></div>
+        <div class="card stat-card"><div class="stat-header"><h3>Completed</h3></div><p class="stat-number">{{ stats.completed }}</p><p class="stat-subtitle">Successfully delivered</p></div>
+      </div>
+      <div class="card payment-methods">
+        <div class="card-header"><h3>Payment Methods</h3><button class="btn btn-primary">Add New</button></div>
+        <div class="payment-list">
+          @for (method of paymentMethods; track method.last4) {
+            <div class="payment-item">
+              <div class="payment-details">
+                <span></span>
+                <div>
+                  <p><strong>{{ method.type }}</strong> &bull;&bull;&bull;&bull; {{ method.last4 }}
+                    @if (method.isPreferred) { <span class="preferred-badge">Preferred</span> }
+                  </p>
+                  <p class="text-muted">Expires {{ method.expires }}</p>
+                </div>
+              </div>
+              <button class="btn btn-outline">Edit</button>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <app-order-history [orders]="orders"></app-order-history> -->
+</div>

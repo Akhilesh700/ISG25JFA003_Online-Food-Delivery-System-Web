@@ -1,0 +1,116 @@
+<div class="container bg-black w-100vw ">
+  <div class="flex items-center justify-center min-h-screen px-4 ">
+
+    <div class="relative w-full max-w-md pt-24 ">
+
+      <div class="absolute top-5 -left-5 w-3/6 z-10">
+        <img src="img/login/spilling_burger_2.png" alt="Spilling Burger">
+      </div>
+      <z-card class="w-full bg-white mt-17">
+        <div class="flex flex-col items-center">
+          <h1 class="text-3xl text-orange-700 font-bold">Register</h1>
+        </div>
+        <form [formGroup]="restaurantRegistrationForm" (ngSubmit)="onSubmit()" class="grid gap-1 mt-6 text-black">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="form-field">
+              <label for="name" class="form-label required">Restaurant Name</label>
+              <div class="form-control">
+                <input id="name" class="form-input" type="text" placeholder="Enter restaurant name"
+                  formControlName="name" [class.is-invalid]="f['name'].invalid && f['name'].touched" />
+                @if (f['name'].invalid && f['name'].touched) {
+                <p class="text-xs text-red-500 mt-1">Name is required.</p>
+                }
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label for="phone" class="form-label required">Phone</label>
+              <div class="form-control">
+                <input id="phone" class="form-input" type="number" placeholder="Enter phone number"
+                  formControlName="phone" [class.is-invalid]="f['phone'].invalid && f['phone'].touched" />
+                @if (f['phone'].invalid && f['phone'].touched) {
+                @if (f['phone'].errors?.['required']) {
+                <p class="text-xs text-red-500 mt-1">Phone number is required.</p>
+                }
+                @if (f['phone'].errors?.['pattern']) {
+                <p class="text-xs text-red-500 mt-1">Please enter a valid 10-digit number.</p>
+                }
+                }
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="email" class="form-label required">Email</label>
+            <div class="form-control">
+              <input id="email" class="form-input" type="email" placeholder="Enter your email" formControlName="email"
+                [class.is-invalid]="f['email'].invalid && f['email'].touched" />
+              @if (f['email'].invalid && f['email'].touched) {
+              @if (f['email'].errors?.['required']) {
+              <p class="text-xs text-red-500 mt-1">Email is required.</p>
+              }
+              @if (f['email'].errors?.['email']) {
+              <p class="text-xs text-red-500 mt-1">Please enter a valid email.</p>
+              }
+              }
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="password" class="form-label required">Password</label>
+            <div class="form-control">
+              <input id="password" class="form-input" type="password" placeholder="Enter your password"
+                formControlName="password" [class.is-invalid]="f['password'].invalid && f['password'].touched" />
+              @if (f['password'].invalid && f['password'].touched) {
+              @if (f['password'].errors?.['required']) {
+              <p class="text-xs text-red-500 mt-1">Password is required.</p>
+              }
+              @if (f['password'].errors?.['minlength']) {
+              <p class="text-xs text-red-500 mt-1">Password must be at least 8 characters.</p>
+              }
+              }
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="form-field">
+              <label for="openTime" class="form-label required">Opening Time</label>
+              <div class="form-control">
+                <input id="openTime" class="form-input" type="time" formControlName="openTime"
+                  [class.is-invalid]="f['openTime'].invalid && f['openTime'].touched" />
+                @if (f['openTime'].invalid && f['openTime'].touched) {
+                <p class="text-xs text-red-500 mt-1">Required.</p>
+                }
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label for="closeTime" class="form-label required">Closing Time</label>
+              <div class="form-control">
+                <input id="closeTime" class="form-input" type="time" formControlName="closeTime"
+                  [class.is-invalid]="f['closeTime'].invalid && f['closeTime'].touched" />
+                @if (f['closeTime'].invalid && f['closeTime'].touched) {
+                <p class="text-xs text-red-500 mt-1">Required.</p>
+                }
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="address" class="form-label required">Address</label>
+            <div class="form-control">
+              <textarea id="address" class="form-input" placeholder="Enter restaurant address" formControlName="address"
+                [class.is-invalid]="f['address'].invalid && f['address'].touched"></textarea>
+              @if (f['address'].invalid && f['address'].touched) {
+              <p class="text-xs text-red-500 mt-1">Address is required.</p>
+              }
+            </div>
+          </div>
+
+          <button type="submit" class="submit-btn p-2.5 min-w-max bg-orange-600">Sign Up</button>
+        </form>
+      </z-card>
+
+    </div>
+  </div>
+</div>

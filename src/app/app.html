@@ -1,1 +1,6 @@
-<router-outlet></router-outlet>
+@if(showNavBar()) {
+    <app-navbar></app-navbar>
+}
+<router-outlet/>
+<z-toaster />
+<app-global-loader/>

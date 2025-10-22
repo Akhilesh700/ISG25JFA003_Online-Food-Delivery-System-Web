@@ -1,0 +1,31 @@
+<div class="max-w-sm mx-auto border border-secondary-foreground/20 dark:bg-secondary-foreground mb-1 shadow-lg p-6 ">
+   
+    <div class="text-lg font-semibold mb-4 tracking-wide flex items-center justify-between">
+        <div class="flex items-center">
+            <i class="pi pi-shopping-cart mr-2"></i>
+            <h3>Cart Summary</h3>
+        </div>
+        <button class="cursor-pointer" (click)="accordion()">
+            @if (isCollapsed) {
+                <i class="pi pi-chevron-down" style="font-size: 0.8rem;"></i>
+            } @else {
+                <i class="pi pi-chevron-up" style="font-size: 0.8rem;"></i>
+            }
+        </button>
+    </div>
+
+
+    @if (!isCollapsed) {
+        <div class="collapsible-content max-h-40 overflow-scroll no-scrollbar" [class.collapsed]="isCollapsed" >
+            @for(item of cartItems ; track item.itemId) {
+                <div class="py-2 px-2 border-b border-primary-foreground/10 flex gap-2">
+                    <img [src]="item.imgUrl" [alt]="item.name" class="max-h-12 max-w-12 min-h-12 min-w-12 object-cover rounded-xl">
+                    <div class="flex w-full justify-between items-center">
+                        <p class="text-sm">{{item.name}}</p>
+                        <p class="h-6 w-6 rounded-md bg-primary flex justify-center items-center text-white">{{item.quantity}}</p>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

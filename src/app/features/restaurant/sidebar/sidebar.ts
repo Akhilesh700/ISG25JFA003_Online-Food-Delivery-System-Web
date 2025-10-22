@@ -2,8 +2,8 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-// Use the MenuItem interface defined in app.component
-import { MenuItem } from '../../../app'; 
+// Import MenuItem from restaurant component
+import { MenuItem } from '../restaurant';
 
 @Component({
   selector: 'app-sidebar',

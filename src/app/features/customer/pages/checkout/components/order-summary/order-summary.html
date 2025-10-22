@@ -1,0 +1,83 @@
+@if (summary) {
+<div class="max-w-sm mx-auto  border border-secondary-foreground/20 dark:bg-secondary-foreground rounded-b-xl shadow-lg p-6 ">
+
+  <!-- Header -->
+  <h2 class="text-xl font-semibold mb-4 tracking-wide">Order total</h2>
+
+  <!-- Bill Details Section -->
+  <div class="space-y-2 text-sm">
+
+    <!-- Subtotal -->
+    <div class="flex justify-between items-center">
+      <p class="">Subtotal</p>
+      <p class="font-medium ">{{ summary.subtotal | number:'1.2-2'}}</p>
+    </div>
+
+    <!-- Promotion (only shown if it exists) -->
+    @if (summary.promotion) {
+    <div class="flex justify-between items-center">
+      <p class="">Promotion</p>
+      <p class="font-semibold bg-primary text-white text-xs px-2 py-1 rounded-sm">{{ summary.promotion | number:'1.2-2' }}</p>
+    </div>
+    }
+
+    <!-- Delivery Fee -->
+    <div class="flex justify-between items-center">
+      <div class="flex items-center space-x-1">
+        <p class="">Delivery Fee</p>
+        <!-- Info Icon -->
+        <button (click)="onInfoClick('deliveryFee')" class="text-gray-400 hover:text-gray-200 transition-colors">
+          <i class="pi pi-question-circle" style="font-size: 0.7rem;" zTooltip="This Delivery Fee will go to delivery agent" ></i>
+        </button>
+      </div>
+      <p class="font-medium ">{{ summary.deliveryFee | number:'1.2-2' }}</p>
+    </div>
+
+    <!-- Delivery Discount (only shown if it exists) -->
+    @if (summary.deliveryDiscount) {
+    <div class="flex justify-between items-center">
+      <p class="">Delivery Discount</p>
+      <p class="font-semibold text-green-500   dark:text-green-300">{{ summary.deliveryDiscount | number:'1.2-2' }}</p>
+    </div>
+    }
+    
+    <!-- Taxes & Other Fees -->
+    <div class="flex justify-between items-center">
+       <div class="flex items-center space-x-1">
+        <p class="">Taxes & Other Fees</p>
+         <!-- Info Icon -->
+        <button (click)="onInfoClick('taxesAndFees')" class="text-gray-400 hover:text-gray-200 transition-colors" >
+          <i class="pi pi-question-circle" style="font-size: 0.7rem;" zTooltip="18% gst and 5% restaurant fee" ></i>
+        </button>
+      </div>
+      <div class="flex items-center space-x-2">
+        <!-- Old Price (Strikethrough) -->
+        @if (summary.oldTaxesAndFees) {
+        <p class="line-through">{{ summary.oldTaxesAndFees | number:'1.2-2' }}</p>
+        }
+        <!-- Clock Icon -->
+        <i class="pi pi-clock"></i>
+        <p class="font-medium t">{{ summary.taxesAndFees | number:'1.2-2' }}</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Divider -->
+  <hr class="my-3 border-gray-200">
+
+  <!-- Total -->
+  <div class="flex justify-between items-center text-lg font-semibold ">
+    <p>Total</p>
+    <p>{{ summary.total | number:'1.2-2' }}</p>
+  </div>
+
+  <!-- Footer Text -->
+  <div class="mt-4 text-xs text-gray-500 space-y-3">
+    <p>This price was set by an algorithm using your personal data. Your location is used to help us calculate fees and savings.</p>
+    <p>Prices may be lower in store.</p>
+    <p>If you're not around when the delivery person arrives, they'll leave your order at the door. By placing your order, you agree to take full responsibility for it once it's delivered. Orders containing alcohol or other restricted items may not be eligible for leave at door and will be returned to the store if you are not available.</p>
+  </div>
+
+</div>
+}

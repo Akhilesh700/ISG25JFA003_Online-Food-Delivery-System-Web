@@ -1,20 +1,40 @@
 import { Routes } from '@angular/router';
-import { Home } from './pages/home/home';
-// Import any guards you might need
-// import { AuthGuard } from 'path/to/auth.guard'; 
+import { CustomerShell } from './shell';
 
 export const routes: Routes = [
+  // {
+  //   path: '',
+  //   // loadComponent: () => import('./shell').then(m => m.CustomerShell)
+  //   component: CustomerShell
+  // },
   {
-    path: '', 
-    // This is the default route when the customer module loads (e.g., /customer)
-    component: Home, 
-    // You'd typically use a guard here to ensure the user is logged in
-    // canActivate: [AuthGuard] 
+    path: 'home', 
+    loadComponent : () => import('./home/home-page/home-page.component').then(m => m.HomePageComponent), 
+    title: "DinCognizant - Home"
   },
+
+  {
+    path: 'resturant/:id',
+    // Route for /user/resturant
+    loadComponent: () => import('./pages/resturant/resturant').then(m => m.Resturant)
+  },
+
+  {
+    path: 'checkout',
+    loadComponent: () => import('./pages/checkout/checkout').then(m=> m.Checkout)
+
+  },
+  {
+
+    path: 'track-order',
+    loadComponent: () => import('./pages/track-order/track-order').then(m=> m.TrackOrder)
+  },
+
+
   // Optional: A wild card route for handling unknown paths within the customer module
   {
     path: '**', 
-    redirectTo: '', // Redirects back to the dashboard
+    redirectTo: 'home',
     pathMatch: 'full'
   }
 ];

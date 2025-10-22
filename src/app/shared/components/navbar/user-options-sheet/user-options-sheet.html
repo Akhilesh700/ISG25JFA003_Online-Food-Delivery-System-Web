@@ -1,0 +1,21 @@
+<div class="w-11/12 mx-auto ">
+    <div class="flex gap-3 border-b border-white/30 pb-4 mb-10 mt-10 ">
+        <img src={{currentUser.avatarUrl}} alt={{currentUser.name}} class="w-16 h-16 rounded-full object-cover" />
+        <div class="flex flex-col justify-center">
+            <h3 class="text-lg font-semibold">{{currentUser.name}}</h3>
+            <p class="text-sm font-light text-primary-foreground/50">{{currentUser.location}}</p>
+        </div>
+    </div>
+
+    <div class="flex flex-col gap-4 justify-between h-[70vh]">
+        <div class="flex flex-col gap-4">
+            <button class="text-left text-primary-foreground/80 hover:text-primary-foreground duration-300 cursor-pointer text-xl pb-2  "> <i class="pi pi-user pr-2"></i> Profile</button>
+            <button class="text-left text-primary-foreground/80 hover:text-primary-foreground duration-300 cursor-pointer text-xl pb-2 "> <i class="pi pi-shopping-bag pr-2"></i> Orders</button>
+            <button class="text-left text-primary-foreground/80 hover:text-primary-foreground duration-300 cursor-pointer text-xl pb-2 "> <i class="pi pi-info-circle pr-2"></i> Help & Support</button>
+        </div>
+        <button z-button zType="destructive" > <i class="pi pi-sign-out pr-1"></i> Logout</button>
+
+    </div>
+
+
+</div>

@@ -1,0 +1,47 @@
+<section class="py-16">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-3xl font-bold text-orange-600">What Our Customers Say</h2>
+    <p class="mt-2 ">Don't just take our word for it</p>
+
+    <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
+      
+      @for (testimonial of testimonials; track testimonial.author) {
+        <div class="relative group rounded-2xl overflow-hidden shadow-lg min-h-[450px]">
+          
+          <img [src]="testimonial.avatarUrl" [alt]="testimonial.author" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
+          
+          <div class="relative z-10 p-8 flex flex-col h-full">
+            <img class="w-14 h-14 rounded-full object-cover border-2 border-white/50" [src]="testimonial.avatarUrl" [alt]="testimonial.author">
+            
+            <div class="flex-grow flex items-center justify-center">
+              <button class="w-20 h-20 rounded-full bg-white/30 backdrop-blur-sm text-white flex items-center justify-center transition-all duration-300 group-hover:bg-white/50">
+                <svg class="w-10 h-10 -mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M4 3.225A.775.775 0 014.775 2.5h10.45a.775.775 0 01.775.775v14.5a.775.775 0 01-1.28.62L8 12.633l-6.72 5.712A.775.775 0 010 17.725V3.225z"></path></svg> 
+                </button>
+            </div>
+            
+            <div>
+              <p class="font-signature text-3xl text-white font-bold">{{ testimonial.author }}</p>
+              <p class="text-sm text-gray-200">{{ testimonial.title }}</p>
+            </div>
+          </div>
+
+          <div class="absolute inset-0 z-20 p-8 bg-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out flex flex-col">
+            <img class="w-14 h-14 rounded-full object-cover" [src]="testimonial.avatarUrl" [alt]="testimonial.author">
+            
+            <p class="mt-6 text-gray-700 text-lg leading-relaxed">
+              "{{ testimonial.quote }}"
+            </p>
+
+            <div class="flex-grow"></div>
+
+            <div>
+              <p class="font-signature text-3xl text-gray-900 font-bold">{{ testimonial.author }}</p>
+              <p class="text-sm text-gray-500">{{ testimonial.title }}</p>
+            </div>
+          </div>
+
+        </div>
+      } </div>
+  </div>
+</section>

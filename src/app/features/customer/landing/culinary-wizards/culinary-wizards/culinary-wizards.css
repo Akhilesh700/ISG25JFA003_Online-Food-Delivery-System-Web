@@ -1,0 +1,39 @@
+/* You can add this to your main stylesheet, like styles.css */
+
+.ribbon {
+  position: relative;
+  /* A beautiful, vibrant linear-gradient background */
+  background: linear-gradient(45deg, #ff6b6b, #f09819)!important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Adds a subtle shadow for depth */
+}
+
+/* Creates the left "tail" of the ribbon */
+.ribbon::before {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 0;
+  height: 0;
+  /* This creates the triangular shape */
+  border-top: 25px solid #d65b5b; /* A darker shade for the fold effect */
+  border-left: 25px solid transparent;
+}
+
+/* Creates the right "tail" of the ribbon */
+.ribbon::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 0;
+  height: 0;
+  /* This creates the triangular shape */
+  border-top: 25px solid #d65b5b; /* A darker shade for the fold effect */
+  border-right: 25px solid transparent;
+}
+
+/* Adds a subtle shadow to the text to make it pop */
+.ribbon h2 {
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}

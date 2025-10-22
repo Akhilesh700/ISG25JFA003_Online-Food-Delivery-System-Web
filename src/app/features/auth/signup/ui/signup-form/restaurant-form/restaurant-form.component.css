@@ -1,0 +1,97 @@
+.container{
+    background: url('/img/login/login-background-dark.png');
+    background-size: cover;
+}
+/* Main container for the registration form */
+.registration-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for the form field wrapper */
+.form-field {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+input::placeholder, textarea::placeholder{
+    color: #919090;
+}
+
+input:focus{
+    background-color: white;
+}
+
+/* Styling for form labels */
+.form-label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+/* Adding the required asterisk to labels with the .required class */
+.form-label.required::after {
+  content: ' *';
+  color: #dc3545;
+}
+
+/* Styling for all input fields */
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* Style for when the input is focused */
+.form-input:focus {
+  outline: none;
+  border-color: #ff6f00;
+  box-shadow: 0 0 0 2px rgba(255, 111, 0, 0.2);
+}
+
+/* Specific styling for the textarea */
+textarea.form-input {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* Class to apply to inputs when they are invalid */
+.is-invalid {
+  border-color: #dc3545 !important;
+}
+
+.is-invalid:focus {
+  box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.25);
+}
+
+/* Styling for the submit button */
+.submit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border: none;
+  width: 100%; /* Make button full width */
+}
+
+/* Hover effect for the button */
+.submit-btn:hover {
+  background-color: #e66000 !important; /* Use !important to override Tailwind */
+}
+

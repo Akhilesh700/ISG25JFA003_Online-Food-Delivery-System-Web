@@ -1,0 +1,46 @@
+<div class="max-w-sm mx-auto border border-secondary-foreground/20 dark:bg-secondary-foreground mb-1 shadow-lg p-6 rounded-2xl ">
+
+    <h2 class="text-sm text-gray-400 mb-6">Order Status</h2>
+    
+    <div class="space-y-6">
+      
+      @for (step of orderSteps; track step.label; let i = $index; let last = $last) {
+        <div class="relative flex items-start gap-4">
+          
+          @if (!last) {
+            <div 
+              class="absolute left-[19px] top-10 w-0.5 h-10"
+              [ngClass]="{
+                'bg-[#e87f6f]': step.completed,
+                'bg-gray-700': !step.completed
+              }">
+            </div>
+          }
+          
+          <div 
+            class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+            [ngClass]="{
+              'bg-[#e87f6f] text-white': step.completed,
+              ' text-gray-400': !step.completed,
+              'ring-4 ring-[#e87f6f]/30': i === currentStatus
+            }">
+            
+            <i class="" [ngClass]="step.icon"></i>
+          </div>
+          
+          <div class="flex-1 pt-1">
+            <h3 
+              class="mb-1"
+              [ngClass]="{
+                'text-white': step.completed,
+                'text-gray-400': !step.completed
+              }">
+              {{ step.label }}
+            </h3>
+            <p class="text-sm text-gray-500">{{ step.time }}</p>
+          </div>
+          
+        </div>
+      } </div>
+      
+</div>
