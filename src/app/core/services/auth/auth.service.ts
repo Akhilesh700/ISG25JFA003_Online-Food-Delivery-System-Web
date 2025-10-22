@@ -7,7 +7,7 @@ import { jwtDecode } from 'jwt-decode';
 
 import { TokenService } from '../auth/token.service';
 import { AuthApiService } from './auth-api.service';
-import { AuthResponse, JwtPayload, LoginCredentials, Role } from './auth.models';
+import { AgentSignupResponse, AuthResponse, CustomerSignupResponse, JwtPayload, LoginCredentials, RestaurantSignupResponse, Role } from './auth.models';
 
 @Injectable({
     providedIn: 'root'
@@ -43,7 +43,7 @@ export class AuthService {
     login(credentials: LoginCredentials): Observable<Role | null> {
         // Reset the resolved state at the start of a login attempt.
         this.isAuthStateResolved.set(false);
-
+        
         return this.authApiService.login(credentials).pipe(
             // Use switchMap to chain the login API call with the role fetching call.
             switchMap(response => {
@@ -73,6 +73,51 @@ export class AuthService {
                 throw error; // Propagate error to the component
             })
         );
+    }
+    restaurantSignUp(credentials: iRestaurantSignup): Observable<RestaurantSignupResponse>{
+        this.isAuthStateResolved.set(false);
+
+        return this.authApiService.restaurantSignup(credentials).pipe(
+            tap({
+                next: (response) =>{
+                    this.isAuthStateResolved.set(true);
+                },
+                error: (error) => {
+                    this.isAuthStateResolved.set(true);
+                    throw error;
+                }
+            })
+        );     
+    }
+    agentSignUp(credentials: iAgentSignup): Observable<AgentSignupResponse>{
+        this.isAuthStateResolved.set(false);
+
+        return this.authApiService.agentSignup(credentials).pipe(
+            tap({
+                next: (response) =>{
+                    this.isAuthStateResolved.set(true);
+                },
+                error: (error) => {
+                    this.isAuthStateResolved.set(true);
+                    throw error;
+                }
+            })
+        );     
+    }
+    customerSignUp(credentials: iCustomerSignup): Observable<CustomerSignupResponse>{
+        this.isAuthStateResolved.set(false);
+
+        return this.authApiService.customerSignup(credentials).pipe(
+            tap({
+                next: (response) =>{
+                    this.isAuthStateResolved.set(true);
+                },
+                error: (error) => {
+                    this.isAuthStateResolved.set(true);
+                    throw error;
+                }
+            })
+        );     
     }
 
     logout(): void {
