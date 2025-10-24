@@ -68,7 +68,10 @@ export class Navbar implements OnInit {
       zContent: UserOptionsSheet,
       zSize: 'sm',
       zSide: 'left',
-      zOkText: null,
+      zOkText: 'logout',
+      zOnOk: (instance) => {
+        instance.handleLogout()
+      }
     });
   }
 

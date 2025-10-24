@@ -1,12 +1,5 @@
 import { Routes } from '@angular/router';
-import { CustomerShell } from './shell';
-
 export const routes: Routes = [
-  // {
-  //   path: '',
-  //   // loadComponent: () => import('./shell').then(m => m.CustomerShell)
-  //   component: CustomerShell
-  // },
   {
     path: 'home', 
     loadComponent : () => import('./home/home-page/home-page.component').then(m => m.HomePageComponent), 
@@ -14,7 +7,7 @@ export const routes: Routes = [
   },
 
   {
-    path: 'resturant/:id',
+    path: 'restaurant/:id',
     // Route for /user/resturant
     loadComponent: () => import('./pages/resturant/resturant').then(m => m.Resturant)
   },

@@ -8,6 +8,9 @@ import { jwtDecode } from 'jwt-decode';
 import { TokenService } from '../auth/token.service';
 import { AuthApiService } from './auth-api.service';
 import { AgentSignupResponse, AuthResponse, CustomerSignupResponse, JwtPayload, LoginCredentials, RestaurantSignupResponse, Role } from './auth.models';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/state/app.state';
+import { emptyCart } from 'src/app/state/cart/cart.action';
 
 @Injectable({
     providedIn: 'root'
@@ -16,7 +19,7 @@ export class AuthService {
     private authApiService = inject(AuthApiService);
     private tokenService = inject(TokenService);
     private router = inject(Router);
-
+    protected readonly storeSerice = inject<Store<AppState>>(Store);
     private userRole = signal<Role>(null);
     public readonly userRoleSignal = this.userRole.asReadonly();
     public userRole$ = toObservable(this.userRole);
@@ -122,6 +125,8 @@ export class AuthService {
 
     logout(): void {
         this.tokenService.removeToken();
+        localStorage.clear()
+        this.storeSerice.dispatch(emptyCart())
         this.userRole.set(null);
         this.isAuthStateResolved.set(true); // After logout, the state is resolved (as "logged out").
         this.router.navigate(['auth/login']);
