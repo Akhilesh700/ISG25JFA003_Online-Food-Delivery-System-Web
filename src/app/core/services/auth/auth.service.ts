@@ -8,6 +8,7 @@ import { jwtDecode } from 'jwt-decode';
 import { TokenService } from '../auth/token.service';
 import { AuthApiService } from './auth-api.service';
 import { AgentSignupResponse, AuthResponse, CustomerSignupResponse, JwtPayload, LoginCredentials, RestaurantSignupResponse, Role } from './auth.models';
+import { iAgentSignup, iCustomerSignup, iRestaurantSignup } from '../../../models/iSignUp';
 
 @Injectable({
     providedIn: 'root'

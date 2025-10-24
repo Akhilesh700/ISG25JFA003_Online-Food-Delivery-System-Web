@@ -1,4 +1,4 @@
-interface iRestaurantSignup{
+export interface iRestaurantSignup{
     email: string,
     password: string,
     name: string,
@@ -7,7 +7,7 @@ interface iRestaurantSignup{
     phone: string,
     address: string
 }
-interface iCustomerSignup{
+export interface iCustomerSignup{
     email: string,
     password: string,
     name: string,
@@ -15,7 +15,7 @@ interface iCustomerSignup{
     dob: string
     address: string
 }
-interface iAgentSignup{
+export interface iAgentSignup{
     email: string,
     password: string,
     name: string,

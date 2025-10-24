@@ -2,11 +2,9 @@ import { Routes } from '@angular/router';
 
 // Import the layout and page components
 import { RestaurantComponent } from './restaurant';
-import { ResturantDashboard } from './resturant-dashboard/resturant-dashboard.component';
 import { UpdateProfileComponent } from './update-profile/update-profile';
-import { OrderHistoryComponent } from './resturant-dashboard/order-history/order-history.component';
-import { DashboardContentComponent } from './resturant-dashboard/dashboard-content/dashboard-content.component';
-import { ManageMenuComponent } from './pages/manage-menu/manage-menu.component';
+import { OrderHistoryComponent } from './order-history/order-history';
+import { DashboardContentComponent } from './dashboard-content/dashboard-content';
 
 export const RESTAURANT_ROUTES: Routes = [
     {
@@ -25,11 +23,6 @@ export const RESTAURANT_ROUTES: Routes = [
                 // This route (/restaurant/dashboard) loads the dashboard.
                 path: 'dashboard',
                 component: DashboardContentComponent
-            },
-            {
-                // This route (/restaurant/manage-menu) loads the menu management.
-                path: 'manage-menu',
-                component: ManageMenuComponent
             },
             {
                 // This route (/restaurant/order-history) loads the order history.

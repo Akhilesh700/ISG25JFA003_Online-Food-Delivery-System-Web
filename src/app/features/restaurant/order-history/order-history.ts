@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RestaurantService } from '../../services/restaurant.service';
-import { RestaurantOrderHistoryResponse } from '../../models/restaurant.models';
+import { RestaurantService } from '../../../core/services/restaurant/restaurant.service';
+import { RestaurantOrderHistoryResponse } from '../../../models/restaurant.models';
 import { Subject, takeUntil, interval } from 'rxjs';
 
 interface Order { 
@@ -12,6 +12,7 @@ interface Order {
   status: string;
   customerPhone: string;
   specialReq: string;
+  orderTime: string;
 }
 
 @Component({
@@ -25,6 +26,8 @@ export class OrderHistoryComponent implements OnInit, OnDestroy {
   orders: Order[] = [];
   filteredOrders: Order[] = [];
   selectedStatus: string = 'All Status';
+  selectedOrder: Order | null = null;
+  isModalOpen: boolean = false;
   
   private destroy$ = new Subject<void>();
 
@@ -51,19 +54,25 @@ export class OrderHistoryComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (orderHistory) => {
-          this.orders = orderHistory.map(o => ({
-            id: o.orderId,
-            customerName: o.customerName,
-            date: new Date(o.orderTime).toLocaleDateString(),
-            price: o.totalAmount,
-            status: o.status,
-            customerPhone: o.customerPhone,
-            specialReq: o.specialReq
-          }));
+          this.orders = orderHistory.map(o => {
+            // Extract status - it might be an object or string
+            const statusValue = typeof o.status === 'object' ? (o.status as any).statusType || o.status : o.status;
+            const statusString = String(statusValue).toUpperCase();
+            
+            return {
+              id: o.orderId,
+              customerName: o.customerName,
+              date: new Date(o.orderTime).toLocaleDateString(),
+              price: o.totalAmount,
+              status: statusString,
+              customerPhone: o.customerPhone,
+              specialReq: o.specialReq || '',
+              orderTime: o.orderTime
+            };
+          });
           this.applyFilter();
         },
         error: (error) => {
-          console.error('Error loading order history:', error);
         }
       });
   }
@@ -110,5 +119,26 @@ export class OrderHistoryComponent implements OnInit, OnDestroy {
       case 'FAILED': return 'Failed';
       default: return status;
     }
+  }
+
+  openOrderDetails(order: Order): void {
+    this.selectedOrder = order;
+    this.isModalOpen = true;
+  }
+
+  closeModal(): void {
+    this.isModalOpen = false;
+    this.selectedOrder = null;
+  }
+
+  formatDateTime(dateTimeString: string): string {
+    const date = new Date(dateTimeString);
+    return date.toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   }
 }

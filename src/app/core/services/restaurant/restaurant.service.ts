@@ -6,7 +6,7 @@ import {
   AcceptRejectOrderResponse,
   RestaurantDashboardStats,
   MonthlyEarnings 
-} from '../models/restaurant.models';
+} from '../../../models/restaurant.models';
 
 @Injectable({
   providedIn: 'root'
@@ -25,11 +25,11 @@ export class RestaurantService {
     return this.http.put<AcceptRejectOrderResponse>(`${this.apiUrl}/update-status/${orderId}`, null, { params: { action } });
   }
 
-  getDashboardStats(): Observable<RestaurantDashboardStats> {
-    return this.http.get<RestaurantDashboardStats>(`${this.apiUrl}/dashboard-stats`);
-  }
+  // getDashboardStats(): Observable<RestaurantDashboardStats> {
+  //   return this.http.get<RestaurantDashboardStats>(`${this.apiUrl}/dashboard-stats`);
+  // }
 
-  getMonthlyEarnings(): Observable<MonthlyEarnings[]> {
-    return this.http.get<MonthlyEarnings[]>(`${this.apiUrl}/monthly-earnings`);
-  }
+  // getMonthlyEarnings(): Observable<MonthlyEarnings[]> {
+  //   return this.http.get<MonthlyEarnings[]>(`${this.apiUrl}/monthly-earnings`);
+  // }
 }
