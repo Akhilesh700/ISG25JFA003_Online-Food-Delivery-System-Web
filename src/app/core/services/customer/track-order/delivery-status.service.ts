@@ -22,6 +22,12 @@ export interface IOrderInfoResponse {
     pickUpAddress: string,
     deliveryAddress: string,
     status: string,
+    deliveryId: number,
+    agentId: number,
+    agentName: string,
+    agentPhone: string,
+    pickupTime: string,
+    eta: string,
     totalOrderItems: OrderItems[]
 }
 
