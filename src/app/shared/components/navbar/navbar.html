@@ -4,7 +4,7 @@
             <i class="pi pi-bars rounded-full hover:bg-primary/60 p-3 duration-300 cursor-pointer" style="color: var(--primary-color)" (click)="openOptionsSheet()"></i>
         </button>
         
-        <a routerLink="/" class="cursor-pointer">
+        <a [routerLink]="getHomeRoute()"  class="cursor-pointer">
             <img src="img/DINE.png" alt="Dine Cognizant Logo" class="h-8 w-auto">
         </a>
         <div class="flex items-center gap-1">

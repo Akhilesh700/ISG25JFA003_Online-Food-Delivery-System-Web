@@ -1,6 +1,6 @@
-<div class="max-w-sm mx-auto border border-secondary-foreground/20 dark:bg-secondary-foreground mb-1 shadow-lg p-6 rounded-2xl ">
+<div class=" h-[85vh] mx-auto border border-secondary-foreground/20 dark:bg-secondary-foreground mb-1 shadow-lg p-6 rounded-l-2xl ">
 
-    <h2 class="text-sm text-gray-400 mb-6">Order Status</h2>
+    <h2 class="text-2xl font-semibold text-black dark:text-gray-400 mb-6">Order Status</h2>
     
     <div class="space-y-6">
       
@@ -11,8 +11,8 @@
             <div 
               class="absolute left-[19px] top-10 w-0.5 h-10"
               [ngClass]="{
-                'bg-[#e87f6f]': step.completed,
-                'bg-gray-700': !step.completed
+                'bg-black dark:bg-primary': step.completed,
+                'bg-black/20  dark:bg-secondary ': !step.completed
               }">
             </div>
           }
@@ -20,9 +20,9 @@
           <div 
             class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
             [ngClass]="{
-              'bg-[#e87f6f] text-white': step.completed,
-              ' text-gray-400': !step.completed,
-              'ring-4 ring-[#e87f6f]/30': i === currentStatus
+              ' bg-black dark:bg-primary  text-white': step.completed,
+              'text-black/80  dark:text-secondary/70': !step.completed,
+              'ring-4 ring-black dark:ring-primary/50': i === currentStatus
             }">
             
             <i class="" [ngClass]="step.icon"></i>
@@ -32,8 +32,8 @@
             <h3 
               class="mb-1"
               [ngClass]="{
-                'text-white': step.completed,
-                'text-gray-400': !step.completed
+                ' text-black dark:text-white': step.completed,
+                'text-gray-800 dark:text-gray-400': !step.completed
               }">
               {{ step.label }}
             </h3>
@@ -42,5 +42,7 @@
           
         </div>
       } </div>
-      
+    
+    <p class=" text-black/30 dark:text-white/30 text-lg mt-10"> <span class="text-8xl">“</span> Give Suresh a tip for his hard work. When he arrives <span class="text-white">😊</span></p>
+
 </div>
