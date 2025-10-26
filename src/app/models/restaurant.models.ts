@@ -58,3 +58,16 @@ export interface MonthlyEarnings {
     earnings: number;
     orderCount: number;
 }
+
+export interface RestaurantProfileUpdateRequest {
+    phone?: string;
+    name?: string;
+    address?: string;
+    openTime?: string;
+    closeTime?: string;
+}
+
+export interface RestaurantProfileUpdateResponse {
+    message: string;
+    restaurant?: RestaurantResponse;
+}

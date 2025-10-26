@@ -12,9 +12,9 @@
     
     <div class="relative">
       <div (click)="toggleProfileDropdown($event)" class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg p-2 transition-colors">
-        <div class="w-9 h-9 bg-orange-500 rounded-full flex items-center justify-center text-white font-semibold">AJ</div>
+        <div class="w-9 h-9 bg-orange-500 rounded-full flex items-center justify-center text-white font-semibold">{{ restaurantInitials }}</div>
         <div>
-          <div class="text-sm font-semibold text-gray-800 dark:text-gray-200">Albert Juan</div>
+          <div class="text-sm font-semibold text-gray-800 dark:text-gray-200">{{ restaurantName }}</div>
           <div class="text-xs text-gray-500 dark:text-gray-400">Manager</div>
         </div>
         <svg class="w-4 h-4 text-gray-600 dark:text-gray-300 transition-transform" [class.rotate-180]="isProfileDropdownOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24">

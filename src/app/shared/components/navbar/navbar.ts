@@ -10,7 +10,7 @@ import { Store } from '@ngrx/store';
 import { selectCartItems, selectCartState } from 'src/app/state/cart/cart.selector';
 import { AsyncPipe } from '@angular/common';
 import { IDish } from 'src/app/models/resturantInterface';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 const getCurrentUser = () => {
   return {
@@ -23,7 +23,7 @@ const getCurrentUser = () => {
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [ZardSwitchComponent, FormsModule, AsyncPipe],
+  imports: [ZardSwitchComponent, FormsModule, AsyncPipe, RouterLink],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css'
 })
@@ -68,7 +68,10 @@ export class Navbar implements OnInit {
       zContent: UserOptionsSheet,
       zSize: 'sm',
       zSide: 'left',
-      zOkText: null,
+      zOkText: 'logout',
+      zOnOk: (instance) => {
+        instance.handleLogout()
+      }
     });
   }
 
@@ -83,6 +86,10 @@ export class Navbar implements OnInit {
         }
       })
       
+  }
+
+  getHomeRoute(): string {
+    return '/user/home'
   }
 
 

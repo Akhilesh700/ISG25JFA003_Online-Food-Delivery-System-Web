@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { toast } from 'ngx-sonner';
+import { RestaurantService } from '../../../core/services/restaurant/restaurant.service';
 
 @Component({
   selector: 'app-update-profile',
@@ -14,14 +15,20 @@ import { toast } from 'ngx-sonner';
 export class UpdateProfileComponent implements OnInit {
   profileForm!: FormGroup;
   profileImageUrl: string | ArrayBuffer | null = 'https://via.placeholder.com/150';
+  isLoading: boolean = false;
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private restaurantService: RestaurantService
+  ) { }
 
   ngOnInit(): void {
     this.profileForm = new FormGroup({
-      name: new FormControl('Albert Juan', [Validators.required]),
-      email: new FormControl('albert.juan@example.com', [Validators.required, Validators.email]),
-      phone: new FormControl('+91 98765 43210', [Validators.required])
+      name: new FormControl('', [Validators.required]),
+      phone: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]),
+      address: new FormControl('', [Validators.required]),
+      openTime: new FormControl(''),
+      closeTime: new FormControl('')
     });
   }
 
@@ -38,12 +45,33 @@ export class UpdateProfileComponent implements OnInit {
 
   onSubmit(): void {
     if (this.profileForm.valid) {
-      console.log('Form Submitted! Data:', this.profileForm.value);
-      toast.success('Profile has been updated');
-      this.router.navigate(['/restaurant']);
+      this.isLoading = true;
+      
+      // Build profile data object, only sending name, phone, and address
+      // openTime and closeTime are excluded due to backend LocalDate type mismatch
+      const profileData: any = {
+        name: this.profileForm.value.name,
+        phone: this.profileForm.value.phone,
+        address: this.profileForm.value.address
+      };
+
+      this.restaurantService.updateProfile(profileData).subscribe({
+        next: (response) => {
+          this.isLoading = false;
+          toast.success('✅ Profile updated successfully!');
+          this.router.navigate(['/restaurant']);
+        },
+        error: (error) => {
+          this.isLoading = false;
+          const errorMsg = error.error?.message || 'Failed to update profile';
+          toast.error(`❌ ${errorMsg}`);
+          console.error('Profile update error:', error);
+        }
+      });
     } else {
       console.error('Form is invalid.');
       this.profileForm.markAllAsTouched();
+      toast.error('❌ Please fill all required fields correctly');
     }
   }
 

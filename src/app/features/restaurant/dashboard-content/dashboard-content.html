@@ -63,8 +63,8 @@
           <td class="py-3 px-4 text-gray-600 dark:text-gray-400">₹{{ order.price | number:'1.2-2' }}</td>
           <td class="py-3 px-4 text-center">
             <div class="flex items-center justify-center gap-2">
-              <button (click)="onUpdateStatus(order, 'accept')" class="px-3 py-1 text-xs font-semibold text-white bg-green-500 rounded-md hover:bg-green-600 transition-colors">Accept</button>
-              <button (click)="onUpdateStatus(order, 'reject')" class="px-3 py-1 text-xs font-semibold text-white bg-red-500 rounded-md hover:bg-red-600 transition-colors">Reject</button>
+              <button (click)="onUpdateStatus(order, 'accept'); $event.stopPropagation()" class="px-3 py-1 text-xs font-semibold text-white bg-green-500 rounded-md hover:bg-green-600 transition-colors">Accept</button>
+              <button (click)="onUpdateStatus(order, 'reject'); $event.stopPropagation()" class="px-3 py-1 text-xs font-semibold text-white bg-red-500 rounded-md hover:bg-red-600 transition-colors">Reject</button>
             </div>
           </td>
         </tr>

@@ -66,16 +66,23 @@ export class DashboardContentComponent implements OnInit, OnDestroy {
   }
 
   loadDashboardData(): void {
-    // Fetch all orders from backend API and filter for PLACED status on frontend
+    // Fetch all orders from backend API and filter for PENDING status on frontend
     this.restaurantService.getOrderHistory()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (orderHistory) => {
           // Map ALL orders for internal tracking
           this.orders = orderHistory.map(o => {
-            // Extract status - it might be an object or string
-            const statusValue = typeof o.status === 'object' ? (o.status as any).statusType || o.status : o.status;
-            const statusString = String(statusValue).toUpperCase();
+            // Extract status - handle multiple possible formats
+            let statusString = '';
+            if (typeof o.status === 'object' && o.status !== null) {
+              // If status is an object, try to get statusType or status property
+              statusString = (o.status as any).statusType || (o.status as any).status || '';
+            } else {
+              // If status is a string, use it directly
+              statusString = String(o.status || '');
+            }
+            statusString = statusString.toUpperCase().trim();
             
             return {
               id: o.orderId,
@@ -94,10 +101,11 @@ export class DashboardContentComponent implements OnInit, OnDestroy {
           // Calculate weekly earnings from ALL orders
           this.calculateWeeklyEarnings(orderHistory);
           
-          // Filter to show only PLACED orders in incoming orders section
+          // Filter to show only PENDING orders in incoming orders section
           this.filterPendingOrders();
         },
         error: (error) => {
+          console.error('Error loading dashboard data:', error);
         }
       });
   }
@@ -142,9 +150,9 @@ export class DashboardContentComponent implements OnInit, OnDestroy {
       }
       
       // Count by status
-      if (status === 'PENDING') {
+      if (status === 'PLACED' || status === 'PENDING') {
         pendingOrders++;
-      } else if (status === 'PLACED' || status === 'PREPARING' || status === 'OUT_FOR_DELIVERY') {
+      } else if (status === 'PREPARING' || status === 'OUT_FOR_DELIVERY') {
         completedOrders++;
       } else if (status === 'DELIVERED') {
         completedOrders++;
@@ -205,7 +213,7 @@ export class DashboardContentComponent implements OnInit, OnDestroy {
 
   onUpdateStatus(order: Order, action: 'accept' | 'reject'): void {
     // Call backend API: PUT /api/v1/restaurant/update-status/{orderId}?action=accept/reject
-    // Backend validates PENDING status and updates to PREPARING or NOT_ACCEPTED
+    // Backend updates PENDING/PLACED status to PREPARING (accept) or NOT_ACCEPTED (reject)
     this.restaurantService.updateOrderStatus(order.id, action)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -216,20 +224,20 @@ export class DashboardContentComponent implements OnInit, OnDestroy {
           toast.success(`✅ Order has been ${actionText} successfully!\n\nNew Status: ${newStatus}`);
           
           // Reload dashboard to fetch updated order list from API
-          // Order will be removed from incoming orders as it's no longer PENDING
+          // Order will be removed from incoming orders as it's now PREPARING or NOT_ACCEPTED
           this.loadDashboardData();
         },
         error: (error) => {
           // Handle different error scenarios
           if (error.status === 400) {
             const errorMsg = error.error?.message || 'Invalid request';
-            alert(`❌ Cannot ${action} this order\n\nReason: ${errorMsg}`);
+            toast.error(`❌ Cannot ${action} this order\n\nReason: ${errorMsg}`);
           } else if (error.status === 404) {
-            alert(`❌ Order #${order.id} not found.\n\nIt may have been deleted or is not from your restaurant.`);
+            toast.error(`❌ Order #${order.id} not found.\n\nIt may have been deleted or is not from your restaurant.`);
           } else if (error.status === 403) {
-            alert(`❌ Access denied.\n\nYou don't have permission to ${action} this order.`);
+            toast.error(`❌ Access denied.\n\nYou don't have permission to ${action} this order.`);
           } else {
-            alert(`❌ Failed to ${action} order #${order.id}\n\nError: ${error.statusText || 'Unknown error'}\n\nPlease try again or contact support.`);
+            toast.error(`❌ Failed to ${action} order #${order.id}\n\nError: ${error.statusText || 'Unknown error'}\n\nPlease try again or contact support.`);
           }
           
           // Reload to refresh current state
@@ -239,12 +247,14 @@ export class DashboardContentComponent implements OnInit, OnDestroy {
   }
 
   private filterPendingOrders(): void {
-    // Frontend filtering: Show only PENDING orders in "Incoming Orders" section
-    // These are new orders from customers awaiting restaurant action (accept/reject)
-    // Once accepted → PREPARING, once rejected → NOT_ACCEPTED (handled by backend)
+    // Frontend filtering: Show new orders awaiting restaurant action in "Incoming Orders" section
+    // These are orders from customers that need accept/reject action
+    // Backend flow: PENDING/PLACED → (accept) → PREPARING, or → (reject) → NOT_ACCEPTED
+    
     this.pendingOrders = this.orders.filter(order => {
       const status = order.status?.toUpperCase().trim() || '';
-      return status === 'PENDING';
+      // Show both PLACED and PENDING status orders in incoming section
+      return status === 'PLACED' || status === 'PENDING';
     });
   }
 
