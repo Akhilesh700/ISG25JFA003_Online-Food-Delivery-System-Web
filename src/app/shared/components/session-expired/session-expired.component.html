@@ -1,0 +1,22 @@
+<div class="flex items-center justify-center min-h-screen bg-background text-foreground">
+
+  <div
+      role="alert"
+      aria-labelledby="session-expired-title"
+      aria-describedby="session-expired-description"
+      class="bg-card text-card-foreground rounded-lg border border-border shadow-lg p-6 sm:p-8 max-w-sm w-full text-center animate-fade-in"
+  >
+      <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-destructive/10 mb-4">
+          <i class="pi pi-clock text-destructive text-xl"></i>
+          </div>
+
+      <h2 id="session-expired-title" class="text-xl sm:text-2xl font-semibold mb-2">
+          Session Expired
+      </h2>
+
+      <p id="session-expired-description" class="text-sm sm:text-base text-muted-foreground mb-6">
+          Your session has timed out due to inactivity. Please log in again to continue.
+      </p>
+  </div>
+
+</div>

@@ -19,9 +19,10 @@ export const roleGuard: CanActivateFn = (route): Observable<boolean | UrlTree> =
     map(() => {
       const userRole = authService.userRoleSignal();
       if (userRole && expectedRoles.includes(userRole)) {
-        return true; // Access granted
-      } else {
-        return router.createUrlTree(['/unauthorised']); // Use your actual unauthorized route
+        return true;
+      } 
+      else {
+        return router.createUrlTree(['/unauthorised']); 
       }
     })
   );

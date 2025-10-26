@@ -14,13 +14,13 @@ export class UserOptionsSheet {
   currentUser = {
     userId: '123',
     name: 'Eren Yeager',
-    avatarUrl: 'https://i.pinimg.com/originals/d4/69/49/d469498d11bed69e289d8dacc8b7eae9.jpg',
+    avatarUrl: 'img/avatar/user.png',
     location: 'Coimbatore, In'
   }
 
   handleLogout(){
     this.authService.logout();
-    
+
   }
 
 }

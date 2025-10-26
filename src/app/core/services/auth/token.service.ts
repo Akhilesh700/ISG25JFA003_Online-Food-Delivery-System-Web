@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class TokenService {
-  // Use the key from the environment file instead of a hardcoded string
+  
   private readonly TOKEN_KEY = environment.tokenKey;
 
   constructor() { }
@@ -15,7 +15,7 @@ export class TokenService {
    * Saves the authentication token to local storage.
    * @param token The JWT token string to save.
    */
-  saveToken(token: string): void {
+    saveToken(token: string): void {
     localStorage.setItem(this.TOKEN_KEY, token);
   }
 

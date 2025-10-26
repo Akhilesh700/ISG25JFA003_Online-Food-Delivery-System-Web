@@ -142,7 +142,7 @@ export class AuthService {
         try {
             const decodedToken: JwtPayload = jwtDecode(token);
             if (decodedToken.exp * 1000 < Date.now()) {
-                this.logout();
+                this.router.navigate(['/session-expired'])
                 return null;
             }
             return decodedToken.userId;
@@ -157,7 +157,7 @@ export class AuthService {
         const userId = this.getUserIdFromToken();
         if (!userId) {
             this.userRole.set(null);
-            this.isAuthStateResolved.set(true); // State is resolved as "logged out".
+            this.isAuthStateResolved.set(true); 
             return;
         }
 
