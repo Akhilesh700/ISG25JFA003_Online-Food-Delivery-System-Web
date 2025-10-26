@@ -1,5 +1,13 @@
-<main class="mt-22">
-
-    <app-order-timeline [currentStatus]="currentStep" ></app-order-timeline>
+<main class="mt-22 ">
+    <div class="flex gap-1 w-11/12 mx-auto ">
+        <app-order-timeline [currentStatus]="currentStep" class="flex-1" ></app-order-timeline>
+        <div>
+            <div class="flex gap-1 flex-2">
+                <app-delivery-agent-card class=></app-delivery-agent-card>
+                <app-resturant-track-order></app-resturant-track-order>
+            </div>
+            <app-order-items-tracking></app-order-items-tracking>
+        </div>
+    </div>
 </main>
 

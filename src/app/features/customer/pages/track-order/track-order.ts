@@ -1,7 +1,11 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { OrderTimeline } from "./order-timeline/order-timeline";
 import { ActivatedRoute, Router } from '@angular/router';
-import { DeliveryStatus } from 'src/app/core/services/customer/track-order/delivery-status.service';
+import { DeliveryStatus, IOrderInfoResponse } from 'src/app/core/services/customer/track-order/delivery-status.service';
+import { DeliveryAgentCard } from "./delivery-agent-card/delivery-agent-card";
+import { RestaurantCheckoutCart } from "../checkout/components/restaurant-checkout-cart/restaurant-checkout-cart";
+import { ResturantTrackOrder } from "./resturant-track-order/resturant-track-order";
+import { OrderItemsTracking } from "./order-items-tracking/order-items-tracking";
 
 const orderStatusSet = {
   'PLACED': 1,
@@ -12,7 +16,7 @@ const orderStatusSet = {
 
 @Component({
   selector: 'app-track-order',
-  imports: [OrderTimeline],
+  imports: [OrderTimeline, DeliveryAgentCard, ResturantTrackOrder, OrderItemsTracking],
   templateUrl: './track-order.html',
   styleUrl: './track-order.css'
 })
@@ -27,22 +31,17 @@ export class TrackOrder implements OnInit {
 
   currentStep!: number;
 
-
-
   ngOnInit(): void {
       this.route.queryParams.subscribe(params => {
         this.orderId = params['orderId']
 
-        this.deliveryStatus.getDeliveryStatus(this.orderId).subscribe(status => {
-          this.orderStatus = status;
-          console.log(this.orderStatus);
+        this.deliveryStatus.getDeliveryStatus(this.orderId).subscribe((orderInfo: IOrderInfoResponse) => {
+          this.orderStatus = orderInfo.status;
+          console.log(orderInfo);
           this.currentStep= orderStatusSet[this.orderStatus as keyof typeof orderStatusSet]
           console.log(this.currentStep);
         })
       });
-
-
-
   }
   
 
