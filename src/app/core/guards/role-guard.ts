@@ -1,50 +1,49 @@
+// src/app/core/guards/role.guard.ts
 import { inject } from '@angular/core';
 import { CanActivateFn, Router, UrlTree } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { map, switchMap, take, filter } from 'rxjs/operators';
-import { AuthService } from '../services/auth/auth.service';
-import { TokenService } from '../services/auth/token.service';
-import { Role } from '../services/auth/auth.models';
+import { AuthStateService } from '../services/auth/auth-state.service'; // Use AuthStateService
+import { TokenService } from '../services/auth/token.service'; // Use TokenService
+import { Role } from '../services/auth/auth.models'; // Adjust path
+import { AuthService } from '../services/auth/auth.service'; // Inject AuthService for logout trigger
 
 export const roleGuard: CanActivateFn = (route): Observable<boolean | UrlTree> => {
-  const authService = inject(AuthService);
+  const authStateService = inject(AuthStateService);
   const tokenService = inject(TokenService);
+  const authService = inject(AuthService); // Inject AuthService for logout
   const router = inject(Router);
 
   const expectedRoles = route.data['roles'] as Role[];
 
-  return authService.isAuthStateResolved$.pipe(
-    // 1. Wait until the initial auth state check is complete.
+  return authStateService.isAuthStateResolved$.pipe(
     filter(isResolved => isResolved === true),
     take(1),
-    // 2. Once resolved, evaluate the situation.
-    switchMap(() => { // Use switchMap to chain async checks if needed in future
-      const userRole = authService.userRoleSignal();
-      const isLoggedInWithValidAccessToken = authService.isLoggedIn; // Checks access token validity
+    switchMap(() => {
+      const userRole = authStateService.userRole(); // Get role from state
+      const hasRefreshToken = tokenService.hasRefreshToken(); // Check refresh token
 
-      // --- Scenario 1: User has a valid role and a non-expired access token ---
-      if (isLoggedInWithValidAccessToken && userRole && expectedRoles.includes(userRole)) {
-        console.log("Allowing access because user has access token")
-        return of(true); // Allow access immediately
+      // Check if access token is technically valid (exists and not expired)
+      // Note: role might still be null here if initial fetch failed but refresh exists
+      const hasValidAccessToken = tokenService.hasAccessToken() && !tokenService.isAccessTokenExpired();
+
+      // Scenario 1: Valid Access Token AND Correct Role already loaded
+      if (hasValidAccessToken && userRole && expectedRoles.includes(userRole)) {
+        return of(true);
       }
-
-      // --- Scenario 2: User doesn't have a valid access token or role, BUT might have a refresh token ---
-      else if (tokenService.hasRefreshToken()) {
-        // Allow navigation to proceed. The component on the route will likely
-        // make an API call. The AuthInterceptor will catch the expected 401
-        // and attempt to refresh the token. If refresh fails, AuthService.handleLogout
-        // (called by the interceptor) will handle the redirect to login.
-          console.log("Allowing access because user has refresh token")
+      // Scenario 2: Refresh Token Exists (even if access token expired/missing or role unknown)
+      else if (hasRefreshToken) {
+          // Allow navigation. Interceptor will handle refresh on first API call.
+          // If refresh fails, AuthService.attemptRefreshToken will trigger logout.
           return of(true);
-        }
-        // --- Scenario 3: User is not logged in (no valid access token) AND has no refresh token ---
-        else {
-          // No valid session at all. Redirect to login.
-          authService.handleLogout(); // Ensure clean state before redirect
-          console.log("Denying access because user does not have any token")
-        // Return the UrlTree for redirection (handleLogout already navigates, but guard needs to return it)
-        return of(router.createUrlTree(['/auth/login'])); // Redirect to login
-        // return of(router.createUrlTree(['/unauthorised'])); // Or keep unauthorised if preferred
+      }
+      // Scenario 3: No valid Access Token, No Refresh Token
+      else {
+        // No session possible. Trigger logout and redirect.
+        authService.triggerLogoutAndRedirect(); // Use the AuthService method
+        return of(false); // Prevent navigation (although redirect happens)
+        // Alternatively return the UrlTree directly if triggerLogoutAndRedirect doesn't navigate
+        // return of(router.createUrlTree(['/auth/login']));
       }
     })
   );

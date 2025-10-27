@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TopRestaurantsComponent } from '../top-restaurants/top-restaurants';
 import { CuisinesComponent } from '../cuisines/cuisines';
 import { OffersComponent } from '../offers/offers';
@@ -26,6 +26,15 @@ import { Footer } from '../../landing/footer/footer/footer';
 ],
   templateUrl: './home-page.component.html',
 })
-export class HomePageComponent {
+export class HomePageComponent implements OnInit, OnDestroy{
   title = 'dine-cognizant';
+
+  ngOnInit(): void {
+    console.log("Mounting Home")
+  }
+
+  ngOnDestroy(): void {
+    console.log("Unmounting Home")
+  }
+
 }

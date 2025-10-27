@@ -1,23 +1,22 @@
-import { Injectable, inject, signal } from '@angular/core';
-import { toObservable } from '@angular/core/rxjs-interop';
+// src/app/core/services/auth/auth.service.ts
+import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http'; // Import HttpErrorResponse
-import { Observable, of, throwError, BehaviorSubject } from 'rxjs';
-import { tap, catchError, take, map, switchMap, filter, finalize } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Observable, of, throwError } from 'rxjs';
+import { tap, catchError, map, switchMap, take } from 'rxjs/operators';
 import { jwtDecode } from 'jwt-decode';
 
-import { TokenService } from '../auth/token.service'; // Adjust path if needed
+import { TokenService } from './token.service';
 import { AuthApiService } from './auth-api.service';
+import { AuthStateService } from './auth-state.service';
+import { RefreshTokenService } from './refresh-token.service';
 import {
     AgentSignupResponse, AuthResponse, CustomerSignupResponse, JwtPayload,
-    LoginCredentials, RestaurantSignupResponse, Role,
-    RefreshResponse, RefreshRequest, 
+    LoginCredentials, RestaurantSignupResponse, Role, RefreshResponse,
 } from './auth.models';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/state/app.state';
 import { emptyCart } from 'src/app/state/cart/cart.action';
-import { navigateToDashboard } from '@shared/utils/navigations.utils';
-import { environment } from 'src/environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -26,44 +25,39 @@ export class AuthService {
     // --- Injected Services ---
     private authApiService = inject(AuthApiService);
     private tokenService = inject(TokenService);
+    private authStateService = inject(AuthStateService);
+    private refreshTokenService = inject(RefreshTokenService);
     private router = inject(Router);
-    private http = inject(HttpClient);
     protected readonly storeService = inject<Store<AppState>>(Store);
 
-    // --- State Signals ---
-    private userRole = signal<Role>(null);
-    public readonly userRoleSignal = this.userRole.asReadonly();
-    public userRole$ = toObservable(this.userRole);
-    private isAuthStateResolved = signal<boolean>(false);
-    public readonly isAuthStateResolved$ = toObservable(this.isAuthStateResolved);
+    // --- Expose State (Readonly) ---
+    public readonly userRoleSignal = this.authStateService.userRole; 
+    public readonly userRole$ = this.authStateService.userRole$;
+    public readonly isAuthStateResolved$ = this.authStateService.isAuthStateResolved$;
 
-    // --- Refresh Token State ---
-    private isRefreshing = false;
-    private refreshTokenSubject: BehaviorSubject<string | Error | null> = new BehaviorSubject<string | Error | null>(null);
-    private refreshTokenUrl = `${environment.apiUrl}api/${environment.version}/auth/refresh`;
 
-    constructor() {
-        this.loadInitialRole();
+    public initializeAuthState(): void {
+        if (!this.authStateService.isAuthStateResolved()) {
+            this.loadInitialRole();
+        }
     }
 
     // --- Login ---
     login(credentials: LoginCredentials): Observable<Role | null> {
-        this.isAuthStateResolved.set(false);
+        this.authStateService.setResolved(false);
 
         return this.authApiService.login(credentials).pipe(
             switchMap((response: AuthResponse) => {
-                // console.log(response); // Keep for debugging if needed
-                if (!response?.jwt ) {
-                    throw new Error('Access token token missing in login response');
-                }
-                if(response?.refreshToken){
-                    this.tokenService.saveRefreshToken(response.refreshToken);                    
+                if (!response?.jwt) {
+                     throw new Error('Access token missing in login response');
                 }
                 this.tokenService.saveAccessToken(response.jwt);
+                if(response?.refreshToken){
+                    this.tokenService.saveRefreshToken(response.refreshToken);
+                }
 
                 const userId = this.getUserIdFromToken();
                 if (!userId) {
-                    // If token is invalid immediately after login, treat as error
                     throw new Error('Invalid token received after login.');
                 }
                 return this.authApiService.fetchUserRole(userId).pipe(
@@ -71,173 +65,177 @@ export class AuthService {
                 );
             }),
             tap(role => {
-                this.userRole.set(role);
-                this.isAuthStateResolved.set(true);
+                this.authStateService.setAuthState(role, true);
             }),
             catchError(error => {
+                // Clearing tokens/state when login or role fetch fails
+                // Using internal logout without navigation
+                this.handleLogoutInternal(); 
                 return throwError(() => error);
             })
         );
     }
 
-    // --- Signup Methods (Implement actual calls or keep stubs) ---
+    // --- Signup Methods (Delegated to ApiService, manage state) ---
     restaurantSignUp(credentials: iRestaurantSignup): Observable<RestaurantSignupResponse> {
-        this.isAuthStateResolved.set(false);
+        this.authStateService.setResolved(false);
         return this.authApiService.restaurantSignup(credentials).pipe(
             tap({
-                next: (response) => { this.isAuthStateResolved.set(true); },
-                error: (error) => { this.isAuthStateResolved.set(true); throw error; }
+                next: () => this.authStateService.setResolved(true),
+                error: (err) => { this.authStateService.setResolved(true); throw err; }
             })
         );
     }
     agentSignUp(credentials: iAgentSignup): Observable<AgentSignupResponse> {
-        this.isAuthStateResolved.set(false);
-        return this.authApiService.agentSignup(credentials).pipe(
-            tap({
-                next: (response) => { this.isAuthStateResolved.set(true); },
-                error: (error) => { this.isAuthStateResolved.set(true); throw error; }
-            })
-        );
+         this.authStateService.setResolved(false);
+         return this.authApiService.agentSignup(credentials).pipe(
+             tap({
+                next: () => this.authStateService.setResolved(true),
+                error: (err) => { this.authStateService.setResolved(true); throw err; }
+             })
+         );
     }
     customerSignUp(credentials: iCustomerSignup): Observable<CustomerSignupResponse> {
-        this.isAuthStateResolved.set(false);
-        return this.authApiService.customerSignup(credentials).pipe(
-            tap({
-                next: (response) => { this.isAuthStateResolved.set(true); },
-                error: (error) => { this.isAuthStateResolved.set(true); throw error; }
-            })
-        );
+         this.authStateService.setResolved(false);
+         return this.authApiService.customerSignup(credentials).pipe(
+             tap({
+                next: () => this.authStateService.setResolved(true),
+                error: (err) => { this.authStateService.setResolved(true); throw err; }
+             })
+         );
     }
-
 
     // --- Logout ---
     logout(): void {
-        this.handleLogout();
+        this.handleLogoutInternal();
+        this.router.navigate(['auth/login']);
     }
 
-    // Centralized Logout Logic
-    handleLogout(): void {
+    // Centralized internal state clearing logic
+    private handleLogoutInternal(): void {
         this.tokenService.removeAllTokens();
-        localStorage.clear(); // Keep if necessary for other non-auth browser data
+        localStorage.clear();
         this.storeService.dispatch(emptyCart());
-        this.userRole.set(null);
-        this.isAuthStateResolved.set(true);
-        this.isRefreshing = false;
-        this.refreshTokenSubject.next(null);
-        this.router.navigate(['auth/login']); // Use router injection
+        this.authStateService.clearAuthState();
     }
 
-    // --- Refresh Token Logic ---
-    refreshToken(): Observable<RefreshResponse> {
-        if (this.isRefreshing) {
-            // Wait for the ongoing refresh result
-            return this.refreshTokenSubject.pipe(
-                filter(result => result !== null),
-                take(1),
-                switchMap(result => {
-                    if (result instanceof Error) {
-                        return throwError(() => result);
-                    }
-                    return of({ accessToken: result as string } as RefreshResponse);
-                })
-            );
-        } else {
-            const storedRefreshToken = this.tokenService.getRefreshToken();
-            if (!storedRefreshToken) {
-                this.handleLogout();
-                return throwError(() => new Error('Refresh token not available'));
-            }
+    // Public method for interceptor/guards to trigger logout sequence
+    public triggerLogoutAndRedirect(): void {
+        this.handleLogoutInternal();
+        this.router.navigate(['auth/login']);
+    }
 
-            this.isRefreshing = true;
-            this.refreshTokenSubject.next(null);
 
-            const payload: RefreshRequest = { refreshToken: storedRefreshToken };
-            const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
-            return this.http.post<RefreshResponse>(this.refreshTokenUrl, payload, { headers }).pipe(
-                tap(response => {
-                    // --- This part correctly handles the provided response structure ---
-                    const newAccessToken = response.accessToken; // Accesses the 'accessToken' field
-                    if (!newAccessToken) {
-                        throw new Error("New access token not found in refresh response");
-                    }
-                    this.tokenService.saveAccessToken(newAccessToken);
-
-                    if (response.refreshToken) {
-                        this.tokenService.saveRefreshToken(response.refreshToken);
-                    }
-                    this.refreshTokenSubject.next(newAccessToken); 
-                }),
-                catchError(error => {
-                    this.handleLogout();
-                    this.refreshTokenSubject.next(error);
-                    return throwError(() => error);
-                }),
-                finalize(() => this.isRefreshing = false)
-            );
-        }
+    // --- Refresh Token Call (Delegated) ---
+    // This is now primarily for the interceptor to call
+    public attemptRefreshToken(): Observable<RefreshResponse> {
+       return this.refreshTokenService.refreshToken().pipe(
+           catchError(error => {
+               // If refresh fails with specific auth error, triggering full logout
+                if (error instanceof HttpErrorResponse && (error.status === 401 || error.status === 403 || error.status === 400)) {
+                   this.triggerLogoutAndRedirect();
+                }
+                // Re-throwing the error for the interceptor/caller
+                return throwError(() => error);
+           })
+       );
     }
 
 
     // --- Utility Methods ---
-
     public get isLoggedIn(): boolean {
-        // Check existence and expiry of the access token
+        // Check state service OR token service - choose one source of truth
+        // Using TokenService is often more direct for guards/interceptors
         return this.tokenService.hasAccessToken() && !this.tokenService.isAccessTokenExpired();
     }
 
-    // Decodes the ACCESS token to get User ID
     private getUserIdFromToken(): string | null {
         const token = this.tokenService.getAccessToken();
         if (!token) return null;
         try {
             const decodedToken: JwtPayload = jwtDecode(token);
-            // Re-verify expiry, though interceptor is primary check
             if (decodedToken.exp * 1000 < Date.now()) {
-                return null; // Expired
+                return null;
             }
             return decodedToken.userId;
         } catch (error) {
-            return null; // Invalid token
+            return null;
         }
     }
 
-    // Loads role based on ACCESS token on initial application load
+    // Initial load logic remains complex, needs careful state management
     private loadInitialRole(): void {
-        const tokenExists = this.tokenService.hasAccessToken();
-        const tokenExpired = this.tokenService.isAccessTokenExpired();
-
-        if (!tokenExists || tokenExpired) {
-            this.userRole.set(null);
-            this.tokenService.removeAllTokens(); // Clean up invalid/expired tokens
-            this.isAuthStateResolved.set(true);
+        const accessTokenExists = this.tokenService.hasAccessToken();
+        const refreshTokenExists = this.tokenService.hasRefreshToken();
+        
+        // Case 1 : If both token does not exists
+        if (!accessTokenExists && !refreshTokenExists) {
+            this.authStateService.setAuthState(null, true);
+            return;
+        }
+        
+        // Case 2 : If access token exists
+        if (accessTokenExists) {
+            const isAccessTokenExpired = this.tokenService.isAccessTokenExpired();
+            // Case 2-A : If access token is not expired
+            if (!isAccessTokenExpired) {
+                const userId = this.getUserIdFromToken();
+                if (userId) {
+                    this.fetchRoleAndResolveState(userId); // Fetches role and updates AuthStateService
+                    return;
+                } else {
+                    this.triggerLogoutAndRedirect(); // Invalid token
+                    this.authStateService.setResolved(true); // Still resolve after logout
+                    return;
+                }
+            // Case 2-B : If access token is expired
+            } 
+            else {
+                // Removing expired token
+                this.tokenService.removeAccessToken(); 
+                if (!refreshTokenExists) {
+                    // Case : Refresh token does not exists when the access token is expired
+                    // No refresh is possible triggering the logout and redirecting to login again
+                    this.triggerLogoutAndRedirect(); 
+                    this.authStateService.setResolved(true);
+                } else {
+                    // Refresh token exists, So interceptor will handle the logic of getting the access token by refresh token
+                    this.authStateService.setAuthState(null, true);
+                }
+                return;
+            }
+        }
+        
+        // Only refresh token exists
+        // Refresh token exists, So interceptor will handle the logic of getting the access token by refresh token
+        if (!accessTokenExists && refreshTokenExists) {
+            this.authStateService.setAuthState(null, true);
             return;
         }
 
-        const userId = this.getUserIdFromToken();
-        if (!userId) {
-            // If decoding failed or re-check showed expiry
-            this.handleLogout();
-            this.isAuthStateResolved.set(true);
-            return;
-        }
+         // Safety: If code reaches here that means some unexpected error has occured
+         this.triggerLogoutAndRedirect();
+         this.authStateService.setResolved(true);
+    }
 
-        // Token seems valid, proceed to fetch role
+    // Fetches role, updates AuthStateService
+    private fetchRoleAndResolveState(userId: string): void {
         this.authApiService.fetchUserRole(userId).pipe(
-            take(1), // Only need the first response
+            take(1),
             catchError((error) => {
-                // Handle API errors during role fetch
-                this.handleLogout();
-                return of(null); // Return null observable on error
+                // If role fetch fails logging out
+                this.triggerLogoutAndRedirect();
+                this.authStateService.setResolved(true); 
+                return of(null);
             })
         ).subscribe(response => {
             if (response && response.role) {
-                this.userRole.set(response.role as Role);
+                this.authStateService.setAuthState(response.role as Role, true);
             } else {
-                // API returned OK but no role - treat as error/logout
-                this.handleLogout();
+                // Role fetch succeeded but no role returned? Logout.
+                this.triggerLogoutAndRedirect();
+                 this.authStateService.setResolved(true);
             }
-            this.isAuthStateResolved.set(true); // State is resolved
         });
     }
 }
