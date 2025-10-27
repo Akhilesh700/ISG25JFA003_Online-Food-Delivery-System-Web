@@ -112,6 +112,8 @@ export class Navbar implements OnInit, OnDestroy { // Implement OnDestroy
     toggleTheme(): void {
         this.darkmodeService.toggleTheme();
         this.isDarkMode = this.darkmodeService.getCurrentTheme() === 'dark';
+        
+        console.log("Current Theme = ", this.darkmodeService.getCurrentTheme())
     }
 
     openCartSheet() {
