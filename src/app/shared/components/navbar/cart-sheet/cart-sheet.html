@@ -22,20 +22,28 @@
                         <h4 class="font-semibold">{{item.name}}</h4>
                         <p class="text-sm text-secondary/60">{{(item.quantity * item.price).toFixed(2)}} Rs.</p>
                     </div>
-                <div>
-                    <button class="bg-primary/20 text-primary px-3 py-1.5 rounded-full text-sm font-medium cursor-pointer hover:bg-primary/40  " (click)="decreaseItemQuantity((item.itemId).toString())" >-</button>
-                    <span class="mx-2">{{item.quantity}}</span>
-                    <button class="bg-primary/20 text-primary px-3 py-1.5 rounded-full text-sm font-medium cursor-pointer hover:bg-primary/40 "  (click)="increaseItemQuantity((item.itemId).toString())" >+</button>
+                <div class="overflow-hidden select-none py-1 text-white  bg-black  dark:bg-primary   rounded-full  bottom-3 right-3  drop-shadow-sm ">
+                   
+                    @if(item.quantity === 1 ) {
+                        <button class="px-4 py-1 duration-300 cursor-pointer " (click)="removeItemFromCart(item.itemId)" ><i class="pi pi-trash"></i></button>
+                    }@else {
+                        <button class="px-4 py-1  duration-300 cursor-pointer" (click)="decreseCartItem(item.itemId)" >-</button>
+                    }
+                    <span class="px-2">{{item.quantity}}</span>
+                    <button class="px-4 py-1  duration-300 cursor-pointer" (click)="increaseCartItem(item.itemId)" >+</button>
+                    
                 </div>
             </div>
         }
         </div>
         
         <div class="h-1 bg-white/20 mt-6"></div>
-        <button z-button zType="outline" (click)="openDialog()">Edit profile</button>
         <div class="flex justify-between items-center mt-5">
-            <h4 class="font-semibold">Total</h4>
-            <h4 class="font-semibold">Rs.  5,432</h4>
+            <div class="flex gap-2">
+                <h4 class="font-semibold text-white/70">Total:</h4>
+                <h4 class="font-semibold">{{totalPrice$ | async}}</h4>
+            </div>
+            <button z-button zType="outline" (click)="openDialog()">Add Note</button>
         </div>
 <!-- 
         <a routerLink="checkout">

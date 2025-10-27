@@ -11,3 +11,5 @@ export const decrement = createAction('[Cart Component] Decrement', props<{dishI
 export const removeFromCart = createAction('[Cart Component] RemoveFromCart', props<{dishId:number}>())
 
 export const emptyCart = createAction('[Cart Component] EmptyCart')
+
+export const addCartNote = createAction('[Cart Component] AddCartNote', props<{note:string}>())
