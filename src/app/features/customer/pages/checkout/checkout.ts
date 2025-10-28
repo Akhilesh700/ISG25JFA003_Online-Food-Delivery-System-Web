@@ -69,7 +69,7 @@ export class Checkout implements OnInit {
         const oldTaxesAndFees = price * 0.28 + price * 0.12;
 
         const finalTotal = price - promotion + deliveryFee - deliveryDiscount + taxesAndFees;
-        this.amount = finalTotal;
+        this.amount = Math.round(finalTotal);
         
         return {
           subtotal: price,

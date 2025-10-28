@@ -76,6 +76,25 @@ textarea::placeholder {
   width: 100%;
 }
 
+.container{
+  animation: updown 8s infinite ease-in-out alternate;
+}
+
+@keyframes updown {
+  0%{
+    transform: translateY(5px);
+  }
+  25%{
+    transform: translateY(0px);
+  }
+  50%{
+    transform: translateY(-5px);
+  }
+  100%{
+    transform: translateY(0px);
+  }
+}
+
 .submit-btn:hover {
   background-color: #e66000 !important;
 }

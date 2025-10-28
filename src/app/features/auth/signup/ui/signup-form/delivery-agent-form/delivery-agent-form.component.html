@@ -1,29 +1,42 @@
-<div class="container">
-  <div class="flex items-center justify-center min-h-screen px-4">
-    <div class="relative w-full max-w-md pt-24">
-
-      <div class="absolute top-5 -left-5 w-3/6 z-10">
-        <img src="img/login/spilling_burger_2.png" alt="Spilling Burger">
+<div class="container bg-black w-100vw">
+  <div class="flex items-center justify-center min-h-screen px-4 py-8">
+    
+    <div class="w-full max-w-4xl flex flex-col md:flex-row bg-white rounded-lg shadow-2xl overflow-hidden">
+      
+      <div class="w-full md:w-1/2 hidden md:block">
+        <img src="img/login/Delivery_Agent.png" alt="Dine Cognizant Delivery Agent" class="w-full h-full object-cover">
       </div>
 
-      <div class="card w-full bg-white mt-17">
+      <div class="w-full md:w-1/2 p-6 md:p-8">
         <div class="flex flex-col items-center">
           <h1 class="text-3xl text-orange-700 font-bold">Agent Register</h1>
           <p class="text-gray-500 mt-1">Join Our Delivery Fleet</p>
         </div>
 
         <form [formGroup]="deliveryAgentForm" (ngSubmit)="onSubmit()" class="grid gap-2 mt-6 text-black">
+          
           <div class="grid grid-cols-2 gap-4">
             <div class="form-field">
               <label for="name" class="form-label required">Full Name</label>
               <input id="name" class="form-input" type="text" placeholder="Your full name" formControlName="name"
                 [class.is-invalid]="f['name'].invalid && f['name'].touched" />
+              @if (f['name'].invalid && (f['name'].touched || submitted)) {
+                <p class="text-xs text-red-500 mt-1">Full name is required.</p>
+              }
             </div>
 
             <div class="form-field">
               <label for="phone" class="form-label required">Phone</label>
               <input id="phone" class="form-input" type="text" placeholder="10-digit mobile" formControlName="phone"
                 [class.is-invalid]="f['phone'].invalid && f['phone'].touched" />
+              @if (f['phone'].invalid && (f['phone'].touched || submitted)) {
+                @if (f['phone'].errors?.['required']) {
+                  <p class="text-xs text-red-500 mt-1">Phone number is required.</p>
+                }
+                @if (f['phone'].errors?.['pattern']) {
+                  <p class="text-xs text-red-500 mt-1">Please enter a valid 10-digit number.</p>
+                }
+              }
             </div>
           </div>
 
@@ -31,12 +44,28 @@
             <label for="email" class="form-label required">Email Address</label>
             <input id="email" class="form-input" type="email" placeholder="you@example.com" formControlName="email"
               [class.is-invalid]="f['email'].invalid && f['email'].touched" />
+            @if (f['email'].invalid && (f['email'].touched || submitted)) {
+              @if (f['email'].errors?.['required']) {
+                <p class="text-xs text-red-500 mt-1">Email is required.</p>
+              }
+              @if (f['email'].errors?.['email']) {
+                <p class="text-xs text-red-500 mt-1">Please enter a valid email address.</p>
+              }
+            }
           </div>
 
           <div class="form-field">
             <label for="password" class="form-label required">Password</label>
             <input id="password" class="form-input" type="password" placeholder="Min. 8 characters"
               formControlName="password" [class.is-invalid]="f['password'].invalid && f['password'].touched" />
+            @if (f['password'].invalid && (f['password'].touched || submitted)) {
+                @if (f['password'].errors?.['required']) {
+                  <p class="text-xs text-red-500 mt-1">Password is required.</p>
+                }
+                @if (f['password'].errors?.['minlength']) {
+                  <p class="text-xs text-red-500 mt-1">Password must be at least 8 characters long.</p>
+                }
+              }
           </div>
 
           <div class="grid grid-cols-2 gap-4">
@@ -49,6 +78,9 @@
                   <option [value]="type">{{ type }}</option>
                 }
               </select>
+               @if (f['identityProofType'].invalid && (f['identityProofType'].touched || submitted)) {
+                <p class="text-xs text-red-500 mt-1">Proof type is required.</p>
+              }
             </div>
 
             <div class="form-field">
@@ -56,17 +88,23 @@
               <input id="identityProofNo" class="form-input" type="text" placeholder="ID Number"
                 formControlName="identityProofNo"
                 [class.is-invalid]="f['identityProofNo'].invalid && f['identityProofNo'].touched" />
+               @if (f['identityProofNo'].invalid && (f['identityProofNo'].touched || submitted)) {
+                <p class="text-xs text-red-500 mt-1">Proof number is required.</p>
+              }
             </div>
           </div>
 
-          @if (deliveryAgentForm.invalid && (deliveryAgentForm.touched || deliveryAgentForm.dirty)) {
-            <div class="text-xs text-center text-red-500 mt-1">Please fill out all required fields correctly.</div>
+          @if (deliveryAgentForm.invalid && submitted) { <div class="text-xs text-center text-red-500 mt-1">Please fill out all required fields correctly.</div>
           }
 
-          <button type="submit" class="submit-btn p-2.5 mt-2 bg-orange-600">Create Account</button>
+          <button type="submit" class="submit-btn p-2.5 mt-2 bg-orange-600" [disabled]="isLoading">
+             @if (isLoading) {
+              <span>Creating Account...</span>
+            } @else {
+              <span>Create Account</span>
+            }
+          </button>
         </form>
-      </div>
 
-    </div>
-  </div>
+      </div> </div> </div>
 </div>
