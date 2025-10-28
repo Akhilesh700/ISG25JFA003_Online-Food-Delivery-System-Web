@@ -16,15 +16,12 @@ export interface RestaurantSignupResponse {
 }
 
 export interface RestaurantResponse {
-    restaurantId: number;
     name: string;
     address: string;
-    bannerUrl: string;
-    logoUrl: string;
-    rating: number;
-    ETA: number;
-    isOpen: boolean;
-    deliveryFee: number;
+    phone: string;
+    openTime: string;
+    closeTime: string;
+    profileImageUrl?: string;
 }
 
 export interface RestaurantOrderHistoryResponse {

@@ -105,7 +105,7 @@ export class DashboardContentComponent implements OnInit, OnDestroy {
           this.filterPendingOrders();
         },
         error: (error) => {
-          console.error('Error loading dashboard data:', error);
+          // Error loading dashboard data
         }
       });
   }
@@ -149,14 +149,18 @@ export class DashboardContentComponent implements OnInit, OnDestroy {
         totalEarnings += Number(order.totalAmount) || 0;
       }
       
-      // Count by status
-      if (status === 'PLACED' || status === 'PENDING') {
+      // Count by status (matching backend status flow)
+      if  (status === 'PENDING') {
+        // New orders awaiting restaurant action (accept/reject)
         pendingOrders++;
       } else if (status === 'PREPARING' || status === 'OUT_FOR_DELIVERY') {
+        // Orders in progress
         completedOrders++;
       } else if (status === 'DELIVERED') {
+        // Successfully delivered orders
         completedOrders++;
       } else if (status === 'NOT_ACCEPTED' || status === 'FAILED') {
+        // Rejected or failed orders
         rejectedOrders++;
       }
     });
@@ -213,7 +217,7 @@ export class DashboardContentComponent implements OnInit, OnDestroy {
 
   onUpdateStatus(order: Order, action: 'accept' | 'reject'): void {
     // Call backend API: PUT /api/v1/restaurant/update-status/{orderId}?action=accept/reject
-    // Backend updates PENDING/PLACED status to PREPARING (accept) or NOT_ACCEPTED (reject)
+    // Backend validates order is in PLACED status, then updates to PREPARING (accept) or NOT_ACCEPTED (reject)
     this.restaurantService.updateOrderStatus(order.id, action)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -224,7 +228,7 @@ export class DashboardContentComponent implements OnInit, OnDestroy {
           toast.success(`✅ Order has been ${actionText} successfully!\n\nNew Status: ${newStatus}`);
           
           // Reload dashboard to fetch updated order list from API
-          // Order will be removed from incoming orders as it's now PREPARING or NOT_ACCEPTED
+          // Order will be removed from incoming orders as it's now PREPARING or NOT_ACCEPTED (no longer PLACED)
           this.loadDashboardData();
         },
         error: (error) => {
@@ -247,14 +251,15 @@ export class DashboardContentComponent implements OnInit, OnDestroy {
   }
 
   private filterPendingOrders(): void {
-    // Frontend filtering: Show new orders awaiting restaurant action in "Incoming Orders" section
-    // These are orders from customers that need accept/reject action
-    // Backend flow: PENDING/PLACED → (accept) → PREPARING, or → (reject) → NOT_ACCEPTED
+    // Frontend filtering: Show only PLACED orders in "Incoming Orders" section
+    // These are new orders from customers awaiting restaurant action (accept/reject)
+    // Backend flow: Customer places order → PLACED → Restaurant accepts → PREPARING
+    // Restaurant rejects → NOT_ACCEPTED
     
     this.pendingOrders = this.orders.filter(order => {
       const status = order.status?.toUpperCase().trim() || '';
-      // Show both PLACED and PENDING status orders in incoming section
-      return status === 'PLACED' || status === 'PENDING';
+      // Show only PLACED status orders (need restaurant action)
+      return status === 'PLACED';
     });
   }
 

@@ -51,11 +51,4 @@ export class RestaurantService {
     return this.profileSubject.value;
   }
 
-  // getDashboardStats(): Observable<RestaurantDashboardStats> {
-  //   return this.http.get<RestaurantDashboardStats>(`${this.apiUrl}/dashboard-stats`);
-  // }
-
-  // getMonthlyEarnings(): Observable<MonthlyEarnings[]> {
-  //   return this.http.get<MonthlyEarnings[]>(`${this.apiUrl}/monthly-earnings`);
-  // }
 }

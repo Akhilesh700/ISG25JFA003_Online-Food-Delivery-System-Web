@@ -14,8 +14,9 @@ import { RestaurantService } from '../../../core/services/restaurant/restaurant.
 })
 export class UpdateProfileComponent implements OnInit {
   profileForm!: FormGroup;
-  profileImageUrl: string | ArrayBuffer | null = 'https://via.placeholder.com/150';
+  profileImageUrl: string | ArrayBuffer | null = './img/avatar/restaurant_profile.jpg';
   isLoading: boolean = false;
+  isSaving: boolean = false;
 
   constructor(
     private router: Router,
@@ -29,6 +30,42 @@ export class UpdateProfileComponent implements OnInit {
       address: new FormControl('', [Validators.required]),
       openTime: new FormControl(''),
       closeTime: new FormControl('')
+    });
+
+    // Load current profile data from API
+    this.loadProfileData();
+  }
+
+  loadProfileData(): void {
+    this.isLoading = true;
+    this.restaurantService.getProfile().subscribe({
+      next: (profile) => {
+        this.isLoading = false;
+        
+        // Populate form with existing profile data (time in HH:mm:ss format)
+        this.profileForm.patchValue({
+          name: profile.name || '',
+          phone: profile.phone || '',
+          address: profile.address || '',
+          openTime: profile.openTime || '',
+          closeTime: profile.closeTime || ''
+        });
+        
+        // Update profile image if available from backend
+        if (profile.profileImageUrl) {
+          this.profileImageUrl = profile.profileImageUrl;
+        }
+      },
+      error: (error) => {
+        this.isLoading = false;
+        
+        // If API fails, show warning but allow user to enter data
+        if (error.status === 404) {
+          toast.info('No existing profile found. Please enter your details.');
+        } else {
+          toast.warning('Could not load existing profile data. You can still update your profile.');
+        }
+      }
     });
   }
 
@@ -45,31 +82,35 @@ export class UpdateProfileComponent implements OnInit {
 
   onSubmit(): void {
     if (this.profileForm.valid) {
-      this.isLoading = true;
+      this.isSaving = true;
       
-      // Build profile data object, only sending name, phone, and address
-      // openTime and closeTime are excluded due to backend LocalDate type mismatch
+      // Build profile data object with time in HH:mm:ss format (LocalTime)
       const profileData: any = {
         name: this.profileForm.value.name,
         phone: this.profileForm.value.phone,
-        address: this.profileForm.value.address
+        address: this.profileForm.value.address,
+        openTime: this.profileForm.value.openTime || null,
+        closeTime: this.profileForm.value.closeTime || null
       };
 
       this.restaurantService.updateProfile(profileData).subscribe({
         next: (response) => {
-          this.isLoading = false;
+          this.isSaving = false;
           toast.success('✅ Profile updated successfully!');
-          this.router.navigate(['/restaurant']);
+          
+          // Reload the profile data from backend to show the updated values
+          this.loadProfileData();
+          
+          // Mark form as pristine since data is now in sync with backend
+          this.profileForm.markAsPristine();
         },
         error: (error) => {
-          this.isLoading = false;
+          this.isSaving = false;
           const errorMsg = error.error?.message || 'Failed to update profile';
           toast.error(`❌ ${errorMsg}`);
-          console.error('Profile update error:', error);
         }
       });
     } else {
-      console.error('Form is invalid.');
       this.profileForm.markAllAsTouched();
       toast.error('❌ Please fill all required fields correctly');
     }

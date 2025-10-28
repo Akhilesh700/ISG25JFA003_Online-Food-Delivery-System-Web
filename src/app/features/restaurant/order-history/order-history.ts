@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RestaurantService } from '../../../core/services/restaurant/restaurant.service';
 import { RestaurantOrderHistoryResponse } from '../../../models/restaurant.models';
 import { Subject, takeUntil, interval } from 'rxjs';
@@ -18,14 +19,14 @@ interface Order {
 @Component({
   selector: 'app-order-history',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './order-history.html',
   styleUrls: ['./order-history.css']
 })
 export class OrderHistoryComponent implements OnInit, OnDestroy {
   orders: Order[] = [];
   filteredOrders: Order[] = [];
-  selectedStatus: string = 'All Status';
+  selectedStatus: string = 'PLACED'; // Default filter to show only PLACED orders
   selectedOrder: Order | null = null;
   isModalOpen: boolean = false;
   
@@ -69,7 +70,8 @@ export class OrderHistoryComponent implements OnInit, OnDestroy {
               specialReq: o.specialReq || '',
               orderTime: o.orderTime
             };
-          });
+          }).filter(order => order.status !== 'PENDING'); // Exclude PENDING orders from history
+          
           this.applyFilter();
         },
         error: (error) => {

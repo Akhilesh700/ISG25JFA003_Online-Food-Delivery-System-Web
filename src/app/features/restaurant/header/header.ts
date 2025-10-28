@@ -21,6 +21,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isProfileDropdownOpen: boolean = false;
   restaurantName: string = 'Restaurant';
   restaurantInitials: string = 'R';
+  profileImageUrl: string = './img/avatar/restaurant_profile.jpg'; // Default profile image
   
   private authService = inject(AuthService);
   private restaurantService = inject(RestaurantService);
@@ -29,23 +30,29 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(private elementRef: ElementRef) {}
 
   ngOnInit() {
-    // Subscribe to profile updates
+    // Subscribe to profile updates from BehaviorSubject
     this.restaurantService.profile$
       .pipe(takeUntil(this.destroy$))
       .subscribe(profile => {
         if (profile && profile.name) {
           this.restaurantName = profile.name;
           this.restaurantInitials = this.getInitials(profile.name);
+          // Update profile image if available from backend
+          if (profile.profileImageUrl) {
+            this.profileImageUrl = profile.profileImageUrl;
+          }
         }
       });
 
-    // Load profile from API if endpoint exists
+    // Load profile from API on component initialization
     this.restaurantService.getProfile()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
+        next: (profile) => {
+          // Profile loaded successfully
+        },
         error: (err) => {
-          // Profile endpoint not available yet - will be updated when user updates profile
-          console.log('Profile will be loaded after first update');
+          // Profile API not available
         }
       });
   }
