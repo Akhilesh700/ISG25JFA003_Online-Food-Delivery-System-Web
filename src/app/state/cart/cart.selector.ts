@@ -19,3 +19,8 @@ export const selectCartRestaurant = createSelector(
     (state: CartState) => state.restaurant
 )
 
+export const selectCartNote = createSelector(
+    selectCartState,
+    (state: CartState) => state.note
+)
+

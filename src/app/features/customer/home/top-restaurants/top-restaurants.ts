@@ -10,7 +10,6 @@ import { RestaurantService } from 'src/app/core/services/customer/restaurants/Re
 })
 export class TopRestaurantsComponent implements OnInit {
   private restaurantService = inject(RestaurantService);
-
   // Expose the read-only signal directly to the template for reactive updates.
   public restaurants = this.restaurantService.topRestaurantsSignal;
 

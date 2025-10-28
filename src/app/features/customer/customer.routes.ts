@@ -3,7 +3,7 @@ export const routes: Routes = [
   {
     path: 'home', 
     loadComponent : () => import('./home/home-page/home-page.component').then(m => m.HomePageComponent), 
-    title: "DinCognizant - Home"
+    title: "DineCognizant - Home"
   },
 
   {

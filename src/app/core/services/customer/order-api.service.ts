@@ -1,6 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { map, Observable } from 'rxjs';
+import { AppState } from 'src/app/state/app.state';
+import { selectCartNote } from 'src/app/state/cart/cart.selector';
 import { environment } from 'src/environments/environment';
 
 // Matches the backend's PlaceOrderRequestDto
@@ -29,10 +32,21 @@ export interface UpdatePaymentRequest {
 })
 export class OrderApiService {
   private readonly http = inject(HttpClient);
+  protected readonly storeSerice = inject<Store<AppState>>(Store);
   private readonly apiUrl = `${environment.apiUrl}api/${environment.version}/customer/orders`; // Using proxy
 
   placeOrder(cartId: number): Observable<PlaceOrderResponse> {
-    const request: PlaceOrderRequest = { note:"Fetch it from user" };
+    let note = "";
+    this.storeSerice.select(selectCartNote).pipe(
+      map(n => {
+        if(n) {
+          note = n;
+        }
+        return n;
+      })
+    ).subscribe();
+
+    const request: PlaceOrderRequest = { note: note};
     return this.http.post<PlaceOrderResponse>(`${this.apiUrl}/place`, request);
   }
 

@@ -9,6 +9,7 @@ import { AppState } from 'src/app/state/app.state';
 import { combineLatest, map, Observable, of, startWith } from 'rxjs';
 import { selectCartItems } from 'src/app/state/cart/cart.selector';
 import { AsyncPipe } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -77,6 +78,7 @@ import { AsyncPipe } from '@angular/common';
 export class Resturant implements OnInit {
   private readonly resturantService = inject(RestaurantService);
   protected readonly store = inject<Store<AppState>>(Store);
+  private route = inject(ActivatedRoute);
   param: number = Number(window.location.pathname.split('/').pop());
 
   resturant$!: Observable<IResturant>;
@@ -86,6 +88,7 @@ export class Resturant implements OnInit {
 
 
   ngOnInit(): void {
+    console.log("Its a hit")
       // 1. Get the restaurant as an observable stream from the service.
     this.resturant$ = this.resturantService.getResturantById(this.param);
     

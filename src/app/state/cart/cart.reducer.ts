@@ -1,13 +1,14 @@
 import { createReducer, on } from "@ngrx/store";
 import { IDish, IResturant } from "src/app/models/resturantInterface";
-import { addToCard, decrement, emptyCart, increment, removeFromCart } from "./cart.action";
+import { addCartNote, addToCard, decrement, emptyCart, increment, removeFromCart } from "./cart.action";
 import { getInitialCartState } from "../metaReducer";
 
 
 export interface CartState{
     dishes: IDish[],
     totalPrice: number,
-    restaurant?: IResturant
+    restaurant?: IResturant,
+    note? : string
 }
 
 export const initialCartState: CartState = getInitialCartState();
@@ -75,7 +76,14 @@ export const cartReducer = createReducer(
 
     on(emptyCart, () => {
         return initialCartState
-    })
+    }),
+
+    on(addCartNote, (state, {note}) => {
+        return {
+            ...state,
+            note: note
+        }
+    } )
 
 
      

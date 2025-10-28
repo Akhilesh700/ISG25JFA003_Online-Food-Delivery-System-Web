@@ -6,6 +6,8 @@ import { Router, RouterOutlet, NavigationStart, NavigationEnd, NavigationCancel,
 import { LoadingService } from './core/services/loading/loading.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ZardToastComponent } from "./shared/components/toast/toast.component";
+import { ZardToastComponent } from "@shared/components/toast/toast.component";
+import { AuthService } from './core/services/auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -15,13 +17,14 @@ import { ZardToastComponent } from "./shared/components/toast/toast.component";
 })
 export class App implements OnInit {
   private readonly darkmodeService = inject(DarkModeService);
-
+  private readonly authService = inject(AuthService);
   private readonly loadingService = inject(LoadingService);
   private readonly router = inject(Router);
 
   constructor() {
     // Start listening to router events as soon as the component is created.
     this.listenToRouterEvents();
+    this.authService.initializeAuthState();
   }
 
   ngOnInit(): void {

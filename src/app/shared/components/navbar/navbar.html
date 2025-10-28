@@ -1,31 +1,91 @@
-<nav class="bg-black text-white dark:bg-secondary-foreground/70 border-b border-white/30 backdrop-blur-md fixed top-0 left-0 w-full z-50 py-4 ">
-    <div class="w-11/12 mx-auto flex justify-between items-center">
+<nav
+    class="bg-background text-foreground dark:bg-secondary-foreground/70 border-b border-border backdrop-blur-md fixed top-0 left-0 w-full z-50 py-4 ">
+    <div class="w-11/12 mx-auto flex justify-between items-center relative">
         <button class="cursor-pointer">
-            <i class="pi pi-bars rounded-full hover:bg-primary/60 p-3 duration-300 cursor-pointer" style="color: var(--primary-color)" (click)="openOptionsSheet()"></i>
+            <i class="pi pi-bars rounded-full hover:bg-primary/60 p-3 duration-300 cursor-pointer text-primary"
+               (click)="openOptionsSheet()"></i>
         </button>
-        
-        <a [routerLink]="getHomeRoute()"  class="cursor-pointer">
+
+        <a routerLink="/" class="cursor-pointer">
             <img src="img/DINE.png" alt="Dine Cognizant Logo" class="h-8 w-auto">
         </a>
         <div class="flex items-center gap-1">
-            <i class="pi pi-map-marker " style="color: var(--primary-color)"></i>
+            <i class="pi pi-map-marker text-primary"></i>
             <p class="font-light cursor-not-allowed ">{{currentUser.location}}</p>
             <span class="text-secondary/40">·</span>
             <p class="font-light text-xs ">Now</p>
-            <i class="pi pi-angle-down cursor-pointer" style="color: var(--primary-color)"></i>
+            <i class="pi pi-angle-down cursor-pointer text-primary"></i>
         </div>
-        <div class=" px-4 py-1.5 bg-secondary/20 rounded-full w-1/2 flex items-center gap-3">
-            <i class="pi pi-search" style="color: var(--primary-color)"></i>
-            <input type="text" placeholder="Search for restaurant, cuisine or a dish" class=" text-sm font-mono  bg-transparent outline-none text-primary-foreground placeholder:text-primary-foreground/20 flex-1 " />
+
+        <div class="px-4 py-1.5 bg-secondary/20 rounded-full w-1/2 flex items-center gap-3 relative">
+            <i class="pi pi-search text-primary"></i>
+            <input type="text" placeholder="Search for restaurant, cuisine or a dish"
+                   class=" text-sm font-mono bg-transparent outline-none text-primary-foreground placeholder:text-primary-foreground/20 flex-1 "
+                   [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" (input)="onSearchInput($event)"
+                   (focus)="onSearchFocus()" autocomplete="off" />
+
+            @if (showResults()) {
+              <div
+                  class="search-results absolute top-full left-0 right-0 mt-2 bg-popover text-popover-foreground border border-border rounded-md shadow-lg max-h-80 overflow-y-auto z-[60]">
+
+                  @if (isLoading()) {
+                    <div class="p-4 text-center text-muted-foreground animate-pulse">Searching...</div>
+                  } @else if (searchResults$ | async; as results) {
+                    @if (results.length === 0 && searchQuery().trim().length > 0) {
+                      <div class="p-4 text-center text-muted-foreground text-sm">
+                        No results found for "{{ searchQuery() }}".
+                      </div>
+                    } @else {
+                      @for (result of results; track result.type + result.id) {
+                        <a (click)="navigateSearch(result)"
+                           class="flex items-center gap-3 p-3 hover:bg-accent hover:text-accent-foreground border-b border-border last:border-b-0 cursor-pointer">
+
+                          @if (result.type === 'restaurant') {
+                            <img [src]="result.imageUrl || 'img/default.jpg'" [alt]="result.name"
+                                 class="w-10 h-10 rounded-md object-cover flex-shrink-0">
+                            <div class="flex-grow min-w-0">
+                              <p class="font-semibold text-sm truncate">{{ result.name }}</p>
+                              <p class="text-xs text-muted-foreground truncate">{{ result.cuisine }}
+                                @if (result.rating) {
+                                  <span> - ★ {{ result.rating }}</span>
+                                }
+                              </p>
+                              @if (result.address) {
+                                <p class="text-xs text-muted-foreground truncate">{{ result.address }}</p>
+                              }
+                            </div>
+                          } @else if (result.type === 'menuItem') {
+                            <img [src]="result.imageUrl || '/public/img/default.jpg'" [alt]="result.name"
+                                 class="w-10 h-10 rounded-md object-cover flex-shrink-0">
+                            <div class="flex-grow min-w-0">
+                              <p class="font-semibold text-sm truncate">{{ result.name }}</p>
+                              <p class="text-xs text-muted-foreground truncate">From {{ result.restaurantName }}
+                                @if (result.price) {
+                                  <span> - ₹{{ result.price }}</span>
+                                }
+                              </p>
+                              @if (result.description) {
+                                <p class="text-xs text-muted-foreground truncate mt-1">{{ result.description }}</p>
+                              }
+                            </div>
+                          }
+                        </a>
+                      }
+                    }
+                  }
+              </div> }
         </div>
         <div class="flex items-center">
-            <button class=" cursor-pointer relative " (click)="openCartSheet()">
-                <i class="pi pi-shopping-cart rounded-full hover:bg-primary/60 p-3 duration-300" style="color: var(--primary-color)"   ></i>
-                @if((cartItems$ | async)?.length){
-                    <span class="absolute top-0.5  right-0 w-[17px] h-[17px] rounded-full bg-primary text-xs flex items-center justify-center ">{{(cartItems$ | async)?.length}}</span>
-                }
-            </button>
-            <z-switch [(ngModel)]="isDarkMode" (onChange)="toggleTheme()" class="ml-4"></z-switch>
+             <button class=" cursor-pointer relative " (click)="openCartSheet()">
+                 <i class="pi pi-shopping-cart rounded-full hover:bg-primary/60 p-3 duration-300 text-primary"></i>
+                 @if((cartItems$ | async)?.length){
+                     <span
+                         class="absolute top-0.5 right-0 w-[17px] h-[17px] rounded-full bg-primary text-xs flex items-center justify-center text-primary-foreground">
+                         {{(cartItems$ | async)?.length}}
+                     </span>
+                 }
+             </button>
+             <z-switch [(ngModel)]="isDarkMode" (checkChange)="toggleTheme()" class="ml-4"></z-switch>
         </div>
     </div>
 </nav>

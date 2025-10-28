@@ -3,14 +3,33 @@
 export interface LoginCredentials {
     username: string;
     password: string;
-    rememberMe: boolean;
+    rememberMe: boolean;    
+    deviceName?: string;
+    browserName?: string;
+    browserVersion?: string;
+    timezone?: string;
+    deviceType?: string;
 }
 
 export type Role = 'ROLE_ADMIN' | 'ROLE_CUSTOMER' | 'ROLE_RESTAURANT' | 'ROLE_DELIVERY_AGENT' | null;
 
+// Updated AuthResponse
 export interface AuthResponse {
     jwt: string;
-    user: number; 
+    refreshToken: string;
+    userId: number;
+}
+
+// Interface for the Refresh Endpoint Response
+export interface RefreshResponse {
+  accessToken: string;
+  refreshToken?: string;
+  tokenType: string;
+}
+
+// Interface for the Refresh Endpoint Request
+export interface RefreshRequest {
+  refreshToken: string;
 }
 
 export interface RestaurantSignupResponse{
@@ -38,3 +57,5 @@ export interface JwtPayload {
     iat: number;   // Issued at timestamp.
     exp: number;   // Expiration time timestamp.
 }
+
+
