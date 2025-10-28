@@ -95,3 +95,21 @@ textarea.form-input {
   background-color: #e66000 !important; /* Use !important to override Tailwind */
 }
 
+.container{
+  animation: updown 8s infinite ease-in-out alternate;
+}
+
+@keyframes updown {
+  0%{
+    transform: translateY(5px);
+  }
+  25%{
+    transform: translateY(0px);
+  }
+  50%{
+    transform: translateY(-5px);
+  }
+  100%{
+    transform: translateY(0px);
+  }
+}
