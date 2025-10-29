@@ -32,6 +32,13 @@ export interface RestaurantOrderHistoryResponse {
     customerName: string;
     customerPhone: string;
     status: string;
+    orderItems?: OrderItem[];
+}
+
+export interface OrderItem {
+    name: string;
+    quantity: number;
+    price: number;
 }
 
 export interface AcceptRejectOrderResponse {

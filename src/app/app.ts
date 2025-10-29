@@ -6,7 +6,6 @@ import { Router, RouterOutlet, NavigationStart, NavigationEnd, NavigationCancel,
 import { LoadingService } from './core/services/loading/loading.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ZardToastComponent } from "./shared/components/toast/toast.component";
-import { ZardToastComponent } from "@shared/components/toast/toast.component";
 import { AuthService } from './core/services/auth/auth.service';
 
 @Component({

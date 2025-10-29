@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RestaurantService } from '../../../core/services/restaurant/restaurant.service';
-import { RestaurantOrderHistoryResponse } from '../../../models/restaurant.models';
+import { RestaurantOrderHistoryResponse, OrderItem } from '../../../models/restaurant.models';
 import { Subject, takeUntil, interval } from 'rxjs';
 
 interface Order { 
@@ -14,6 +14,7 @@ interface Order {
   customerPhone: string;
   specialReq: string;
   orderTime: string;
+  orderItems?: OrderItem[];
 }
 
 @Component({
@@ -68,7 +69,8 @@ export class OrderHistoryComponent implements OnInit, OnDestroy {
               status: statusString,
               customerPhone: o.customerPhone,
               specialReq: o.specialReq || '',
-              orderTime: o.orderTime
+              orderTime: o.orderTime,
+              orderItems: o.orderItems || []
             };
           }).filter(order => order.status !== 'PENDING'); // Exclude PENDING orders from history
           

@@ -116,6 +116,7 @@ export class DashboardContentComponent implements OnInit, OnDestroy {
     
     let todayOrders = 0;
     let todayEarnings = 0;
+    let totalOrders = 0;
     let totalEarnings = 0;
     let pendingOrders = 0;
     let completedOrders = 0;
@@ -132,20 +133,20 @@ export class DashboardContentComponent implements OnInit, OnDestroy {
       // Check if order is from today
       const isToday = orderDate.getTime() === today.getTime();
       
-      // Count today's orders (regardless of status)
-      if (isToday) {
+      // Count today's orders (exclude PENDING, NOT_ACCEPTED, FAILED)
+      // PENDING orders are not yet confirmed/placed, so they shouldn't count
+      if (isToday && status !== 'PENDING' && status !== 'NOT_ACCEPTED' && status !== 'FAILED') {
         todayOrders++;
-        
-        // Add to today's earnings if NOT rejected
-        // Include: PENDING, PREPARING, PLACED, OUT_FOR_DELIVERY, DELIVERED
-        // Exclude: NOT_ACCEPTED, FAILED
-        if (status !== 'NOT_ACCEPTED' && status !== 'FAILED') {
-          todayEarnings += Number(order.totalAmount) || 0;
-        }
+        todayEarnings += Number(order.totalAmount) || 0;
       }
       
-      // Add to total earnings only if NOT rejected
-      if (status !== 'NOT_ACCEPTED' && status !== 'FAILED') {
+      // Count total orders (exclude PENDING, NOT_ACCEPTED, FAILED)
+      if (status !== 'PENDING' && status !== 'NOT_ACCEPTED' && status !== 'FAILED') {
+        totalOrders++;
+      }
+      
+      // Add to total earnings only if NOT rejected or pending
+      if (status !== 'NOT_ACCEPTED' && status !== 'FAILED' && status !== 'PENDING') {
         totalEarnings += Number(order.totalAmount) || 0;
       }
       
@@ -168,7 +169,7 @@ export class DashboardContentComponent implements OnInit, OnDestroy {
     this.dashboardStats = {
       todayOrders,
       todayEarnings,
-      totalOrders: orders.length,
+      totalOrders,
       totalEarnings,
       pendingOrders,
       completedOrders,
@@ -195,7 +196,7 @@ export class DashboardContentComponent implements OnInit, OnDestroy {
       });
     }
     
-    // Aggregate orders by day, excluding NOT_ACCEPTED and FAILED orders
+    // Aggregate orders by day, excluding PENDING, NOT_ACCEPTED and FAILED orders
     orders.forEach(order => {
       const orderDate = new Date(order.orderTime);
       orderDate.setHours(0, 0, 0, 0);
@@ -204,8 +205,8 @@ export class DashboardContentComponent implements OnInit, OnDestroy {
       const statusValue = typeof order.status === 'object' ? (order.status as any).statusType || order.status : order.status;
       const status = String(statusValue).toUpperCase().trim();
       
-      // Only add earnings if order is NOT rejected or failed
-      if (status !== 'NOT_ACCEPTED' && status !== 'FAILED') {
+      // Only add earnings if order is confirmed (exclude PENDING, NOT_ACCEPTED, FAILED)
+      if (status !== 'PENDING' && status !== 'NOT_ACCEPTED' && status !== 'FAILED') {
         // Find matching day in weeklyData
         const dayData = this.weeklyData.find(d => d.date.getTime() === orderDate.getTime());
         if (dayData) {
