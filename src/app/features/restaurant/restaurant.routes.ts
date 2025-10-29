@@ -5,6 +5,7 @@ import { RestaurantComponent } from './restaurant';
 import { UpdateProfileComponent } from './update-profile/update-profile';
 import { OrderHistoryComponent } from './order-history/order-history';
 import { DashboardContentComponent } from './dashboard-content/dashboard-content';
+import { MenuManagementComponent } from './manage-menu/manage-menu';
 
 export const RESTAURANT_ROUTES: Routes = [
     {
@@ -33,6 +34,11 @@ export const RESTAURANT_ROUTES: Routes = [
                 // This route (/restaurant/update-profile) loads the profile page.
                 path: 'update-profile',
                 component: UpdateProfileComponent
+            },
+            {
+                // This route (/restaurant/update-profile) loads the profile page.
+                path: 'manage-menu',
+                component: MenuManagementComponent
             }
         ]
     }

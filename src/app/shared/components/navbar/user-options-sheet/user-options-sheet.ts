@@ -4,10 +4,11 @@ import { Z_MODAL_DATA } from '@shared/components/sheet/sheet.service';
 import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { IUserResponse } from 'src/app/core/services/customer/user-profile/user-profile.service';
 import { OptionSheetData } from '../navbar';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-user-options-sheet',
-  imports: [ZardBreadcrumbModule],
+  imports: [ZardBreadcrumbModule, RouterLink],
   templateUrl: './user-options-sheet.html',
   styleUrl: './user-options-sheet.css'
 })
@@ -33,7 +34,7 @@ export class UserOptionsSheet implements OnInit {
       this.currentUser = {
       userId: this.user?.email ? this.user.email : '1',
       name: this.user?.name ? this.user.name : 'Eren Yeager',
-      avatarUrl: 'img/avatar/user.png',
+      avatarUrl: '/img/avatar/user_profile.png',
       location: this.user?.address ? this.user.address  : 'Coimbatore, In'
     }    
   }
