@@ -26,6 +26,18 @@ export class userProfileService {
         return this.http.get<IUserResponse>(this.apiUrl);
     }   
 
+    updateUserAddress(adress: string) : Observable<boolean> {
+        const res =  this.http.put<boolean>(`${this.apiUrl}/update-profile`, {address: adress});
+        
+        res.subscribe({
+            next: (val)  => {
+                console.log(val)
+            }
+        })
+        
+        return res;
+    
+    }
 
 
 }

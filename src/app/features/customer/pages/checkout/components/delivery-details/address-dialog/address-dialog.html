@@ -1,0 +1,56 @@
+<form [formGroup]="addressForm">
+  <div class="p-6 space-y-5">
+    
+    <div>
+      <label for="laneNo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Lane No. / Street</label>
+      <input type="text" id="laneNo" formControlName="laneNo"
+             class="block w-full p-2.5 rounded-lg border text-sm
+                
+                    bg-gray-50 border-gray-300 text-gray-900 
+                    dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
+                    focus:ring-blue-500 focus:border-blue-500
+                    dark:focus:ring-blue-500 dark:focus:border-blue-500"
+             placeholder="e.g., 123, Main Street">
+      
+      @if (addressForm.get('laneNo')?.invalid && addressForm.get('laneNo')?.touched) {
+        <div class="mt-1 text-xs text-red-500">
+          Lane number or street is required.
+        </div>
+      }
+    </div>
+
+    <div>
+      <label for="area" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Area</label>
+      <select id="area" formControlName="area"
+              class="block w-full p-2.5 rounded-lg border text-sm
+                     bg-gray-50 border-gray-300 text-gray-900 
+                     dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
+                     focus:ring-blue-500 focus:border-blue-500
+                     dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        
+        @for (area of coimbatoreAreas; track area) {
+          <option [value]="area">{{ area }}</option>
+        }
+      </select>
+    </div>
+
+    <div>
+      <label for="city" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">City</label>
+      <input type="text" id="city" formControlName="city"
+             class="block w-full p-2.5 rounded-lg border text-sm
+                    border-gray-300 text-gray-500
+                    dark:border-gray-600 dark:text-gray-400
+                    disabled:bg-gray-100 dark:disabled:bg-gray-600 cursor-not-allowed">
+    </div>
+
+    <div>
+      <label for="state" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">State</label>
+      <input type="text" id="state" formControlName="state"
+             class="block w-full p-2.5 rounded-lg border text-sm
+                    border-gray-300 text-gray-500
+                    dark:border-gray-600 dark:text-gray-400
+                    disabled:bg-gray-100 dark:disabled:bg-gray-600 cursor-not-allowed">
+    </div>
+    
+  </div>
+</form>

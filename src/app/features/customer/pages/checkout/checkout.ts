@@ -23,6 +23,7 @@ import { PaymentSucessDialog } from './components/payment-sucess-dialog/payment-
 import { ZardBreadcrumbModule } from "@shared/components/sheet/sheet.module";
 import { ZardDialogService } from '@shared/components/dialog/dialog.service';
 import { toast } from 'ngx-sonner';
+import { IUserResponse, userProfileService } from 'src/app/core/services/customer/user-profile/user-profile.service';
 
 @Component({
   selector: 'app-checkout',
@@ -47,12 +48,16 @@ export class Checkout implements OnInit {
   private dialogService = inject(ZardDialogService);
   private cartApiService = inject(CartApiService);
   private orderApiService = inject(OrderApiService);
+  private customerService = inject(userProfileService);
 
 
   // Observables from the NgRx store
   cartItems$: Observable<IDish[]> = this.store.select(selectCartItems);
   restaurant$: Observable<IResturant> = this.store.select(selectCartRestaurant) as unknown as Observable<IResturant>;
   summary$: Observable<IOrderSummary>;
+
+  userProfile$!: Observable<IUserResponse>
+  user!: IUserResponse;
   
   // Class properties
   amount!: number;
@@ -82,39 +87,64 @@ export class Checkout implements OnInit {
         };
       })
     );
+
+     this.userProfile$= this.customerService.getUserProfile();
+     this.customerService.getUserProfile().subscribe({
+      next: (val) => {
+        this.user = val
+      },
+      error : (err) => {
+        console.log(err);
+        toast.error("Error Fetching the user.");
+      }
+     })
   }
 
   ngOnInit(): void {}
 
   onPay() {
-
-    // 1. Get the latest cart and restaurant data from the store
-    forkJoin({
-      items: this.cartItems$.pipe(first()),
-      restaurant: this.restaurant$.pipe(first())
-    }).pipe(
-      // 2. Save the cart, but keep 'restaurant' for the next step
-      switchMap(({ items, restaurant }) => 
-        this.cartApiService.saveCart(items).pipe(
-          map(cartResponse => ({ cartResponse, restaurant })) // Pass restaurant along
-        )
-      ),
-      // 3. Place the order, but keep 'restaurant'
-      switchMap(({ cartResponse, restaurant }) => 
-        this.orderApiService.placeOrder(cartResponse.cartId).pipe(
-          map(orderResponse => ({ orderResponse, restaurant })) // Pass restaurant along again
-        )
-      ),
-      // 4. Open Razorpay, now with access to the order and restaurant
-      tap(({ orderResponse, restaurant }) => 
-        this.openRazorpay(orderResponse.orderId, this.amount, restaurant)
-      )
-    ).subscribe({
-      error: (err) => {
-        console.error('Failed to place order:', err);
-        // You could show an error toast/message to the user here
+    this.userProfile$= this.customerService.getUserProfile();
+     this.customerService.getUserProfile().subscribe({
+      next: (val) => {
+        this.user = val
+      },
+      error : (err) => {
+        console.log(err);
+        toast.error("Error Fetching the user.");
       }
-    });
+     })
+     
+    if(this.user.address == null || this.user.address == ''){
+      toast.error('Address cant be null please add the address.')
+    }else{
+      // 1. Get the latest cart and restaurant data from the store
+      forkJoin({
+        items: this.cartItems$.pipe(first()),
+        restaurant: this.restaurant$.pipe(first())
+      }).pipe(
+        // 2. Save the cart, but keep 'restaurant' for the next step
+        switchMap(({ items, restaurant }) => 
+          this.cartApiService.saveCart(items).pipe(
+            map(cartResponse => ({ cartResponse, restaurant })) // Pass restaurant along
+          )
+        ),
+        // 3. Place the order, but keep 'restaurant'
+        switchMap(({ cartResponse, restaurant }) => 
+          this.orderApiService.placeOrder(cartResponse.cartId).pipe(
+            map(orderResponse => ({ orderResponse, restaurant })) // Pass restaurant along again
+          )
+        ),
+        // 4. Open Razorpay, now with access to the order and restaurant
+        tap(({ orderResponse, restaurant }) => 
+          this.openRazorpay(orderResponse.orderId, this.amount, restaurant)
+        )
+      ).subscribe({
+        error: (err) => {
+          console.error('Failed to place order:', err);
+          // You could show an error toast/message to the user here
+        }
+      });
+    }
   }
 
   openRazorpay(orderId: number, amount: number, restaurant:IResturant) {
