@@ -5,10 +5,18 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { take } from 'rxjs';
 import { navigateToDashboard } from '@shared/utils/navigations.utils';
-import { LoginCredentials } from 'src/app/core/services/auth/auth.models';
+import { LoginCredentials, Role } from 'src/app/core/services/auth/auth.models';
 import { toast } from 'ngx-sonner';
 import { DeviceInfoService } from 'src/app/core/services/auth/device-info.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/state/app.state';
+import { userService } from 'src/app/core/services/customer/userService';
+import { UserProfileComponent } from 'src/app/features/customer/pages/user-profile/user-profile';
+import { userProfileService } from 'src/app/core/services/customer/user-profile/user-profile.service';
+import { addUser } from 'src/app/state/user/user.action';
+import { IUser } from "src/app/core/services/customer/userService";
+import { DeliveryAgentService } from 'src/app/core/services/delivery-agent/delivery-agent.service';
 
 @Component({
   selector: 'app-login-form',
@@ -24,8 +32,11 @@ export class LoginFormComponent implements OnInit {
   // --- Dependency Injection ---
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  protected userService = inject(userProfileService);
   private router = inject(Router);
   private deviceInfoService = inject(DeviceInfoService);
+  protected readonly store = inject<Store<AppState>>(Store);
+  private deliveryAgentService = inject(DeliveryAgentService);
 
   // --- Component State ---
   loginForm!: FormGroup;
@@ -64,8 +75,23 @@ export class LoginFormComponent implements OnInit {
       deviceType: deviceInfo.deviceType
     };
     this.authService.login(credentials).subscribe({
-      next: (role) => {
+      next: (role : Role) => {
         this.isLoading = false;
+        if(role === 'ROLE_CUSTOMER') {
+          const store = this.store
+          this.userService.getUserProfile().subscribe({
+            next(user) {
+                store.dispatch(addUser({user}))
+                console.log(user);
+            },
+            error(err) {
+              console.error("Unable to load the user in the state store", err);
+            },
+          })
+        }
+        if(role == 'ROLE_DELIVERY_AGENT') {
+          this.deliveryAgentService.updateAgentStatus('Available');
+        }
         navigateToDashboard(role, this.router);
       },
       error: (error: unknown) => { 

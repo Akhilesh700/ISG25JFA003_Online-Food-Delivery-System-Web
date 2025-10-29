@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, effect, EventEmitter, Input, OnChanges, OnInit, Output, signal, SimpleChanges } from '@angular/core';
 import { toast } from 'ngx-sonner';
 import { ZardBreadcrumbModule } from "@shared/components/sheet/sheet.module";
 
@@ -21,40 +21,44 @@ interface OrderStep {
 export class OrderTimeline implements OnChanges {
   @Input() 
   currentStatus: number = 1;
+
+  @Output() 
+  refreshClicked = new EventEmitter<void>();
+  
   
   // Updated with PrimeIcons class names
   orderSteps: OrderStep[] = [
     {
       currentStep: 1,
-      icon: 'pi pi-shopping-cart', // Changed
+      icon: 'pi pi-shopping-cart', 
       label: 'Order Placed',
       time: '2:30 PM',
       completed: true
     },
     {
       currentStep: 2,
-      icon: 'pi pi-heart',         // Changed
+      icon: 'pi pi-heart',         
       label: 'Prepering',
       time: '2:32 PM',
       completed: false
     },
     {
       currentStep: 3,
-      icon: 'pi pi-box',           // Changed
+      icon: 'pi pi-box',          
       label: 'Out for Delivery',
       time: '2:45 PM',
       completed: false
     },
     {
       currentStep: 4,
-      icon: 'pi pi-check-circle', // Changed
+      icon: 'pi pi-check-circle',
       label: 'Delivered',
       time: 'Pending',
       completed: false
     }
   ];
-
   constructor() {
+
     const startTime = new Date(Date.now());
 
     const options = {
@@ -85,17 +89,27 @@ export class OrderTimeline implements OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.orderSteps = this.orderSteps.map(o => {
-      if(o.currentStep <= this.currentStatus){
-        o.time = o.time.split(" (Expected)")[0]
-        o.completed=true;
-      }
-      return o;
-    })  
-    console.log(changes)
+    if (changes['currentStatus']) {
+      this.updateTimelineStatus();
+      console.log(changes);
+    }
   }
 
-  
+  private updateTimelineStatus(): void {
+    this.orderSteps = this.orderSteps.map(o => {
+      if (o.currentStep <= this.currentStatus) {
+        o.time = o.time.split(" (Expected)")[0];
+        o.completed = true;
+      }
+      return o;
+    });
+  }
+
+
+  onRefreshClick(){
+    console.log("Child button clicked. Emitting 'refreshClicked' to parent.");
+    this.refreshClicked.emit();
+  }
 
 
 

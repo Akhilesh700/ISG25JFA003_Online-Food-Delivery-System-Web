@@ -9,6 +9,7 @@ import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors, withInterceptor
 import { addTokenInterceptor } from './core/interceptors/add-token-interceptor';
 import { localStorageSync } from './state/metaReducer';
 import { LoadingInterceptor } from './core/interceptors/loading.interceptor';
+import { userReducer } from './state/user/user.reducer';
 
 export function playerFactory() {
   return player;
@@ -25,13 +26,15 @@ export const appConfig: ApplicationConfig = {
       })
     ),
     provideStore({
-      cart: cartReducer
+      cart: cartReducer,
+      user: userReducer
     },
     {
       metaReducers: [localStorageSync]
     }
   ),
     provideState({name: 'cart', reducer: cartReducer}),
+    provideState({name: 'user', reducer: userReducer}),
     provideHttpClient(
       withInterceptors([addTokenInterceptor]),
       withInterceptorsFromDi()),

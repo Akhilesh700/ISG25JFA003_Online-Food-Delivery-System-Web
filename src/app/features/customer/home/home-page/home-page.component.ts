@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { TopRestaurantsComponent } from '../top-restaurants/top-restaurants';
 import { CuisinesComponent } from '../cuisines/cuisines';
 import { OffersComponent } from '../offers/offers';

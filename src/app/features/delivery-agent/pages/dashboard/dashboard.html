@@ -1,0 +1,28 @@
+<main class="w-full max-w-6xl mx-auto px-4 py-8 sm:px-6 lg:px-8 mt-18">
+  
+  <!-- Page Header -->
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+    <h1 class="text-3xl font-bold text-zinc-900 dark:text-white">
+      Delivery Dashboard
+    </h1>
+    
+    <!-- Agent Status Indicator -->
+    <div class="flex items-center gap-3 bg-white dark:bg-zinc-800 px-4 py-2 rounded-lg shadow-sm">
+      <span class="relative flex h-3 w-3">
+        @if (deliveryAgentStatus === 'Available') {
+          <span class="absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75 animate-ping"></span>
+        }
+        <span 
+          [ngClass]="deliveryAgentStatus === 'Available' ? 'bg-green-400' : 'bg-amber-400' " 
+          class="relative inline-flex rounded-full h-3 w-3">
+        </span>
+      </span>
+      <span class="text-base font-medium text-zinc-700 dark:text-zinc-200">
+        Status: {{ deliveryAgentStatus }}
+      </span>
+    </div>
+  </div>
+
+  <!-- Assigned Orders Component -->
+  <app-assigned-order-card></app-assigned-order-card>
+</main>

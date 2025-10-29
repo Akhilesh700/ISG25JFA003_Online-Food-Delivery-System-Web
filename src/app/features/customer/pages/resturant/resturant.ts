@@ -10,6 +10,7 @@ import { combineLatest, map, Observable, of, startWith } from 'rxjs';
 import { selectCartItems } from 'src/app/state/cart/cart.selector';
 import { AsyncPipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
@@ -18,63 +19,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './resturant.html',
   styleUrl: './resturant.css'
 })
-// export class Resturant implements OnInit {
-  
-//   private readonly resturantService = inject(ResturantService)
-//   protected readonly store = inject<Store<AppState>>(Store);
 
-//   param:number = window.location.pathname.split('/').pop() as unknown as number;
-  
-//   isLoading: boolean = false;
-  
-//   resturant:IResturant =this.resturantService.getResturantById(this.param);
-
-//   menuItems$:Observable<IDish[]> = of(this.resturant.dishes);
-//   cartItem$: Observable<IDish[]> = this.store.select(selectCartItems);
-//   mergeDishes$!: Observable<IDish[]>;
-
-
-//   ngOnInit(): void {
-//       this.mergeDishes$ = combineLatest([
-//         this.menuItems$,
-//         this.cartItem$
-//       ]).pipe(
-//         map(([menuItems, cartItems]) => {
-//           // Create a map for quick lookup of cart quantities
-//             const cartQuantities = cartItems.reduce((acc, item) => {
-//             acc[item.id] = item.quantity;
-//             return acc;
-//           }, {} as { [id: string]: number });
-
-//           // Merge menu dishes with cart quantity
-//         return menuItems.map(menuDish => ({
-//           ...menuDish,
-//           // Set quantity from cart, or 0 if not in cart
-//           quantity: cartQuantities[menuDish.id] || 0
-//         }));
-//         } )
-//       )
-//   }
-
-//   addItemToCart(dish: IDish) {
-//     this.store.dispatch(addToCard({dish}))
-//   }
-
-//   increaseCartItem(dishId: number) {
-//     this.store.dispatch(increment({dishId}))
-//   }
-
-//   decreseCartItem(dishId: number) {
-//     this.store.dispatch(decrement({dishId}));
-//   }
-
-//   removeItemFromCart(dishId: number) {
-//     this.store.dispatch(removeFromCart({dishId}));
-//   }
-
-
-
-// }
 export class Resturant implements OnInit {
   private readonly resturantService = inject(RestaurantService);
   protected readonly store = inject<Store<AppState>>(Store);
@@ -111,7 +56,7 @@ export class Resturant implements OnInit {
           quantity: cartMap.get(menuDish.itemId) || 0
         }));
       })
-    );
+    )
   }
 
 

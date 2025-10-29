@@ -1,8 +1,10 @@
 import { ActionReducer, Action } from "@ngrx/store";
 import { CartState } from "./cart/cart.reducer";
 import { emptyCart } from "./cart/cart.action";
+import { UserState } from "./user/user.reducer";
 
 const CART_STORAGE_KEY = 'myAppCartState';
+const USER_STORAGE_KEY = 'myAppUserState';
 
 export const localStorageSync = (reducer: ActionReducer<any>) : ActionReducer<any> => {
     return (state: any, action: Action) =>  {
@@ -12,7 +14,11 @@ export const localStorageSync = (reducer: ActionReducer<any>) : ActionReducer<an
         if (action.type === emptyCart.type) {
             localStorage.removeItem(CART_STORAGE_KEY);
         } else if (nextState && nextState.cart) {
+            console.log("I am from metaReducer. [cart]")
             localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(nextState.cart));
+        } else if (nextState && nextState.user) {
+            console.log("I am from metaReducer. [user]")
+            localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(nextState.user));
         }
 
         return nextState;
@@ -35,4 +41,16 @@ export const getInitialCartState = () : CartState => {
         totalPrice: 0,
         restaurant: undefined
     }
+}
+
+export const getInititalUserState = () : UserState => {
+    const savedState = localStorage.getItem(USER_STORAGE_KEY);
+    if(savedState) {
+        try {
+            return JSON.parse(savedState);
+        }catch(e) {
+            console.error("Error while parsing user state" , e);
+        }
+    }
+    return  {}
 }

@@ -25,6 +25,12 @@ export const routes: Routes = [
         data: {roles : ['ROLE_ADMIN', 'ROLE_CUSTOMER']}  
     },
     {
+        path: 'delivery',
+        loadChildren: () => import('./features/delivery-agent/delivery.routes').then(m =>m.routes),      
+        canActivate: [roleGuard],
+        data: {roles : ['ROLE_ADMIN', 'ROLE_DELIVERY_AGENT']} 
+    },
+    {
         path: 'unauthorised',
         loadComponent : () => import('./shared/components/unauthorised/unauthorised.component').then(m=>m.UnauthorisedComponent)
     },

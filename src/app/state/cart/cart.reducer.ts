@@ -2,6 +2,7 @@ import { createReducer, on } from "@ngrx/store";
 import { IDish, IResturant } from "src/app/models/resturantInterface";
 import { addCartNote, addToCard, decrement, emptyCart, increment, removeFromCart } from "./cart.action";
 import { getInitialCartState } from "../metaReducer";
+import { toast } from "ngx-sonner";
 
 
 export interface CartState{
@@ -23,7 +24,7 @@ export const cartReducer = createReducer(
     on(addToCard, (state, {dish, restaurant}) => {
         if (state.restaurant && state.restaurant.id !== restaurant.id) {
             // Todo: Make it sooner
-            alert("You can only order from one restaurant at a time. Please clear your cart first.");
+            toast.info("You can only order from one restaurant at a time. Please clear your cart first.");
             return state; // Return the state unchanged
         }
         const updatedDishes = [...state.dishes, {...dish, quantity: dish.quantity + 1} ]
