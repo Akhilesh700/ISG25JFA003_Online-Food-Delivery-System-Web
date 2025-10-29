@@ -1,22 +1,19 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ZardBreadcrumbModule } from "@shared/components/sheet/sheet.module";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ZardCardComponent } from "@shared/components/card/card.component";
-import { AuthService } from 'src/app/core/services/auth/auth.service';
 import { Router } from '@angular/router';
-import { RestaurantSignupResponse } from 'src/app/core/services/auth/auth.models';
 import { toast } from 'ngx-sonner';
 import { HttpErrorResponse } from '@angular/common/http';
 import { delay, finalize, interval, map, switchMap, take, timer } from 'rxjs';
+import { AuthService } from '../../../../../../core/services/auth/auth.service';
+import { RestaurantSignupRequest } from '../../../../../../models/restaurant.models';
 
 @Component({
   selector: 'app-restaurant-form',
+  standalone: true,
   templateUrl: './restaurant-form.component.html',
   styleUrls: ['./restaurant-form.component.css'],
   imports: [
-    ZardBreadcrumbModule,
-    ReactiveFormsModule,
-    ZardCardComponent
+    ReactiveFormsModule
   ]
 })
 export class RestaurantFormComponent implements OnInit {
@@ -50,7 +47,7 @@ export class RestaurantFormComponent implements OnInit {
       // If valid, log the form data to the console
       console.log(this.restaurantRegistrationForm.value);
       // Here you would typically send the data to your backend service
-      const credentials: iRestaurantSignup = {
+      const credentials: RestaurantSignupRequest = {
         email: this.restaurantRegistrationForm.value.email,
         password: this.restaurantRegistrationForm.value.password,
         name: this.restaurantRegistrationForm.value.name,

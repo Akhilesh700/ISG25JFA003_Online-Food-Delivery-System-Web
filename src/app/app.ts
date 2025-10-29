@@ -1,11 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Navbar } from '@shared/components/navbar/navbar';
-import { DarkModeService } from '@shared/services/darkmode.service';
-import { GlobalLoaderComponent } from "@shared/components/global-loader/global-loader.component";
+import { Navbar } from './shared/components/navbar/navbar';
+import { DarkModeService } from './shared/services/darkmode.service';
+import { GlobalLoaderComponent } from "./shared/components/global-loader/global-loader.component";
 import { Router, RouterOutlet, NavigationStart, NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
 import { LoadingService } from './core/services/loading/loading.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ZardToastComponent } from "@shared/components/toast/toast.component";
+import { ZardToastComponent } from "./shared/components/toast/toast.component";
 import { AuthService } from './core/services/auth/auth.service';
 import { NavbarDelivery } from './features/delivery-agent/pages/dashboard/navbar/navbar';
 
@@ -13,7 +13,7 @@ import { NavbarDelivery } from './features/delivery-agent/pages/dashboard/navbar
   selector: 'app-root',
   imports: [RouterOutlet, Navbar, GlobalLoaderComponent, ZardToastComponent, NavbarDelivery],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css']
 })
 export class App implements OnInit {
   private readonly darkmodeService = inject(DarkModeService);
@@ -37,7 +37,7 @@ export class App implements OnInit {
   }
 
   showDeliveryAgentNavBar() :boolean {
-    return this.router.url.includes('delivery');
+    return this.router.url.includes('delivery/');
   }
 
   private listenToRouterEvents(): void {

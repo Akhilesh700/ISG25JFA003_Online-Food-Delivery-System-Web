@@ -1,0 +1,58 @@
+/* Modal Animation */
+.fixed {
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Modal Content Animation */
+.fixed > div {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Table Row Hover Effect */
+tbody tr {
+  transition: all 0.2s ease;
+}
+
+tbody tr:hover {
+  transform: scale(1.01);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Scrollbar Styling for Modal */
+.overflow-y-auto::-webkit-scrollbar {
+  width: 8px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: rgba(249, 115, 22, 0.5);
+  border-radius: 10px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: rgba(249, 115, 22, 0.7);
+}
