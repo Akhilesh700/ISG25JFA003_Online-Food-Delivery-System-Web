@@ -5,10 +5,9 @@ import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { finalize } from 'rxjs/operators';
 import { toast } from 'ngx-sonner';
-
-// Import your shared components and services. Adjust paths as necessary.
-import { AuthService } from 'src/app/core/services/auth/auth.service';
-import { AgentSignupResponse } from 'src/app/core/services/auth/auth.models';
+import { AuthService } from '../../../../../../core/services/auth/auth.service';
+import { AgentSignupResponse } from '../../../../../../core/services/auth/auth.models';
+import { iAgentSignup } from '../../../../../../models/iSignUp';
 
 
 @Component({
