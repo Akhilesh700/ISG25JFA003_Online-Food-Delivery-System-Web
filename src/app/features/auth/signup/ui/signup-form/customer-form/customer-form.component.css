@@ -1,0 +1,115 @@
+/* src/app/features/auth/components/customer-form/customer-form.component.css */
+
+.container{
+    background: url('/img/login/login-background-dark.png'); /* Ensure this path is correct relative to your build output or use Angular assets */
+    background-size: cover;
+}
+/* Main container styling (mostly handled by z-card and Tailwind) */
+
+/* Styling for the form field wrapper */
+.form-field {
+  display: block;
+  margin-bottom: 0.5rem; /* Reduced margin slightly to fit more fields */
+}
+
+/* Common input styling */
+input::placeholder, textarea::placeholder{
+    color: #919090; /* Placeholder text color */
+}
+
+input:focus, textarea:focus {
+    background-color: white !important; /* Ensure background stays white on focus */
+    outline: none; /* Remove default outline */
+    border-color: #ff6f00; /* Orange border on focus */
+    box-shadow: 0 0 0 2px rgba(255, 111, 0, 0.2); /* Subtle orange glow */
+}
+
+/* Styling for form labels */
+.form-label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #333; /* Dark gray for labels */
+  font-size: 0.9rem;
+}
+
+/* Adding the required asterisk */
+.form-label.required::after {
+  content: ' *';
+  color: #dc3545; /* Red asterisk */
+}
+
+/* Styling for all input fields and textarea */
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc; /* Default border color */
+  border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background-color: #f8f9fa; /* Light background for inputs */
+  color: #333; /* Input text color */
+}
+
+
+/* Specific styling for the textarea */
+textarea.form-input {
+  min-height: 80px; /* Minimum height */
+  resize: vertical; /* Allow vertical resize */
+}
+
+/* Class applied to inputs when validation fails */
+.is-invalid {
+  border-color: #dc3545 !important; /* Red border for invalid fields */
+}
+
+.is-invalid:focus {
+  box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.25); /* Red glow on focus when invalid */
+}
+
+/* Styling for the submit button */
+.submit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border: none;
+  width: 100%;
+  margin-top: 1rem; /* Add some space above the button */
+}
+
+/* Hover effect for the button */
+.submit-btn:hover:not(:disabled) { /* Apply hover only when not disabled */
+  background-color: #e66000 !important; /* Darker orange on hover */
+}
+
+/* Disabled state for the button */
+.submit-btn:disabled {
+    background-color: #fdba74; /* Lighter orange when disabled */
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.container{
+  animation: updown 8s infinite ease-in-out alternate;
+}
+
+@keyframes updown {
+  0%{
+    transform: translateY(5px);
+  }
+  25%{
+    transform: translateY(0px);
+  }
+  50%{
+    transform: translateY(-5px);
+  }
+  100%{
+    transform: translateY(0px);
+  }
+}

@@ -13,7 +13,6 @@ export interface iCustomerSignup{
     name: string,
     phone: string,
     dob: string
-    address: string
 }
 export interface iAgentSignup{
     email: string,

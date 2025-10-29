@@ -1,9 +1,11 @@
 import { AfterViewInit, Component, ElementRef, ViewChild, } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-hero',
   standalone: true,
   templateUrl: './hero.html',
+  imports: [RouterModule],
   styleUrl:'./hero.css'
 })
 export class HeroComponent implements AfterViewInit {

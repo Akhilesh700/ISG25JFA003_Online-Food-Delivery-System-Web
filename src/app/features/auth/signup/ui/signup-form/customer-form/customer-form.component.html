@@ -1,21 +1,94 @@
-<form class=" grid gap-4 mt-6 text-black">
-  <z-form-field>
-    <z-form-label zRequired="true">Email</z-form-label>
-    <z-form-control>
-      <input z-input type="email" placeholder="Enter you email" />
-    </z-form-control>
-  </z-form-field>
+<div class="container bg-black w-100vw ">
+  <div class="flex items-center justify-center min-h-screen px-4 ">
+    <div class="relative w-full max-w-md pt-24 ">
+      <div class="absolute top-5 -left-5 w-3/6 z-10">
+        <img src="img/login/spilling_burger_2.png" alt="Spilling Burger">
+      </div>
 
-  <z-form-field>
-    <z-form-label zRequired="true">Password</z-form-label>
-    <z-form-control>
-      <input z-input type="password" placeholder="Enter you password" />
-    </z-form-control>
-  </z-form-field>
-  <div class="flex w-100 justify-between align-center">
-    <z-checkbox>Remember me</z-checkbox>
-    <p class="text-orange-600 hover:cursor-pointer">Forgot Password</p>
+      <z-card class="w-full bg-white mt-17">
+        <div class="flex flex-col items-center">
+          <h1 class="text-3xl text-orange-700 font-bold">Register</h1>
+        </div>
+
+        <form [formGroup]="customerRegistrationForm" (ngSubmit)="onSubmit()" class="grid gap-2 mt-6 text-black">
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-field">
+              <label for="name" class="form-label required">Full Name</label>
+              <div class="form-control">
+                <input id="name" class="form-input" type="text" placeholder="Enter your full name"
+                       formControlName="name" [class.is-invalid]="f['name'].invalid && (f['name'].touched || submitted)" />
+                @if (f['name'].invalid && (f['name'].touched || submitted)) {
+                  <p class="text-xs text-red-500 mt-1">Full name is required.</p>
+                }
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label for="phone" class="form-label required">Phone</label>
+              <div class="form-control">
+                <input id="phone" class="form-input" type="tel" placeholder="Enter 10-digit phone"
+                       formControlName="phone" [class.is-invalid]="f['phone'].invalid && (f['phone'].touched || submitted)" />
+                @if (f['phone'].invalid && (f['phone'].touched || submitted)) {
+                  @if (f['phone'].errors?.['required']) {
+                    <p class="text-xs text-red-500 mt-1">Phone number is required.</p>
+                  }
+                  @if (f['phone'].errors?.['pattern']) {
+                    <p class="text-xs text-red-500 mt-1">Please enter a valid 10-digit number.</p>
+                  }
+                }
+              </div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="email" class="form-label required">Email</label>
+            <div class="form-control">
+              <input id="email" class="form-input" type="email" placeholder="Enter your email" formControlName="email"
+                     [class.is-invalid]="f['email'].invalid && (f['email'].touched || submitted)" />
+              @if (f['email'].invalid && (f['email'].touched || submitted)) {
+                @if (f['email'].errors?.['required']) {
+                  <p class="text-xs text-red-500 mt-1">Email is required.</p>
+                }
+                @if (f['email'].errors?.['email']) {
+                  <p class="text-xs text-red-500 mt-1">Please enter a valid email address.</p>
+                }
+              }
+            </div>
+          </div>
+          
+          <div class="form-field">
+            <label for="password" class="form-label required">Password</label>
+            <div class="form-control">
+              <input id="password" class="form-input" type="password" placeholder="Enter minimum 8 characters"
+                     formControlName="password" [class.is-invalid]="f['password'].invalid && (f['password'].touched || submitted)" />
+              @if (f['password'].invalid && (f['password'].touched || submitted)) {
+                @if (f['password'].errors?.['required']) {
+                  <p class="text-xs text-red-500 mt-1">Password is required.</p>
+                }
+                @if (f['password'].errors?.['minlength']) {
+                  <p class="text-xs text-red-500 mt-1">Password must be at least 8 characters long.</p>
+                }
+              }
+            </div>
+          </div>
+
+           <div class="form-field">
+            <label for="dob" class="form-label required">Date of Birth</label>
+            <div class="form-control">
+              <input id="dob" class="form-input" type="date" formControlName="dob"
+                     [class.is-invalid]="f['dob'].invalid && (f['dob'].touched || submitted)" />
+              @if (f['dob'].invalid && (f['dob'].touched || submitted)) {
+                <p class="text-xs text-red-500 mt-1">Date of Birth is required.</p>
+              }
+            </div>
+          </div>          
+
+          <button type="submit" class="submit-btn p-2.5 min-w-max bg-orange-600" >            
+              <span>Sign Up</span>
+          </button>
+        </form>
+      </z-card>
+    </div>
   </div>
-
-  <z-button zFull="true" class="mt-4 bg-orange-700">Login</z-button>
-</form>
+</div>

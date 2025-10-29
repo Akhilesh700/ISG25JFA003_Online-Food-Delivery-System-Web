@@ -16,7 +16,7 @@ export const routes: Routes = [
     title: "DineCognizant - Signup"
   },
   {
-    path: 'signup/',
+    path: 'signup',
     component: CustomerFormComponent,
     title: "DineCognizant - Signup"
   },

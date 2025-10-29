@@ -1,13 +1,25 @@
 <main class="mt-22 ">
-    <div class="flex gap-1 w-11/12 mx-auto ">
-        <app-order-timeline [currentStatus]="currentStep" class="flex-1" ></app-order-timeline>
-        <div>
-            <div class="flex gap-1 flex-2">
-                <app-delivery-agent-card class=></app-delivery-agent-card>
-                <app-resturant-track-order></app-resturant-track-order>
+    @if(order.status == 'PENDING') {
+        <h1 class="text-3xl flex justify-center items-center h-[75vh] ">Your order is pending <span class="text-primary font-bold mx-2">  Pay  </span>  for it.</h1>
+    }
+    @else if (order.status == 'FAILED') {
+        <h1 class="text-3xl flex justify-center items-center h-[75vh] ">Our Delivery Agent couldn't able to find your address</h1>
+    }
+    @else if (order.status == 'NOT_ACCEPTED') {
+        <h1 class="text-3xl flex justify-center items-center h-[75vh] ">Our Restaurant cannot process your order you will get Refund soon.</h1>
+    }
+    @else {
+
+        <div class="flex gap-1 w-11/12 mx-auto ">
+            <app-order-timeline [currentStatus]="currentStep" (refreshClicked)="handleRefresh()" class="flex-1" ></app-order-timeline>
+            <div>
+                <div class="flex gap-1 flex-2">
+                    <app-delivery-agent-card [order]="order"></app-delivery-agent-card>
+                    <app-resturant-track-order></app-resturant-track-order>
+                </div>
+                <app-order-items-tracking [order]="order"></app-order-items-tracking>
             </div>
-            <app-order-items-tracking></app-order-items-tracking>
         </div>
-    </div>
+    }
 </main>
 

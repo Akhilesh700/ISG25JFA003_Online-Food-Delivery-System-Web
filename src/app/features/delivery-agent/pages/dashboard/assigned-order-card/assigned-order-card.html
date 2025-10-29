@@ -1,0 +1,122 @@
+<div class="w-full mx-auto space-y-12">
+  
+  <section class="assigned-orders">
+    <h1 class="text-2xl font-bold text-zinc-900 dark:text-white mb-6">Assigned Orders</h1>
+    
+    @if ((assignedOrders$ | async) ; as assignedOrders) {
+      
+      @if (assignedOrders.length > 0) {
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          @for (item of assignedOrders; track item.orderId) {
+            <div class="bg-white dark:bg-zinc-800 shadow-lg rounded-xl overflow-hidden flex flex-col">
+              
+              <div class="p-4 border-b border-zinc-200 dark:border-zinc-700 flex justify-between items-center">
+                <h2 class="text-lg font-semibold text-zinc-900 dark:text-white">Order #{{ item.orderId }}</h2>
+                <span [ngClass]="getStatusClass(item.status)" class="px-3 py-1 rounded-full text-xs font-medium capitalize">
+                  {{ item.status.toLowerCase().replace('_', ' ') }}
+                </span>
+              </div>
+              
+              <div class="p-4 space-y-4 flex-grow">
+                <div>
+                  <p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Restaurant</p>
+                  <p class="text-base font-semibold text-zinc-800 dark:text-zinc-100">{{ item.restaurant }}</p>
+                  <p class="text-sm text-zinc-600 dark:text-zinc-300">{{ item.pickUpAddress }}</p>
+                </div>
+                
+                <div class="border-t border-zinc-200 dark:border-zinc-700 pt-4">
+                  <p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Deliver To</p>
+                  <p class="text-base font-semibold text-zinc-800 dark:text-zinc-100">{{ item.customer }}</p>
+                  <p class="text-sm text-zinc-600 dark:text-zinc-300">{{ item.deliveryAddress }}</p>
+                  <p class="text-sm text-zinc-600 dark:text-zinc-300">{{ item.customerPhone }}</p>
+                </div>
+              </div>
+
+              <div class="p-4 bg-zinc-50 dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-700">
+                @if (item.status === 'PREPARING') {
+                  <button z-button (click)="onOrderPickUp(item.orderId)" class="w-full">
+                    Order Picked Up
+                  </button>
+                } @else if (item.status === 'OUT_FOR_DELIVERY') {
+                  <div class="flex gap-4">
+                    <button z-button zType="destructive" (click)="onOrderFailed(item.orderId)" class="flex-1">
+                      Failed
+                    </button>
+                    <button z-button (click)="onOrderDelivered(item.orderId)" class="flex-1 ">
+                      Delivered
+                    </button>
+                  </div>
+                }
+              </div>
+
+            </div>
+          }
+        </div>
+      } @else {
+        <!-- Empty state for assigned orders -->
+        <div class="text-center py-12 px-6 bg-white dark:bg-zinc-800 rounded-lg shadow-md">
+          <p class="text-lg font-medium text-zinc-600 dark:text-zinc-300">No assigned orders right now.</p>
+          <p class="text-sm text-zinc-400 dark:text-zinc-500">New orders will appear here automatically.</p>
+        </div>
+      }
+    } @else {
+      <!-- Loading state for assigned orders -->
+      <div class="text-center py-12 px-6 bg-white dark:bg-zinc-800 rounded-lg shadow-md">
+        <p class="text-lg font-medium text-zinc-600 dark:text-zinc-300">Loading assigned orders...</p>
+      </div>
+    }
+  </section>
+
+  <!-- Section 2: Order History -->
+  <section class="order-history">
+    <h1 class="text-2xl font-bold text-zinc-900 dark:text-white mb-6">Order History</h1>
+    
+    @if ((orderHistory$ | async) ; as historyOrders) {
+      
+      @if (historyOrders.length > 0) {
+        <div class="space-y-4">
+          @for (item of historyOrders; track item.orderId) {
+            <div class="bg-white dark:bg-zinc-800 shadow-md rounded-lg overflow-hidden">
+              <div class="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                
+                <!-- Order Info -->
+                <div class="flex-grow mb-4 sm:mb-0">
+                  <div class="flex items-center justify-between sm:justify-start sm:gap-4 mb-2">
+                    <h3 class="text-base font-semibold text-zinc-900 dark:text-white">Order #{{ item.orderId }}</h3>
+                    <span [ngClass]="getStatusClass(item.status)" class="px-3 py-1 rounded-full text-xs font-medium capitalize">
+                      {{ item.status.toLowerCase().replace('_', ' ') }}
+                    </span>
+                  </div>
+                  <p class="text-sm text-zinc-600 dark:text-zinc-300">
+                    <span class="font-medium text-zinc-700 dark:text-zinc-200">{{ item.restaurant }}</span>
+                    <span> to </span>
+                    <span class="font-medium text-zinc-700 dark:text-zinc-200">{{ item.customer }}</span>
+                  </p>
+                </div>
+
+                <!-- Order Details (Time/Amount) -->
+                <div class="flex-shrink-0 text-left sm:text-right">
+                  <p class="text-base font-semibold text-zinc-900 dark:text-white">₹{{ (Math.max(item.totalAmount * 0.12, 40)).toFixed(2) }}</p>
+                  <p class="text-sm text-zinc-500 dark:text-zinc-400">{{ item.orderTime | date: 'short' }}</p>
+                </div>
+
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <!-- Empty state for order history -->
+        <div class="text-center py-12 px-6 bg-white dark:bg-zinc-800 rounded-lg shadow-md">
+          <p class="text-lg font-medium text-zinc-600 dark:text-zinc-300">No past orders found.</p>
+          <p class="text-sm text-zinc-400 dark:text-zinc-500">Completed or failed orders will appear here.</p>
+        </div>
+      }
+    } @else {
+      <!-- Loading state for order history -->
+      <div class="text-center py-12 px-6 bg-white dark:bg-zinc-800 rounded-lg shadow-md">
+        <p class="text-lg font-medium text-zinc-600 dark:text-zinc-300">Loading order history...</p>
+      </div>
+    }
+  </section>
+
+</div>

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { IOrderInfoResponse } from 'src/app/core/services/customer/track-order/delivery-status.service';
 
 @Component({
   selector: 'app-delivery-agent-card',
@@ -8,4 +9,6 @@ import { Component } from '@angular/core';
 })
 export class DeliveryAgentCard {
 
+  @Input()
+  order!: IOrderInfoResponse;
 }

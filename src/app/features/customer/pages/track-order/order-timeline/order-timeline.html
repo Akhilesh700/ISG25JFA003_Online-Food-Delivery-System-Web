@@ -1,48 +1,55 @@
-<div class=" h-[85vh] mx-auto border border-secondary-foreground/20 dark:bg-secondary-foreground mb-1 shadow-lg p-6 rounded-l-2xl ">
 
-    <h2 class="text-2xl font-semibold text-black dark:text-gray-400 mb-6">Order Status</h2>
+
+<div class="relative h-[85vh] mx-auto border border-secondary-foreground/20 dark:bg-secondary-foreground mb-1 shadow-lg p-6 rounded-l-2xl ">
+  
+  <h2 class="text-2xl font-semibold text-black dark:text-gray-400 mb-6">Order Status</h2>
+  
+  <div class="space-y-6">
     
-    <div class="space-y-6">
-      
-      @for (step of orderSteps; track step.label; let i = $index; let last = $last) {
-        <div class="relative flex items-start gap-4">
-          
-          @if (!last) {
-            <div 
-              class="absolute left-[19px] top-10 w-0.5 h-10"
-              [ngClass]="{
-                'bg-black dark:bg-primary': step.completed,
-                'bg-black/20  dark:bg-secondary ': !step.completed
-              }">
-            </div>
-          }
-          
+    @for (step of orderSteps; track step.label; let i = $index; let last = $last) {
+      <div class="relative flex items-start gap-4">
+        
+        @if (!last) {
           <div 
-            class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+            class="absolute left-[19px] top-10 w-0.5 h-10"
             [ngClass]="{
-              ' bg-black dark:bg-primary  text-white': step.completed,
-              'text-black/80  dark:text-secondary/70': !step.completed,
-              'ring-4 ring-black dark:ring-primary/50': i === currentStatus
+              'bg-black dark:bg-primary': step.completed,
+              'bg-black/20  dark:bg-secondary ': !step.completed
             }">
-            
-            <i class="" [ngClass]="step.icon"></i>
           </div>
+        }
+        
+        <div 
+        class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+        [ngClass]="{
+          ' bg-black dark:bg-primary  text-white': step.completed,
+          'text-black/80  dark:text-secondary/70': !step.completed,
+          'ring-4 ring-black dark:ring-primary/50': i === currentStatus
+        }">
           
-          <div class="flex-1 pt-1">
-            <h3 
-              class="mb-1"
-              [ngClass]="{
-                ' text-black dark:text-white': step.completed,
-                'text-gray-800 dark:text-gray-400': !step.completed
-              }">
-              {{ step.label }}
-            </h3>
-            <p class="text-sm text-gray-500">{{ step.time }}</p>
-          </div>
-          
+          <i class="" [ngClass]="step.icon"></i>
         </div>
-      } </div>
+        
+        <div class="flex-1 pt-1">
+          <h3 
+          class="mb-1"
+          [ngClass]="{
+            ' text-black dark:text-white': step.completed,
+            'text-gray-800 dark:text-gray-400': !step.completed
+          }">
+            {{ step.label }}
+          </h3>
+          <p class="text-sm text-gray-500">{{ step.time }}</p>
+        </div>
+        
+      </div>
+    } </div>
+    @if(currentStatus > 1) {
+      <p class=" text-black/30 dark:text-white/30 text-lg mt-10"> <span class="text-8xl">“</span> Give Suresh a tip for his hard work. When he arrives <span class="text-white">😊</span></p>
+    }@else {
+      <p class=" text-black/30 dark:text-white/30 text-lg mt-10"> <span class="text-8xl">“</span> Our Restaurant will accept your order soon.</p>
+    }
     
-    <p class=" text-black/30 dark:text-white/30 text-lg mt-10"> <span class="text-8xl">“</span> Give Suresh a tip for his hard work. When he arrives <span class="text-white">😊</span></p>
-
-</div>
+    <button z-button class=" absolute right-3 top-5" (click)="onRefreshClick()" ><i class="pi pi-refresh"></i> Refresh Status </button>
+    
+  </div>

@@ -28,7 +28,13 @@ export const routes: Routes = [
         path: 'restaurant',
         loadChildren: () => import('./features/restaurant/restaurant.routes').then(m =>m.RESTAURANT_ROUTES),
         canActivate: [roleGuard], 
-        data: {roles : ['ROLE_ADMIN', 'ROLE_RESTAURANT']}  
+        data: {roles : ['ROLE_ADMIN', 'ROLE_RESTAURANT']
+    },
+    {
+        path: 'delivery',
+        loadChildren: () => import('./features/delivery-agent/delivery.routes').then(m =>m.routes),      
+        canActivate: [roleGuard],
+        data: {roles : ['ROLE_ADMIN', 'ROLE_DELIVERY_AGENT']} 
     },
     {
         path: 'unauthorised',

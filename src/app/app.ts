@@ -7,10 +7,11 @@ import { LoadingService } from './core/services/loading/loading.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ZardToastComponent } from "./shared/components/toast/toast.component";
 import { AuthService } from './core/services/auth/auth.service';
+import { NavbarDelivery } from './features/delivery-agent/pages/dashboard/navbar/navbar';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Navbar, GlobalLoaderComponent, ZardToastComponent],
+  imports: [RouterOutlet, Navbar, GlobalLoaderComponent, ZardToastComponent, NavbarDelivery],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })
@@ -33,6 +34,10 @@ export class App implements OnInit {
 
   showNavBar() : boolean {
     return this.router.url.includes('user');
+  }
+
+  showDeliveryAgentNavBar() :boolean {
+    return this.router.url.includes('delivery');
   }
 
   private listenToRouterEvents(): void {

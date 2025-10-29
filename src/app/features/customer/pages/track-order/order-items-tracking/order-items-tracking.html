@@ -1,8 +1,15 @@
-<div class="w-full  mx-auto border border-secondary-foreground/20 dark:bg-secondary-foreground mb-1 shadow-lg p-6 rounded-br-2xl ">
+<div class="min-h-[12.5rem] max-h-[12.5rem] mx-auto overflow-y-scroll  border border-secondary-foreground/20 dark:bg-secondary-foreground mb-1 shadow-lg p-6 rounded-br-2xl ">
 
     <h3 class="text-2xl text-black/90 dark:text-white/80">Order Items</h3>
-    <div>
+    <div class=" mt-4 flex flex-col  gap-2 justify-center items-start">
+        @for (item of order.totalOrderItems; track $index) {
+            <div class="flex w-1/2  items-center justify-between ">
+                <h4>{{item.itemName}}</h4>
+                <p class="px-2 bg-primary rounded-lg">{{item.quantity}}</p>
+            </div>
+            
 
+        }
     </div>
 
 </div>

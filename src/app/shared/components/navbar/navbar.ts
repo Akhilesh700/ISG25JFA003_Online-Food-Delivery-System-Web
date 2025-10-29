@@ -12,8 +12,16 @@ import { AsyncPipe, CommonModule } from '@angular/common'; // Keep CommonModule
 import { IDish } from 'src/app/models/resturantInterface';
 import { Router, RouterLink } from '@angular/router'; // Import RouterLink
 import { SearchService } from 'src/app/core/services/customer/search/search.service'; // Corrected path
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { SearchResultItem } from 'src/app/models/iSearch'; // Use the correct path for SearchResultItem
+import { selectUser } from 'src/app/state/user/user.selector';
+import { IUserResponse } from 'src/app/core/services/customer/user-profile/user-profile.service';
+
+
+export interface OptionSheetData {
+    user: Observable<IUserResponse>
+}
+
 
 const getCurrentUser = () => {
     return {
@@ -29,9 +37,9 @@ const getCurrentUser = () => {
     imports: [
         ZardSwitchComponent,
         FormsModule,
-        AsyncPipe, // Keep if used for cartItems$ directly in template
-        CommonModule, // Keep for async pipe and directives
-        RouterLink // *** ADDED RouterLink HERE ***
+        AsyncPipe, 
+        CommonModule,
+        RouterLink 
     ],
     templateUrl: './navbar.html',
     styleUrl: './navbar.css',
@@ -131,11 +139,19 @@ export class Navbar implements OnInit, OnDestroy { // Implement OnDestroy
     }
 
     openOptionsSheet() {
+        this.storeSerice.select(selectUser).subscribe({
+            next(value) {
+                console.log(value)
+            },
+        })
         this.sheetService.create({
             zContent: UserOptionsSheet,
             zSize: 'sm',
             zSide: 'left',
             zOkText: 'logout',
+            zData: {
+                user: this.storeSerice.select(selectUser)
+            } as OptionSheetData, 
             zOnOk: (instance: any) => { // Consider using a specific type for instance
                 if (instance && typeof instance.handleLogout === 'function') {
                     instance.handleLogout();

@@ -1,6 +1,9 @@
 @if(showNavBar()) {
     <app-navbar></app-navbar>
 }
+@if(showDeliveryAgentNavBar()) {
+    <app-navbar-delivery></app-navbar-delivery>
+}
 <router-outlet/>
 <z-toaster [richColors]="true" [position]="'top-right'"/>
 <app-global-loader/>
