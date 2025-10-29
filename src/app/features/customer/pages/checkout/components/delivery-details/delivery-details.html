@@ -9,8 +9,12 @@
       <div class="flex items-center">
         <i class="pi pi-home mr-4 " style="font-size: 1.4rem;"></i>
         <div>
-          <p class="font-semibold ">New York</p>
-          <p class="text-sm ">NY</p>
+          <p class="font-semibold ">Home Address</p>
+          @if((userProfile$ | async); as user) {
+            @if (user.address != null) {
+              <p class="text-sm  line-clamp-1 ">{{user.address}}</p>
+            }
+          }
         </div>
       </div>
       <button z-button zType="outline" (click)="onEdit('location')" class=" text-black dark:text-white text-sm px-4 py-1.5 rounded-full ">Edit <i class="pi pi-pencil ml-1"></i></button>

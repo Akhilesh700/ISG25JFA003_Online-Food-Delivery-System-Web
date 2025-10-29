@@ -1,0 +1,4 @@
+input, input:focus {
+    font: black !important ;
+    background-color: transparent !important;
+}

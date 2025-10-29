@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-navbar-delivery',
-  imports: [ZardBreadcrumbModule, FormsModule],
+  imports: [ZardBreadcrumbModule, FormsModule, ZardSwitchComponent],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css'
 })
