@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { DeliveryAgentService } from 'src/app/core/services/delivery-agent/delivery-agent.service';
-import { DeliveryAgentStatus } from 'src/app/models/delivery-agent/IDeliveryAgent';
+import { DeliveryAgentService } from '../../../../core/services/delivery-agent/delivery-agent.service';
+import { DeliveryAgentStatus } from '../../../../models/delivery-agent/IDeliveryAgent';
 import { AssignedOrderCard } from "./assigned-order-card/assigned-order-card";
 import { NgClass } from '@angular/common';
 

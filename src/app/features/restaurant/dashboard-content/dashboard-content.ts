@@ -242,7 +242,7 @@ export class DashboardContentComponent implements OnInit, OnDestroy {
           } else if (error.status === 403) {
             toast.error(`❌ Access denied.\n\nYou don't have permission to ${action} this order.`);
           } else {
-            toast.error(`❌ Failed to ${action} order #${order.id}\n\nError: ${error.statusText || 'Unknown error'}\n\nPlease try again or contact support.`);
+            toast.error(`${error.error.message || 'Unknown error'}`);
           }
           
           // Reload to refresh current state

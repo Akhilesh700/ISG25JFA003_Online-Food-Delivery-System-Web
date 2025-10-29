@@ -1,8 +1,8 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { toast } from 'ngx-sonner';
-import { DeliveryAgentService } from 'src/app/core/services/delivery-agent/delivery-agent.service';
-import { IOrderHistroy, OrderStatus } from 'src/app/models/delivery-agent/IOrder';
+import { DeliveryAgentService } from '../../../../../../app/core/services/delivery-agent/delivery-agent.service';
+import { IOrderHistroy, OrderStatus } from '../../../../../../app/models/delivery-agent/IOrder';
 import { ZardBreadcrumbModule } from "@shared/components/sheet/sheet.module";
 import { BehaviorSubject, catchError, map, of, shareReplay, switchMap } from 'rxjs';
 

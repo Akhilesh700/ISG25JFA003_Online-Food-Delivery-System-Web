@@ -2,9 +2,9 @@ import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { ColdObservable } from "rxjs/internal/testing/ColdObservable";
-import { DeliveryAgentStatus, IDeliveryAgent } from "src/app/models/delivery-agent/IDeliveryAgent";
-import { IOrderHistroy } from 'src/app/models/delivery-agent/IOrder';
-import { environment } from "src/environments/environment";
+import { DeliveryAgentStatus, IDeliveryAgent } from "../../../models/delivery-agent/IDeliveryAgent";
+import { IOrderHistroy } from '../../../models/delivery-agent/IOrder';
+import { environment } from "../../../../environments/environment";
 
 
 
