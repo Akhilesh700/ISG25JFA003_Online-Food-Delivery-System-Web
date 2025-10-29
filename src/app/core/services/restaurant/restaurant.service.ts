@@ -11,13 +11,14 @@ import {
   RestaurantProfileUpdateResponse,
   RestaurantResponse
 } from '../../../models/restaurant.models';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RestaurantService {
 
-  private apiUrl = '/api/v1/restaurant';
+  private apiUrl = `${environment.apiUrl}api/${environment.version}/restaurant`;
   private profileSubject = new BehaviorSubject<RestaurantResponse | null>(null);
   public profile$ = this.profileSubject.asObservable();
 

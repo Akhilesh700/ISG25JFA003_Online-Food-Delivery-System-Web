@@ -5,22 +5,22 @@ import { CommonModule } from '@angular/common'; // Import CommonModule
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { toast } from 'ngx-sonner';
-
-import { ZardCardComponent } from "@shared/components/card/card.component"; // Adjust path
-import { AuthService } from 'src/app/core/services/auth/auth.service'; // Adjust path
-import { CustomerSignupResponse } from 'src/app/core/services/auth/auth.models'; // Adjust path
 import { finalize } from 'rxjs';
+import { iCustomerSignup } from '../../../../../../models/iSignUp';
+import { AuthService } from '../../../../../../core/services/auth/auth.service';
+import { CustomerSignupResponse } from '../../../../../../core/services/auth/auth.models';
+import {ZardCardComponent} from '../../../../../../shared/components/card/card.component';
 
 @Component({
   selector: 'app-customer-form',
-  standalone: true, // Mark as standalone
+  standalone: true,
   imports: [
     ReactiveFormsModule,
-    CommonModule, // Include CommonModule for directives like ngIf
-    ZardCardComponent // Import necessary shared components
+    CommonModule, 
+    ZardCardComponent
   ],
   templateUrl: './customer-form.component.html',
-  styleUrls: ['./customer-form.component.css'] // Link to the CSS file
+  styleUrls: ['./customer-form.component.css']
 })
 export class CustomerFormComponent implements OnInit {
   // --- Dependency Injection ---

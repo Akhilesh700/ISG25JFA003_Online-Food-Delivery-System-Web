@@ -37,7 +37,7 @@ export class App implements OnInit {
   }
 
   showDeliveryAgentNavBar() :boolean {
-    return this.router.url.includes('delivery');
+    return this.router.url.includes('delivery/');
   }
 
   private listenToRouterEvents(): void {
