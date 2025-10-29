@@ -1,67 +1,137 @@
-<div class="profile-container">
-  <div class="main-content-grid">
-    <div class="profile-column">
-      @if (!isEditing) {
-        <div class="card profile-header">
-          <img [src]="user.imageUrl" alt="Profile Picture" class="profile-avatar">
-          <div class="profile-details">
-            <h2>{{ user.name }}</h2>
-            <p>{{ user.email }}</p>
-            <p>{{ user.phone }}</p>
-            <p>{{ user.address }}</p>
-          </div>
-          <button class="btn btn-outline edit-btn" (click)="toggleEdit()">Edit Profile</button>
-        </div>
-      } @else {
-        <div class="card">
-          <form [formGroup]="profileForm" (ngSubmit)="onSave()">
-             <h3>Edit Profile</h3>
-             <div class="form-avatar-edit">
-                <img [src]="previewImageUrl" alt="Profile Picture Preview" class="profile-avatar">
-                <label for="file-upload" class="btn btn-outline">Change Picture</label>
-                <input id="file-upload" type="file" (change)="onFileChange($event)" accept="image/*">
-             </div>
-             <div class="form-fields">
-                <div class="form-group"><label for="name">Full Name</label><input id="name" type="text" formControlName="name"></div>
-                <div class="form-group"><label for="email">Email Address</label><input id="email" type="email" formControlName="email"></div>
-                <div class="form-group"><label for="phone">Phone Number</label><input id="phone" type="text" formControlName="phone"></div>
-                <div class="form-group"><label for="address">Address</label><input id="address" type="text" formControlName="address"></div>
-             </div>
-             <div class="form-actions">
-                <button type="button" class="btn btn-outline" (click)="toggleEdit()">Cancel</button>
-                <button type="submit" class="btn btn-primary" [disabled]="profileForm.invalid">Save Changes</button>
-             </div>
-          </form>
-        </div>
-      }
-    </div>
+<div class="min-h-screen bg-gray-900 text-gray-100 p-4 md:py-8 mt-22">
+ <div class="w-full max-w-4xl mx-auto bg-gray-800 shadow-2xl rounded-lg overflow-hidden grid grid-cols-1 md:grid-cols-3">
 
-    <div class="right-column">
-      <div class="stats-grid">
-        <div class="card stat-card"><div class="stat-header"><h3>Total Orders</h3></div><p class="stat-number">{{ stats.totalOrders }}</p><p class="stat-subtitle">All time orders</p></div>
-        <div class="card stat-card"><div class="stat-header"><h3>Completed</h3></div><p class="stat-number">{{ stats.completed }}</p><p class="stat-subtitle">Successfully delivered</p></div>
-      </div>
-      <div class="card payment-methods">
-        <div class="card-header"><h3>Payment Methods</h3><button class="btn btn-primary">Add New</button></div>
-        <div class="payment-list">
-          @for (method of paymentMethods; track method.last4) {
-            <div class="payment-item">
-              <div class="payment-details">
-                <span></span>
-                <div>
-                  <p><strong>{{ method.type }}</strong> &bull;&bull;&bull;&bull; {{ method.last4 }}
-                    @if (method.isPreferred) { <span class="preferred-badge">Preferred</span> }
-                  </p>
-                  <p class="text-muted">Expires {{ method.expires }}</p>
-                </div>
-              </div>
-              <button class="btn btn-outline">Edit</button>
-            </div>
-          }
-        </div>
-      </div>
-    </div>
-  </div>
+   <div class="md:col-span-1 p-6 flex flex-col items-center border-r border-gray-700 bg-gray-800"> <img src = "/img/avatar/user_profile.png" 
+           alt="Profile Picture" 
+           class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-orange-500 object-cover bg-gray-700 p-1"> <h2 class="text-2xl font-semibold text-white mb-1">{{ user?.name || 'Loading...' }}</h2>
+     <p class="text-gray-400 text-sm">{{ user?.phone }}</p> 
+     <p class="text-gray-500 text-xs">{{ user?.address }}</p>
+   </div>
 
-  <!-- <app-order-history [orders]="orders"></app-order-history> -->
-</div>
+   <div class="md:col-span-2 p-6">
+     <div class="flex justify-between items-center mb-6 border-b border-gray-700 pb-4"> <h3 class="text-xl font-semibold text-white">User Profile</h3> @if (!isEditing) {
+         <button (click)="toggleEdit()" 
+                 class="bg-orange-600 text-white px-5 py-2 rounded-lg hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-gray-800">
+           Edit
+         </button>
+       } @else {
+         <div class="space-x-2">
+           <button (click)="onSave()" 
+                   [disabled]="profileForm.invalid || isSaving"
+                   class="bg-orange-600 text-white px-5 py-2 rounded-lg hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed">
+             @if (isSaving) {
+               <svg class="animate-spin inline-block h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+               </svg>
+               Saving...
+             } @else {
+               Save
+             }
+           </button>
+           <button (click)="toggleEdit()" 
+                   [disabled]="isSaving"
+                   class="bg-gray-600 text-white px-5 py-2 rounded-lg hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed">
+             Cancel
+           </button>
+         </div>
+       }
+     </div>
+
+     @if (user || isEditing) {
+       <form [formGroup]="profileForm" (ngSubmit)="onSave()" class="space-y-4">
+         
+         <div class="grid grid-cols-3 gap-4 border-b border-gray-700 pb-4"> <p class="font-medium text-gray-400 col-span-1">Full Name</p> <div class="col-span-2">
+           @if (isEditing) {
+             <input type="text" formControlName="name"
+                    class="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 focus:ring-2 focus:ring-orange-500 focus:border-transparent text-orange-500 placeholder-gray-400
+                           [&:-webkit-autofill]:[-webkit-text-fill-color:black_!important]">
+             @if (profileForm.get('name')?.invalid && profileForm.get('name')?.touched) {
+               <p class="mt-1 text-xs text-red-400">Full name is required.</p> }
+           } @else {
+             <p class="text-gray-300">{{ user?.name }}</p> }
+           </div>
+         </div>
+
+         <div class="grid grid-cols-3 gap-4 border-b border-gray-700 pb-4">
+           <p class="font-medium text-gray-400 col-span-1">Email</p>
+            <div class="col-span-2">
+            @if (isEditing) {
+              <input type="email" formControlName="email"
+                     class="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 focus:ring-2 focus:ring-orange-500 focus:border-transparent text-orange-500 placeholder-gray-400
+                            [&:-webkit-autofill]:[-webkit-text-fill-color:black_!important]">
+              @if (profileForm.get('email')?.invalid && profileForm.get('email')?.touched) {
+                  <p class="mt-1 text-xs text-red-400">Please enter a valid email.</p>
+              }
+            } @else {
+              <p class="text-gray-300">{{ user?.email }}</p>
+            }
+           </div>
+         </div>
+
+         <div class="grid grid-cols-3 gap-4 border-b border-gray-700 pb-4">
+           <p class="font-medium text-gray-400 col-span-1">Phone</p>
+            <div class="col-span-2">
+            @if (isEditing) {
+              <input type="tel" formControlName="phone"
+                     class="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 focus:ring-2 focus:ring-orange-500 focus:border-transparent text-orange-500 placeholder-gray-400
+                            [&:-webkit-autofill]:[-webkit-text-fill-color:black_!important]">
+            } @else {
+              <p class="text-gray-300">{{ user?.phone }}</p>
+            }
+           </div>
+         </div>
+
+         <div class="grid grid-cols-3 gap-4 border-b border-gray-700 pb-4">
+           <p class="font-medium text-gray-400 col-span-1">Address</p>
+            <div class="col-span-2">
+            @if (isEditing) {
+              <input type="text" formControlName="address"
+                     class="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 focus:ring-2 focus:ring-orange-500 focus:border-transparent text-orange-500 placeholder-gray-400
+                            [&:-webkit-autofill]:[-webkit-text-fill-color:black_!important]">
+            } @else {
+              <p class="text-gray-300">{{ user?.address }}</p>
+            }
+           </div>
+         </div>
+
+         <div class="grid grid-cols-3 gap-4 border-b border-gray-700 pb-4">
+           <p class="font-medium text-gray-400 col-span-1">Date of Birth</p>
+           <div class="col-span-2">
+             @if (isEditing) {
+              <input type="date" formControlName="dob"
+                      class="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 focus:ring-2 focus:ring-orange-500 focus:border-transparent text-orange-500 placeholder-gray-400
+                             [&:-webkit-autofill]:[-webkit-text-fill-color:black_!important]"
+                      [style.color-scheme]="'dark'"> @if (profileForm.get('dob')?.invalid && profileForm.get('dob')?.touched) {
+               <p class="mt-1 text-xs text-red-400">Date of birth is required.</p>
+               }
+             } @else {
+               <p class="text-gray-300">{{ user?.dob | date:'longDate' }}</p> 
+             }
+           </div>
+         </div>
+
+         <div class="grid grid-cols-3 gap-4 pb-4">
+           <p class="font-medium text-gray-400 col-span-1">Preferred Payment</p>
+           <div class="col-span-2">
+             @if (isEditing) {
+                <select formControlName="preferredPayment"
+                        class="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 focus:ring-2 focus:ring-orange-500 focus:border-transparent text-orange-500
+                               [&:-webkit-autofill]:[-webkit-text-fill-color:black_!important]">
+                 <option value="" disabled>Select a payment method</option>
+                 <option value="UPI">UPI</option>
+                 <option value="Credit Card">Credit Card</option>
+                 <option value="Debit Card">Debit Card</option>
+                 <option value="Net Banking">Net Banking</option>
+                </select>
+             } @else {
+               <p class="text-gray-300">{{ user?.preferredPayment || 'Not Set' }}</p>
+             }
+           </div>
+         </div>
+
+       </form>
+     } @else {
+       <p class="text-center text-gray-400 py-10">Loading profile...</p>
+     }
+   </div> </div> </div>
