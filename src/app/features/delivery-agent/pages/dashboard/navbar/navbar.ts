@@ -1,9 +1,9 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { ZardBreadcrumbModule } from "@shared/components/sheet/sheet.module";
 import { toast } from 'ngx-sonner';
-import { AuthService } from 'src/app/core/services/auth/auth.service';
-import { DeliveryAgentService } from 'src/app/core/services/delivery-agent/delivery-agent.service';
-import { DeliveryAgentStatus, IDeliveryAgent } from 'src/app/models/delivery-agent/IDeliveryAgent';
+import { AuthService } from '../../../../../core/services/auth/auth.service';
+import { DeliveryAgentService } from '../../../../../core/services/delivery-agent/delivery-agent.service';
+import { DeliveryAgentStatus, IDeliveryAgent } from '../../../../../models/delivery-agent/IDeliveryAgent';
 import { ZardSwitchComponent } from "@shared/components/switch/switch.component";
 import { FormsModule } from '@angular/forms';
 
