@@ -2,7 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AgentSignupResponse, AuthResponse, CustomerSignupResponse, LoginCredentials, RestaurantSignupResponse, Role } from './auth.models';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../../environments/environment';
+import { iAgentSignup, iCustomerSignup, iRestaurantSignup } from '../../../models/iSignUp';
 
 /**
  * Service dedicated to making authentication-related HTTP requests to the backend.

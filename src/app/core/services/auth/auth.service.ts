@@ -15,8 +15,11 @@ import {
     LoginCredentials, RestaurantSignupResponse, Role, RefreshResponse,
 } from './auth.models';
 import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/state/app.state';
-import { emptyCart } from 'src/app/state/cart/cart.action';
+import { AppState } from '../../../state/app.state';
+import { emptyCart } from '../../../state/cart/cart.action';
+// import { AppState } from 'src/app/state/app.state';
+// import { emptyCart } from 'src/app/state/cart/cart.action';
+import { iAgentSignup, iCustomerSignup, iRestaurantSignup } from '../../../models/iSignUp';
 
 @Injectable({
     providedIn: 'root'

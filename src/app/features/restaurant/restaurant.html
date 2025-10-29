@@ -1,0 +1,21 @@
+<div class="flex h-screen bg-gray-50 dark:bg-gray-900">
+  <!-- Sidebar Component -->
+  <app-sidebar [menuItems]="menuItems" [isOpen]="sidebarOpen"></app-sidebar>
+  
+  <!-- Main Content Area -->
+  <div class="flex-1 flex flex-col min-w-0">
+    <!-- Header Component -->
+    <app-header 
+      [isDarkMode]="isDarkMode" 
+      (toggleSidebarEvent)="toggleSidebar()" 
+      (toggleThemeEvent)="toggleTheme()">
+    </app-header>
+    
+    <!-- Page Content (Dynamic Route Content) -->
+    <main class="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900">
+      <div class="p-6">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+  </div>
+</div>
